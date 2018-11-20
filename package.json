@@ -1,0 +1,59 @@
+{
+  "name": "@muhammadkasim/xformer",
+  "version": "0.1.0-alpha-0.1",
+  "description": "xFormer provides an extensive set of utilities, a way to define declarative transformation pipelines and a parser to facilitate easier data transformations.",
+  "main": "lib/index.js",
+  "author": "eMumba <muhammad.kasim@emumba.com>",
+  "repository": "https://gitlab.com/muhammadkasim/xformer",
+  "license": "MIT",
+  "scripts": {
+    "build": "babel src --out-dir lib --quiet",
+    "prepublishOnly": "npm run build",
+    "test": "jest"
+  },
+  "keywords": [
+    "ramda",
+    "functional",
+    "pure"
+  ],
+  "files": [
+    "lib",
+    "src"
+  ],
+  "jest": {
+    "transform": {
+      "^.+\\.(js|jsx|ts|tsx)$": "babel-jest"
+    },
+    "verbose": true,
+    "moduleFileExtensions": [
+      "js",
+      "jsx"
+    ],
+    "moduleDirectories": [
+      "node_modules",
+      "src"
+    ]
+  },
+  "babel": {
+    "presets": [
+      "stage-0",
+      "flow"
+    ],
+    "plugins": [
+      "transform-es2015-modules-commonjs"
+    ]
+  },
+  "dependencies": {
+    "ramda": "^0.26.0"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.3",
+    "babel-jest": "^23.6.0",
+    "babel-plugin-transform-es2015-modules-commonjs": "^6.26.2",
+    "babel-preset-flow": "^6.23.0",
+    "babel-preset-stage-0": "^6.24.1",
+    "flow-bin": "^0.80.0",
+    "jest": "^23.6.0"
+  }
+}
