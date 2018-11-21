@@ -18,18 +18,12 @@
           "title": "xFormer",
           "description": "xFormer makes data transformations easy on your cognition and hassle-free.",
           "repository": "https://gitlab.com/muhammadkasim/xformer",
-          "site": "http://my-library.org",
-          "author": "https://twitter.com/foo",
-          "image": "http://my-library.org/logo.png"
-        },
-        "manual": {
-          "index": "./manual/index.md",
-          "globalIndex": true,
-          "asset": "./manual/asset",
-          "files": ["./manual/overview.md"]
+          "site": "https://www.npmjs.com/package/@muhammadkasim/xformer",
+          "author": "http://www.emumba.com/",
+          "image": "https://cdn-images-1.medium.com/max/1200/1*w1GC6zZbgdAXDKq01bmFWA.png"
         },
         "test": {
-          "source": "./test/",
+          "source": "./__tests__",
           "interfaces": ["describe", "it", "context", "suite", "test"],
           "includes": ["(spec|Spec|test|Test)\\.js$"],
           "excludes": ["\\.config\\.js$"]

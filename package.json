@@ -7,7 +7,7 @@
   "repository": "https://gitlab.com/muhammadkasim/xformer",
   "license": "MIT",
   "scripts": {
-    "build": "babel src --out-dir lib --quiet",
+    "build": "./node_modules/.bin/esdoc && babel src --out-dir lib --quiet",
     "prepublishOnly": "npm run build",
     "test": "jest --watch"
   },
