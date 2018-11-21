@@ -9,7 +9,7 @@
   "scripts": {
     "build": "babel src --out-dir lib --quiet",
     "prepublishOnly": "npm run build",
-    "test": "jest"
+    "test": "jest --watch"
   },
   "keywords": [
     "ramda",
@@ -26,8 +26,7 @@
     },
     "verbose": true,
     "moduleFileExtensions": [
-      "js",
-      "jsx"
+      "js"
     ],
     "moduleDirectories": [
       "node_modules",
@@ -36,8 +35,7 @@
   },
   "babel": {
     "presets": [
-      "stage-0",
-      "flow"
+      "stage-0"
     ],
     "plugins": [
       "transform-es2015-modules-commonjs"
@@ -51,9 +49,7 @@
     "babel-core": "^6.26.3",
     "babel-jest": "^23.6.0",
     "babel-plugin-transform-es2015-modules-commonjs": "^6.26.2",
-    "babel-preset-flow": "^6.23.0",
     "babel-preset-stage-0": "^6.24.1",
-    "flow-bin": "^0.80.0",
     "jest": "^23.6.0"
   }
 }
