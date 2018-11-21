@@ -31,7 +31,7 @@ export const bePositive = R.pipe(
 //  * @param  {Object} input
 //  * @returns {Object}
 //  */
-// export const xformForChart = R.evolve({
+// export const xFormerForChart = R.evolve({
 //   x: parseInt,
 //   y: R.pipe(
 //     defaultToZero,
@@ -88,9 +88,9 @@ export const sumList = R.cond([
  * @param  {any} data
  * @returns {Object}
  */
-export const zipValueWithStep = (step, data) => ({
+export const zipValueWithStep = R.curry((step, data) => ({
   [step]: data
-});
+}));
 
 /**
  * @param  {Function} fn(value, index)

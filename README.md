@@ -1,6 +1,6 @@
-## XFormer: Easier Data Transformations
+## xFormer: Easier Data Transformations
 
-XFormer makes data transformations easy on your cognition and hassle-free.
+xFormer makes data transformations easy on your cognition and hassle-free.
 
 #### Features
 
@@ -10,7 +10,7 @@ XFormer makes data transformations easy on your cognition and hassle-free.
 
 #### Usage
 
-Using XFormer, data transformation pipelines can be expressed as a list of actions.
+Using xFormer, data transformation pipelines can be expressed as a list of actions.
 
 ##### 1. Describing an action with `string`
 
