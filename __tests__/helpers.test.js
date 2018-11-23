@@ -15,7 +15,7 @@ describe('Tests helper functions', () => {
     });
   });
 
-  describe('Converts junky values to zero', () => {
+  describe('Converts junky values to the provided fallback value', () => {
     it('stringy numbers as numbers', () => {
       expect(_.defaultToZero('123')).toBe(123);
     });
@@ -25,11 +25,11 @@ describe('Tests helper functions', () => {
     });
 
     it('undefined is zero', () => {
-      expect(_.defaultToZero(undefined)).toBe(0);
+      expect(_.defaultTo(1, undefined)).toBe(1);
     });
 
     it('an Object is zero', () => {
-      expect(_.defaultToZero({ a: 1 })).toBe(0);
+      expect(_.defaultTo(100, { a: 1 })).toBe(100);
     });
   });
 
@@ -75,25 +75,13 @@ describe('Tests helper functions', () => {
     });
   });
 
-  describe('Sums up values in an Array or Object safely', () => {
+  describe('Sums up values in an Array', () => {
     it('adds values in an Array', () => {
       expect(_.sumList([1, 2, 3])).toBe(6);
     });
 
-    it('adds values in an Object', () => {
-      expect(_.sumList({ a: 1, b: 2, c: undefined })).toBe(3);
-    });
-
-    it('sum of a number is that number', () => {
-      expect(_.sumList(25)).toBe(25);
-    });
-
-    it('sum of a stringy number is that number', () => {
-      expect(_.sumList('25')).toBe(25);
-    });
-
-    it('sum of a junky is zero', () => {
-      expect(_.sumList('abc')).toBe(0);
+    it('ignore junky values when summing', () => {
+      expect(_.sumList([1, 2, 3, undefined, 'abc'])).toBe(6);
     });
   });
 
@@ -174,6 +162,24 @@ describe('Tests helper functions', () => {
 
     it('Array is not falsy', () => {
       expect(_.isNothing([1, 2, 3])).toBe(false);
+    });
+  });
+
+  describe('Calculates percentage for used memory (1 - x * 100)', () => {
+    it('calculates used memory for valid input', () => {
+      expect(_.getUsedMemoryForSingle(0.3)).toBe(70);
+    });
+
+    it('calculates used memory for junky input', () => {
+      expect(_.getUsedMemoryForSingle(undefined)).toBe(0);
+    });
+
+    it('calculates used memory for number greater than 1', () => {
+      expect(_.getUsedMemoryForSingle(2)).toBe(0);
+    });
+
+    it('calculates used memory for stringy number', () => {
+      expect(_.getUsedMemoryForSingle('0.15')).toBe(85);
     });
   });
 });

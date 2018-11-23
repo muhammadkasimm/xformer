@@ -114,3 +114,30 @@ export const sumAll = R.cond([
   [_.typeMatches('string'), _.defaultToZero],
   [R.T, R.always(0)]
 ]);
+
+/**
+ * @param  {number} value
+ * @param  {Object|Array} data
+ * @returns {number}
+ */
+export const defaultAll = R.curry((value, data) => {
+  R.cond([
+    [_.typeMatches('array'), R.map(_.defaultTo(value))],
+    [_.typeMatches('object'), R.map(_.defaultTo(value))],
+    [_.typeMatches('number'), _.defaultTo(value)],
+    [_.typeMatches('string'), _.defaultTo(value)],
+    [R.T, _.defaultTo(value)]
+  ])(data);
+});
+
+/**
+ * @param  {any} input
+ * @returns {number}
+ */
+export const getUsedMemory = R.cond([
+  [_.typeMatches('array'), R.map(_.getUsedMemoryForSingle)],
+  [_.typeMatches('object'), R.map(_.getUsedMemoryForSingle)],
+  [_.typeMatches('number'), _.getUsedMemoryForSingle],
+  [_.typeMatches('string'), _.getUsedMemoryForSingle],
+  [R.T, _.getUsedMemoryForSingle]
+]);

@@ -12,11 +12,21 @@ export const isJunk = R.pipe(
   parseFloat,
   R.anyPass([R.equals(NaN), R.equals(Infinity), R.equals(-Infinity)])
 );
+
+/**
+ * @param  {number} value
+ * @param  {number} input
+ * @returns {number}
+ */
+export const defaultTo = R.curry((value, input) =>
+  R.ifElse(isJunk, R.always(value), parseFloat)(input)
+);
+
 /**
  * @param  {number} input
  * @returns {number}
  */
-export const defaultToZero = R.ifElse(isJunk, R.always(0), parseFloat);
+export const defaultToZero = defaultTo(0);
 
 /**
  * @param  {number} input
@@ -63,25 +73,7 @@ export const sum = R.curry((left, right) => R.add(defaultToZero(left), defaultTo
  * @param  {Array<number>} data
  * @returns {number}
  */
-const _sumList = R.reduce(sum, 0);
-
-/**
- * @param  {Array<number> | Object} data
- * @returns {number}
- */
-export const sumList = R.cond([
-  [
-    typeMatches('object'),
-    R.pipe(
-      R.values,
-      _sumList
-    )
-  ],
-  [typeMatches('array'), _sumList],
-  [typeMatches('number'), R.identity],
-  [typeMatches('string'), defaultToZero],
-  [R.T, R.always(0)]
-]);
+export const sumList = R.reduce(sum, 0);
 
 /**
  * @param  {string} step
@@ -136,3 +128,14 @@ export const isNothing = R.either(R.isEmpty, R.isNil);
  * @returns {boolean}
  */
 export const isSomething = R.complement(isNothing);
+
+/**
+ * @param  {any} input
+ * @returns {boolean}
+ */
+export const getUsedMemoryForSingle = R.pipe(
+  defaultTo(1),
+  R.min(1),
+  R.subtract(1),
+  R.multiply(100)
+);

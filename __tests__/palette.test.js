@@ -80,4 +80,14 @@ describe('Test palette functions', () => {
       expect(_.sumAll([1, 2, 3, undefined, 'abc'])).toBe(6);
     });
   });
+
+  describe('Calculates used memory for any input', () => {
+    it('calculates used memory for Array', () => {
+      expect(_.getUsedMemory([0.1, 0.2, 0.3])).toEqual([90, 80, 70]);
+    });
+
+    it('calculates used memory for Object', () => {
+      expect(_.getUsedMemory({ a: 0.1, b: 0.2, c: 0.3 })).toEqual({ a: 90, b: 80, c: 70 });
+    });
+  });
 });
