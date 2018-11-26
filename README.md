@@ -8,7 +8,7 @@ xFormer makes data transformations easy on your cognition and hassle-free.
 - Supports a flexible palette of actions
 - Provides 2 ways of describing an action: a string or JSON
 
-#### Insallation
+#### Installation
 
 ```
 npm i @muhammadkasim/xformer --save
