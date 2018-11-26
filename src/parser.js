@@ -178,13 +178,12 @@ const executePipe = R.curry((data, pipe) => {
 });
 
 /**
- * Takes a query and data as input and executes all pipelines within the query, with each pipeline receiving the
- * provided data.
- *
  * @param  {Object} query
  * @param  {Object} data
  * @returns {Object}
  *
+ * Takes a query and data as input and executes all pipelines within the query, with each pipeline receiving the
+ * provided data.
  */
 export function parser(query, data) {
   return R.map(p => {
