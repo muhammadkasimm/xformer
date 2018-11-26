@@ -2,6 +2,12 @@
 
 xFormer makes data transformations easy on your cognition and hassle-free.
 
+#### Features
+
+- Provides an intuitive way to express transformation pipelines
+- Supports a flexible palette of actions
+- Provides 2 ways of describing an action: a string or JSON
+
 #### Insallation
 
 ```
@@ -35,14 +41,6 @@ parser(query, data);
 //   }
 // }
 ```
-
-#### Features
-
-- Provides an intuitive way to express transformation pipelines
-- Supports a flexible palette of actions
-- Provides 2 ways of describing an action: a string or JSON
-
-#### Usage
 
 Using xFormer, data transformation pipelines can be expressed as a list of actions.
 
