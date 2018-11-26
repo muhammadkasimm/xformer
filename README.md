@@ -2,6 +2,40 @@
 
 xFormer makes data transformations easy on your cognition and hassle-free.
 
+#### Insallation
+
+```
+npm i @muhammadkasim/xformer --save
+```
+
+#### Usage
+
+```
+import { parser } from '@muhammadkasim/xformer';
+
+const query = {
+  series_1: ['mergeWithAdd', 'differential'];
+}
+const data = [
+  { a: 2, b: 4 },
+  { a: 22, b: 24 }
+]
+
+// Run query with data
+parser(query, data);
+
+// Evaluated query with step-wise results for each action in a pipe
+// {
+//   'series_1': {
+//     buffer: {
+//       'mergeWithAdd': { a: 24, b: 28 },
+//       'differential': { b: 4 }
+//     },
+//     result: { b: 4 }
+//   }
+// }
+```
+
 #### Features
 
 - Provides an intuitive way to express transformation pipelines
