@@ -1,6 +1,6 @@
 {
   "name": "@muhammadkasim/xformer",
-  "version": "0.1.0-alpha-0.6",
+  "version": "0.1.0-alpha-0.9",
   "description": "xFormer provides an extensive set of utilities, a way to define declarative transformation pipelines and a parser to facilitate easier data transformations.",
   "main": "lib/index.js",
   "author": "eMumba <muhammad.kasim@emumba.com>",
@@ -16,8 +16,7 @@
     "pure"
   ],
   "files": [
-    "lib",
-    "src"
+    "lib"
   ],
   "jest": {
     "transform": {
@@ -41,11 +40,11 @@
     ]
   },
   "dependencies": {
-    "esdoc": "^1.1.0",
-    "esdoc-standard-plugin": "^1.0.0",
-    "ramda": "^0.26.0"
+    "ramda": "0.26.0"
   },
   "devDependencies": {
+    "esdoc": "^1.1.0",
+    "esdoc-standard-plugin": "^1.0.0",
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.3",
     "babel-jest": "^23.6.0",

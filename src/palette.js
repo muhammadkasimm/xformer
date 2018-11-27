@@ -53,6 +53,12 @@ const mergeWithOp = R.curry((xformer, data) =>
 export const mergeWithAdd = mergeWithOp(_.sum);
 
 /**
+ * @param  {Array<Object>} data
+ * @returns {Object}
+ */
+export const mergeWithSubtract = mergeWithOp(_.subtract);
+
+/**
  * @param  {Object} data
  * @returns {Object}
  */
@@ -137,7 +143,21 @@ export const defaultAll = R.curry((value, data) => {
 export const getUsedMemory = R.cond([
   [_.typeMatches('array'), R.map(_.getUsedMemoryForSingle)],
   [_.typeMatches('object'), R.map(_.getUsedMemoryForSingle)],
-  [_.typeMatches('number'), _.getUsedMemoryForSingle],
-  [_.typeMatches('string'), _.getUsedMemoryForSingle],
   [R.T, _.getUsedMemoryForSingle]
+]);
+
+/**
+ * @param  {any} input
+ * @returns {number}
+ */
+export const getAvg = R.cond([
+  [_.typeMatches('array'), _.getAverageForList],
+  [
+    _.typeMatches('object'),
+    R.pipe(
+      R.values,
+      _.getAverageForList
+    )
+  ],
+  [R.T, _.defaultToZero]
 ]);

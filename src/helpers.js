@@ -70,6 +70,15 @@ export const typeMatches = R.curry((typeToBe, input) =>
 export const sum = R.curry((left, right) => R.add(defaultToZero(left), defaultToZero(right)));
 
 /**
+ * @param  {number} left
+ * @param  {number} right
+ * @returns {Object}
+ */
+export const subtract = R.curry((left, right) =>
+  Math.abs(R.subtract(defaultToZero(left), defaultToZero(right)))
+);
+
+/**
  * @param  {Array<number>} data
  * @returns {number}
  */
@@ -138,4 +147,14 @@ export const getUsedMemoryForSingle = R.pipe(
   R.min(1),
   R.subtract(1),
   R.multiply(100)
+);
+
+/**
+ * @param  {any} input
+ * @returns {boolean}
+ */
+export const getAverageForList = R.pipe(
+  R.reject(isJunk),
+  R.converge(R.divide, [R.sum, R.length]),
+  defaultToZero
 );

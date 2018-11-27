@@ -145,7 +145,10 @@ const executeAction = R.curry((fn, data) => {
  */
 const updateAccumulator = R.curry((fn, info, acc) => {
   return R.pipe(
-    R.over(R.lensProp('buffer'), R.assoc(info.name, executeAction(fn, acc.result))),
+    R.over(
+      R.lensProp('buffer'),
+      R.append({ title: info.name, data: executeAction(fn, acc.result) })
+    ),
     R.set(R.lensProp('result'), executeAction(fn, acc.result))
   )(acc);
 });
@@ -170,7 +173,7 @@ const executePipe = R.curry((data, pipe) => {
         return updateAccumulator(fn, info, acc);
       },
       {
-        buffer: {},
+        buffer: [],
         result: data
       }
     )
@@ -185,8 +188,4 @@ const executePipe = R.curry((data, pipe) => {
  * Takes a query and data as input and executes all pipelines within the query, with each pipeline receiving the
  * provided data.
  */
-export function parser(query, data) {
-  return R.map(p => {
-    return executePipe(data, p);
-  }, query);
-}
+export const parser = R.curry((query, data) => R.map(executePipe(data), query));

@@ -75,6 +75,24 @@ describe('Tests helper functions', () => {
     });
   });
 
+  describe('Subtracts two values safely', () => {
+    it('subtracts two numbers', () => {
+      expect(_.subtract(4, 2)).toBe(2);
+    });
+
+    it('subtracts a number and a stringy number', () => {
+      expect(_.subtract(4, '2')).toBe(2);
+    });
+
+    it('subtracts a number and a junky value', () => {
+      expect(_.subtract(4, null)).toBe(4);
+    });
+
+    it('subtracts two junky values', () => {
+      expect(_.subtract(undefined, null)).toBe(0);
+    });
+  });
+
   describe('Sums up values in an Array', () => {
     it('adds values in an Array', () => {
       expect(_.sumList([1, 2, 3])).toBe(6);
@@ -180,6 +198,20 @@ describe('Tests helper functions', () => {
 
     it('calculates used memory for stringy number', () => {
       expect(_.getUsedMemoryForSingle('0.15')).toBe(85);
+    });
+  });
+
+  describe('Calculates average of values in a list', () => {
+    it('calculates average for valid values', () => {
+      expect(_.getAverageForList([1, 2, 3])).toBe(2);
+    });
+
+    it('ignores invalid values while averaging', () => {
+      expect(_.getAverageForList([1, 2, 3, null])).toBe(2);
+    });
+
+    it('takes stringy numbers into account while averaging', () => {
+      expect(_.getAverageForList([1, 2, '3'])).toBe(2);
     });
   });
 });
