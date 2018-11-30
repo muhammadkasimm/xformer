@@ -6,7 +6,6 @@
 import * as R from 'ramda';
 import * as E from './palette';
 import * as _ from './helpers';
-import { PALLETE_REQUIREMENTS } from './palleteRequirements';
 
 const ALIAS_REGEX = /^[a-zA-z0-9_]*/;
 const OPENING_PARAN_REGEX = /^[\(]?/;
@@ -105,16 +104,42 @@ const decodePipe = R.map(
 );
 
 /**
+ * @param  {Object} action
+ * @returns {string}
+ *
+ * Takes a JSON representation of an action and converts it into stringy representation.
+ */
+const translateObjectToString = R.converge(R.concat, [
+  R.prop('name'),
+  R.ifElse(
+    R.propSatisfies(_.isSomething, 'params'),
+    R.pipe(
+      R.prop('params'),
+      R.map(R.toString),
+      R.join(', '),
+      x => `(${x})`
+    ),
+    R.always('')
+  )
+]);
+
+/**
  * @param  {string | Object} action
  * @returns {string} name of the action
  *
  * Takes a string or Object representation of an action and returns the name of the action.
  */
-const getActionName = R.curry((action, idx) => {
+const getActionName = R.curry(action => {
   return R.cond([
-    [_.typeMatches('string'), _.getFirstMatch(ALIAS_REGEX)],
-    [_.typeMatches('object'), R.prop('name')],
-    [_.typeMatches('array'), R.always(`combo_${idx}`)]
+    [_.typeMatches('string'), R.identity],
+    [_.typeMatches('object'), translateObjectToString],
+    [
+      _.typeMatches('array'),
+      R.pipe(
+        R.map(getActionName),
+        R.join(', ')
+      )
+    ]
   ])(action);
 });
 
@@ -144,12 +169,11 @@ const executeAction = R.curry((fn, data) => {
  * according to the action(s).
  */
 const updateAccumulator = R.curry((fn, info, acc) => {
+  const executedData = executeAction(fn, acc.result);
+
   return R.pipe(
-    R.over(
-      R.lensProp('buffer'),
-      R.append({ title: info.name, data: executeAction(fn, acc.result) })
-    ),
-    R.set(R.lensProp('result'), executeAction(fn, acc.result))
+    R.over(R.lensProp('buffer'), R.append({ title: info.name, data: executedData })),
+    R.set(R.lensProp('result'), executedData)
   )(acc);
 });
 
@@ -174,6 +198,7 @@ const executePipe = R.curry((data, pipe) => {
       },
       {
         buffer: [],
+        originalData: data,
         result: data
       }
     )

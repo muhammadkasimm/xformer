@@ -93,16 +93,6 @@ export const differential = R.curry(data => {
   ])(data);
 });
 
-// /**
-//  * @param  {Object} data
-//  * @returns {Array<Object>}
-//  */
-// export const getTimeSeries = R.pipe(
-//   R.toPairs,
-//   R.map(R.zipObj(['x', 'y'])),
-//   R.map(_.xformForChart)
-// );
-
 /**
  * @param  {Object|Array} data
  * @returns {number}
@@ -128,10 +118,7 @@ export const sumAll = R.cond([
  */
 export const defaultAll = R.curry((value, data) => {
   R.cond([
-    [_.typeMatches('array'), R.map(_.defaultTo(value))],
-    [_.typeMatches('object'), R.map(_.defaultTo(value))],
-    [_.typeMatches('number'), _.defaultTo(value)],
-    [_.typeMatches('string'), _.defaultTo(value)],
+    [R.anyPass([_.typeMatches('array'), _.typeMatches('object')]), R.map(_.defaultTo(value))],
     [R.T, _.defaultTo(value)]
   ])(data);
 });
