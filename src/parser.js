@@ -198,10 +198,10 @@ const executePipe = R.curry((data, pipe) => {
       },
       {
         buffer: [],
-        originalData: data,
         result: data
       }
-    )
+    ),
+    R.over(R.lensProp('buffer'), R.insert(0, { title: 'Original Data', data: data }))
   )(pipe);
 });
 
