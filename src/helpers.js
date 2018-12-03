@@ -37,18 +37,6 @@ export const bePositive = R.pipe(
   Math.abs
 );
 
-// /**
-//  * @param  {Object} input
-//  * @returns {Object}
-//  */
-// export const xFormerForChart = R.evolve({
-//   x: parseInt,
-//   y: R.pipe(
-//     defaultToZero,
-//     bePositive
-//   )
-// });
-
 /**
  * @param  {string} typeToBe
  * @param  {any} input
