@@ -46,7 +46,7 @@ function updateAccumulator(fn, info, acc) {
  *
  * Returns an object containing the result of executing the pipeline and the corresponding result of each step.
  */
-function executePipe(pipe, data) {
+export function executePipe(pipe, data) {
   return R.pipe(
     D.decodePipe.bind(this),
     _.reduceIndexed(

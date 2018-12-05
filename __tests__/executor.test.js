@@ -129,4 +129,19 @@ describe('Parses xFormer queries', () => {
 
     expect(parsed['1'].result).toEqual({ a2: 1, a3: 1, a4: 1, a5: 1 });
   });
+
+  it('executes a single pipe', () => {
+    const parsed = E.executePipe(
+      [
+        { name: 'pickByRegex', params: ['a_'] },
+        'mergeWithAdd',
+        'differential',
+        { name: 'getRate', params: ['$.INTERVAL'] }
+      ],
+      mockData,
+      { INTERVAL: 4 }
+    );
+
+    expect(parsed.result).toEqual({ a2: 1, a3: 1, a4: 1, a5: 1 });
+  });
 });

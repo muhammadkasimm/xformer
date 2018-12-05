@@ -1,5 +1,5 @@
 import merge from 'ramda/src/merge';
-import { execute } from './executor';
+import { execute, executePipe } from './executor';
 
 class Xform {
   constructor() {
@@ -17,6 +17,11 @@ class Xform {
   execute(query, data, ext = {}) {
     this.setExternals(ext);
     return execute.call(this, query, data);
+  }
+
+  executePipe(pipe, data, ext = {}) {
+    this.setExternals(ext);
+    return executePipe.call(this, pipe, data);
   }
 }
 
