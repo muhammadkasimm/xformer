@@ -118,7 +118,6 @@ describe('Parses xFormer queries', () => {
       {
         1: [
           { name: 'pickByRegex', params: ['a_'] },
-          // 'pickByRegex("a_")',
           'mergeWithAdd',
           'differential',
           { name: 'getRate', params: ['$.INTERVAL'] }

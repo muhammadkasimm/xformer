@@ -1,4 +1,4 @@
-import { merge } from 'ramda';
+import merge from 'ramda/src/merge';
 import { execute } from './executor';
 
 class Xform {
@@ -6,8 +6,12 @@ class Xform {
     this.$ = {};
   }
 
+  getExternals() {
+    return this.$;
+  }
+
   setExternals(ext = {}) {
-    this.$ = merge(this.$, ext);
+    this.$ = merge(this.getExternals(), ext);
   }
 
   execute(query, data, ext = {}) {

@@ -52,7 +52,15 @@ function executePipe(pipe, data) {
     _.reduceIndexed(
       (acc, fn, idx) => {
         const info = { idx: idx, name: D.getActionName(R.nth(idx, pipe), idx) };
-        return updateAccumulator.call(this, fn, info, acc);
+        try {
+          return updateAccumulator.call(this, fn, info, acc);
+        } catch (error) {
+          console.error(error.stack);
+          console.error('Failed to perform action:', {
+            name: info.name,
+            data: acc
+          });
+        }
       },
       {
         buffer: [],
