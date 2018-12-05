@@ -146,3 +146,14 @@ export const getAverageForList = R.pipe(
   R.converge(R.divide, [R.sum, R.length]),
   defaultToZero
 );
+
+/**
+ * @param  {any} input
+ * @returns {boolean}
+ */
+export const divideBy = R.curry((denominator, numerator) => {
+  return R.pipe(
+    defaultTo(1),
+    R.divide(defaultToZero(numerator))
+  )(denominator);
+});

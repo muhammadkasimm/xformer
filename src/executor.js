@@ -12,8 +12,8 @@ import * as _ from './helpers';
  */
 function executeAction(fn, data) {
   return R.cond([
-    [_.typeMatches('function'), R.applyTo(data)],
-    [_.typeMatches('array'), R.map(R.applyTo(data))]
+    [_.typeMatches('function'), func => func.call(this, data)],
+    [_.typeMatches('array'), R.map(func => func.call(this, data))]
   ])(fn);
 }
 
@@ -27,7 +27,7 @@ function executeAction(fn, data) {
  * according to the action(s).
  */
 function updateAccumulator(fn, info, acc) {
-  const executedData = executeAction(fn, acc.result);
+  const executedData = executeAction.call(this, fn, acc.result);
 
   return R.pipe(
     R.over(R.lensProp('buffer'), R.append({ title: info.name, data: executedData })),
@@ -48,11 +48,11 @@ function updateAccumulator(fn, info, acc) {
  */
 function executePipe(pipe, data) {
   return R.pipe(
-    D.decodePipe,
+    D.decodePipe.bind(this),
     _.reduceIndexed(
       (acc, fn, idx) => {
         const info = { idx: idx, name: D.getActionName(R.nth(idx, pipe), idx) };
-        return updateAccumulator(fn, info, acc);
+        return updateAccumulator.call(this, fn, info, acc);
       },
       {
         buffer: [],
@@ -72,5 +72,5 @@ function executePipe(pipe, data) {
  * provided data.
  */
 export function execute(query, data) {
-  return R.map(R.curry(executePipe)(R.__, data), query);
+  return R.map(R.curry(executePipe.bind(this))(R.__, data), query);
 }

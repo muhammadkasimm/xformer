@@ -1,5 +1,6 @@
 import * as R from 'ramda';
-import * as E from '../src/executor';
+import E from '../src/main';
+// import * as E from '../src/executor';
 import { pickFrom, mergeWithSubtract } from '../src/palette';
 
 const mockData = {
@@ -98,5 +99,35 @@ describe('Parses xFormer queries', () => {
     );
 
     expect(parsed['1'].result).toEqual({ abc: 1, xyz: 1 });
+  });
+
+  it('parses stringy action with external dependencies', () => {
+    const parsed = E.execute(
+      {
+        1: ['pickByRegex("a_")', 'mergeWithAdd', 'differential', 'getRate("$.INTERVAL")']
+      },
+      mockData,
+      { INTERVAL: 4 }
+    );
+
+    expect(parsed['1'].result).toEqual({ a2: 1, a3: 1, a4: 1, a5: 1 });
+  });
+
+  it('parses object action with external dependencies', () => {
+    const parsed = E.execute(
+      {
+        1: [
+          { name: 'pickByRegex', params: ['a_'] },
+          // 'pickByRegex("a_")',
+          'mergeWithAdd',
+          'differential',
+          { name: 'getRate', params: ['$.INTERVAL'] }
+        ]
+      },
+      mockData,
+      { INTERVAL: 4 }
+    );
+
+    expect(parsed['1'].result).toEqual({ a2: 1, a3: 1, a4: 1, a5: 1 });
   });
 });

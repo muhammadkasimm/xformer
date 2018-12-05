@@ -163,3 +163,14 @@ export const runAll = R.curry((pipes, data) => {
     )(pipes)
   )(data);
 });
+
+/**
+ * @param  {Array} pipes
+ * @returns {Array}
+ */
+export const getRate = R.curry((denominator, data) => {
+  return R.cond([
+    [R.anyPass([_.typeMatches('array'), _.typeMatches('object')]), R.map(_.divideBy(denominator))],
+    [R.T, _.divideBy(denominator)]
+  ])(data);
+});

@@ -12,6 +12,19 @@ const OPENING_PARAN_REGEX = /^[\(]?/;
 const CLOSING_PARAN_REGEX = /[\)]?$/;
 const SEPARATOR_REGEX = /[,][ ]?/;
 
+function evaluate(str) {
+  return R.pipe(
+    R.tryCatch(eval, R.always(str)),
+    R.when(
+      R.test(/^[\$.]/),
+      R.pipe(
+        R.split('.'),
+        R.path(R.__, this)
+      )
+    )
+  )(str);
+}
+
 /**
  * @param  {string} action
  * @returns {Function}
@@ -30,7 +43,7 @@ function decodeStringyAction(action) {
         R.replace(CLOSING_PARAN_REGEX, ''),
         R.split(SEPARATOR_REGEX),
         R.without(['', undefined]),
-        R.map(eval)
+        R.map(evaluate.bind(this))
       )
     ]),
     R.ifElse(
@@ -63,15 +76,17 @@ function decodeStringyAction(action) {
 // with the parser.
 function decodeObjectAction(action) {
   const { name, params, func } = action;
+  const _evaluate = evaluate.bind(this);
 
   if (R.has(name, P)) {
     let _func = [];
     let _params = [];
 
-    if (_.typeMatches('array', func) && _.isSomething(func)) _func = decodePipe(func);
+    if (_.typeMatches('array', func) && _.isSomething(func)) _func = decodePipe.call(this, func);
     if (_.isSomething(params)) _params = _.typeMatches('array', params) ? params : [params];
-    if (_.isSomething(_func)) return P[name](R.pipe(..._func), ..._params);
-    return P[name](..._params);
+    if (_.isSomething(_func)) return P[name](R.pipe(..._func), ...R.map(_evaluate, _params));
+
+    return P[name](...R.map(_evaluate, _params));
   } else {
     return R.identity;
   }
@@ -110,9 +125,9 @@ function translateObjectToString(action) {
 export function decodePipe(pipe) {
   return R.map(
     R.cond([
-      [_.typeMatches('string'), decodeStringyAction],
-      [_.typeMatches('object'), decodeObjectAction],
-      [_.typeMatches('array'), decodePipe]
+      [_.typeMatches('string'), decodeStringyAction.bind(this)],
+      [_.typeMatches('object'), decodeObjectAction.bind(this)],
+      [_.typeMatches('array'), decodePipe.bind(this)]
     ]),
     pipe
   );
