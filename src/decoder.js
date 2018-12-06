@@ -41,8 +41,8 @@ function decodeStringyAction(action) {
         R.replace(ALIAS_REGEX, ''),
         R.replace(OPENING_PARAN_REGEX, ''),
         R.replace(CLOSING_PARAN_REGEX, ''),
-        R.split(SEPARATOR_REGEX),
-        R.without(['', undefined]),
+        x => `[${x}]`,
+        eval,
         R.map(evaluate.bind(this))
       )
     ]),
@@ -51,14 +51,7 @@ function decodeStringyAction(action) {
         R.prop(0),
         R.has(R.__, P)
       ),
-      R.ifElse(
-        R.pipe(
-          R.prop(1),
-          _.isSomething
-        ),
-        ([a, p]) => P[a](...p),
-        ([a, p]) => P[a]
-      ),
+      R.ifElse(R.propSatisfies(_.isSomething, 1), ([a, p]) => P[a](...p), ([a, p]) => P[a]),
       R.identity
     )
   )(action);

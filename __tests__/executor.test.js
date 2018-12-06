@@ -19,6 +19,26 @@ const mockData = {
     a5: 30
   }
 };
+const mockData_2 = {
+  a_1: {
+    a1: {
+      x: 1,
+      y: 2,
+      z: 3
+    },
+    a2: 4,
+    a3: 6,
+    a4: 8,
+    a5: 10
+  },
+  a_2: {
+    a1: 22,
+    a2: 24,
+    a3: 26,
+    a4: 28,
+    a5: 30
+  }
+};
 
 describe('Parses xFormer queries', () => {
   it('parses queries containing strings', () => {
