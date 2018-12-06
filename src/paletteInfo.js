@@ -13,5 +13,8 @@ export const PALETTE_INFO = {
     'Calculates average of values in a list or JSON object; ignores values that are not numbers.',
   differential:
     'Applies iterative subtraction over consecutive values in a JSON object such that T[i] = T[i] - T[i-1]; first value is ignored in the result.',
-  defaultAll: 'Replaces non-number values in a list or JSON object with the specified value.'
+  defaultAll: 'Replaces non-number values in a list or JSON object with the specified value.',
+  getRate:
+    'Calculates rate by dividing each value in a list or JSON object by the provided interval; ignores values that are not numbers.',
+  runAll: 'Execute a list of pipelines on provided data.'
 };

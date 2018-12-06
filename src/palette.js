@@ -4,7 +4,9 @@
 */
 
 import * as R from 'ramda';
+import * as E from './executor';
 import * as _ from './helpers';
+import { decodePipe } from './decoder';
 
 /**
  * @param  {Array<string>} path
@@ -148,3 +150,27 @@ export const getAvg = R.cond([
   ],
   [R.T, _.defaultToZero]
 ]);
+
+/**
+ * @param  {Array} pipes
+ * @returns {Array}
+ */
+export const runAll = R.curry((pipes, data) => {
+  return R.juxt(
+    R.pipe(
+      decodePipe,
+      R.map(R.apply(R.pipe))
+    )(pipes)
+  )(data);
+});
+
+/**
+ * @param  {Array} pipes
+ * @returns {Array}
+ */
+export const getRate = R.curry((denominator, data) => {
+  return R.cond([
+    [R.anyPass([_.typeMatches('array'), _.typeMatches('object')]), R.map(_.divideBy(denominator))],
+    [R.T, _.divideBy(denominator)]
+  ])(data);
+});

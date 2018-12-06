@@ -1,6 +1,6 @@
-## xFormer: Easier Data Transformations
+## XFormer: Easier Data Transformations
 
-xFormer makes data transformations easy on your cognition and hassle-free.
+XFormer makes data transformations easy on your cognition and hassle-free.
 
 #### Features
 
@@ -16,132 +16,102 @@ npm i @muhammadkasim/xformer --save
 
 #### Usage
 
-```
-import { parser } from '@muhammadkasim/xformer';
+With Xformer, you can execute a simple pipeline of actions by providing a list of action descriptions to the `executePipe` method on the imported instance.
 
-const query = {
-  series_1: ['mergeWithAdd', 'differential'];
-}
-const data = [
-  { a: 2, b: 4 },
-  { a: 22, b: 24 }
-]
+```javascript
+import X from '@muhammadkasim/xformer';
 
-// Run query with data
-parser(query, data);
+const mock_data = [{ a: 1 }, { a: 2 }, { b: 3 }];
+X.executePipe(['mergeWithAdd', 'getAvg'], mock_data);
 
-// Evaluated query with step-wise results for each action in a pipe
+// Returns an object containing the result of executing the pipeline and the
+// corresponding result of each step.
 // {
-//   'series_1': {
-//     buffer: {
-//       'mergeWithAdd': { a: 24, b: 28 },
-//       'differential': { b: 4 }
-//     },
-//     result: { b: 4 }
-//   }
+//   buffer: [
+//     { data: [{a: 1}, {a: 2}, {b: 3}], title: 'Original Data' },
+//     { data: {a: 3, b: 3}, title: 'mergeWithAdd' },
+//     { data: 3, title: 'getAvg' }
+//   ],
+//   result: 3
 // }
 ```
 
-Using xFormer, data transformation pipelines can be expressed as a list of actions.
-
-##### 1. Describing an action with `string`
-
-An action can be described with a simple string. If need be, parameters can also be passed within parenthesis for instance, `pickByRegex(created)`.
-
-Now let's make a couple of pipelines for a sample data from Reporting Engine.
-
-```json
-{
-	"timeseries_data": {
-		"nat44_data_session_created": {
-			"1541671920000": 12555891,
-			"1541672640000": 12570991,
-			"1541673360000": 12586698
-		},
-		"nat44_data_session_created": {
-			"1541671920000": 12614995,
-			"1541672640000": 12631088,
-			"1541673360000": 12646538
-		},
-		"dslite_data_session_freed": {
-			"1541671920000": 12677359,
-			"1541672640000": 12693833,
-			"1541673360000": 12710132
-		}
-}
-```
+An action can be described either as a string or JSON.
 
 ```javascript
-// Simple pipeline
-[
-  'pickFrom([timseries_data])', // pick value at the specified path
-  'pickByRegex(created)', // pick keys by matching with regex
-  'mergeWithAdd', // add object values with the same timestamp/key
-  'applyDifferential', // T[i] = T[i] - T[i-1], where i >= 1
-  'sumAll' // sum all values with init value 0
-][
-  //Nested pipeline
-  ('pickFrom([timseries_data])', // pick value at the specified path
-  'pickByRegex(created)', // filter object by matching keys with regex
-  'mergeWithAdd', // add object values with the same timestamp/key
+X.executePipe([{ name: 'pickByRegex', params: ['a'] }, 'getAvg'], mock_data); //=> 1.5
+```
+
+Xformer also provides a short hand for passing params when describing an action in string form.
+
+```javascript
+X.executePipe(['pickByRegex(a)', 'getAvg'], mock_data); //=> 1.5
+```
+
+You can perform also perform multiple actions on the same data.
+
+```javascript
+X.executePipe(
   [
-    'applyDifferential', // T[i] = T[i] - T[i-1], where i >= 1
-    'rejectSmallerThan(100)' // only keep values greater than 100
+    ['pickFrom([0, "a"])', 'pickFrom([2, "b"])'], //=> [1, 3]
+    'getAvg'
   ],
-  'sumAll(0)') // sum all values with init value 0
-];
+  mock_data
+); //=> 2
 ```
 
-##### 2. Describing an action with JSON
-
-An action can also be described using a predefined JSON schema. This schema contains multiple keys, each describing an aspect of the action.
-
-| Key          | Type     | Default Value | Description                                                        |
-| ------------ | -------- | :-----------: | ------------------------------------------------------------------ |
-| `alias`      | `string` |               | Name of the action to be performed. This is the only required key. |
-| `params`     | `Array`  |     `[]`      | List of parameters to be passed to the action.                     |
-| `subProcess` | `Action` |  `undefined`  | A nested action to be executed after the main action.              |
-
-Now let's describe a pipeline using JSON.
+If you need to pass some external values to assist execution of the pipe, you can do so like shown below.
 
 ```javascript
-[
-  { alias: 'pickFrom', params: [['timseries_data']] },
-  { alias: 'pickByRegex', params: ['created'] },
-  { alias: 'mergeWithAdd' },
-  { alias: 'applyDifferential' },
-  { alias: 'sumAll', params: [10] } // set initial value to 10
-];
+X.executePipe(['mergeWithAdd', 'getRate($.interval)'], mock_data, { interval: 30 }); //=> {a: 0.1, b: 0.1}
 ```
 
-JSON schema lends to an easier to understand structure for complex queries.
+You can also group and `execute` multiple pipelines on the same data. This group of pipelines is called a query and can be a list of pipelines or a JSON structure where value in each key-value pair is a pipeline.
 
 ```javascript
-[
-  { alias: 'pickFrom', params: [['timseries_data']] },
-  { alias: 'pickByRegex', params: ['created'] },
-  { alias: 'mergeWithAdd' },
+X.execute(
   {
-    alias: 'applyDifferential',
-    subProcess: [
-      { alias: 'rejectSmallerThan', params: [100] },
-      { alias: 'rejectGreaterThan', params: [1500] }
-    ]
+    avg_by_key: ['mergeWithAdd', 'getAvg'],
+    rate_by_30: ['mergeWithAdd', 'getRate($.interval)']
   },
-  { alias: 'sumAll', params: [10] }
-];
+  mock_data
+);
+
+// Takes a query and data as input and executes all pipelines within the query, with
+// each pipeline receiving the provided data.
+// {
+//     avg_by_key: {
+//         buffer: [
+//           { data: [{a: 1}, {a: 2}, {b: 3}], title: 'Original Data' },
+//           { data: {a: 3, b: 3}, title: 'mergeWithAdd' },
+//           { data: 3, title: 'getAvg' }
+//         ],
+//         result: 3
+//     },
+//     rate_by_30: {
+//         buffer: [
+//           { data: [{a: 1}, {a: 2}, {b: 3}], title: 'Original Data' },
+//           { data: {a: 3, b: 3}, title: 'mergeWithAdd' },
+//           { data: {a: 0.1, b: 0.1}, title: 'getRate($.interval)' }
+//         ],
+//         result: {a: 0.1, b: 0.1}
+//     }
+// }
 ```
 
 #### Action Palette
 
-> NOTE: The action palette shown below has a very limited set of actions. Upon release, `v0.1` will actually have actions needed to support all the transformations in CGN app.
+You can describe following actions in transformation pipelines.
 
-| Action              | Params                                | Description                                                                                                                                                         |
-| ------------------- | ------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `pickFrom`          | `path: Array<string>, data: Object`   | Picks value from data at the specified path                                                                                                                         |
-| `pickByRegex`       | `regex: string, data: Object`         | Filter data object by keeping keys that match the provided regex                                                                                                    |
-| `mergeWithAdd`      | `data: Array<Object>`                 | Merge list of objects by adding up values that have the same keys                                                                                                   |
-| `applyDifferential` | `data: [Object, Array]`               | Subtracts current item from the previous iteratively                                                                                                                |
-| `sumAll`            | `init: number, data: [Object, Array]` | Adds all values in a list or object with the initial value being `0`, if not provided. If a value in the list of object is not a number, it will considered as `0`. |
-| `rejectSmallerThan` | `min: number, data: [Object, Array]`  | Rejects keys or items from an object or array that fall below the `min` value.                                                                                      |
-| `rejectGreaterThan` | `max: number, data: [Object, Array]`  | Rejects keys or items from an object or array that are greater than the provided `max` value.                                                                       |
+| Action              | Params                                 | Description                                                                                                                                  |
+| ------------------- | -------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
+| `pickFrom`          | `path: Array<string>, data: Object`    | Retrieves value at the specified path from a JSON object.                                                                                    |
+| `pickByRegex`       | `regex: string, data: Object`          | Filters key-value pairs from a JSON object when key matches the specified regular expression (or string).                                    |
+| `mergeWithAdd`      | `data: Array<Object>`                  | Merges a list of JSON objects into a single JSON object by adding values having the same key; treats a non-number value as zero.             |
+| `mergeWithSubtract` | `data: Array<Object>`                  | Merges a list of JSON objects into a single JSON object by subtracting values having the same key; treats a non-number value as zero.        |
+| `getUsedMemory`     | `data: Object|Array`                   | Calculates percentages of used memory when given a list or JSON object containing percentages of free memory.                                |
+| `getAvg`            | `data: Object|Array`                   | Calculates average of values in a list or JSON object; ignores values that are not numbers.                                                  |
+| `differential`      | `data: Object`                         | Applies iterative subtraction over consecutive values in a JSON object such that T[i] = T[i] - T[i-1]; first value is ignored in the result. |
+| `defaultAll`        | `data: Object|Array`                   | Replaces non-number values in a list or JSON object with the specified value.                                                                |
+| `getRate`           | `interval: number, data: Object|Array` | Calculates rate by dividing each value in a list or JSON object by the provided interval; ignores values that are not numbers.               |
+| `runAll`            | `pipes: Array<pipe>, data: any`        | Execute a list of pipelines on provided data.                                                                                                |

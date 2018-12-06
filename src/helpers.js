@@ -37,18 +37,6 @@ export const bePositive = R.pipe(
   Math.abs
 );
 
-// /**
-//  * @param  {Object} input
-//  * @returns {Object}
-//  */
-// export const xFormerForChart = R.evolve({
-//   x: parseInt,
-//   y: R.pipe(
-//     defaultToZero,
-//     bePositive
-//   )
-// });
-
 /**
  * @param  {string} typeToBe
  * @param  {any} input
@@ -158,3 +146,14 @@ export const getAverageForList = R.pipe(
   R.converge(R.divide, [R.sum, R.length]),
   defaultToZero
 );
+
+/**
+ * @param  {any} input
+ * @returns {boolean}
+ */
+export const divideBy = R.curry((denominator, numerator) => {
+  return R.pipe(
+    defaultTo(1),
+    R.divide(defaultToZero(numerator))
+  )(denominator);
+});
