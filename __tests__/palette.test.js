@@ -95,6 +95,16 @@ describe('Test palette functions', () => {
     });
   });
 
+  describe('Defaults all values in an Array or Object', () => {
+    it('defaults values in an Array', () => {
+      expect(_.defaultAll('N/A', [1, NaN, '3'])).toEqual([1, 'N/A', 3]);
+    });
+
+    it('defaults values in an Object', () => {
+      expect(_.defaultAll(0, { a: 1, b: Infinity, c: 3 })).toEqual({ a: 1, b: 0, c: 3 });
+    });
+  });
+
   describe('Calculates used memory for any input', () => {
     it('calculates used memory for Array', () => {
       expect(_.getUsedMemory([0.1, 0.2, 0.3])).toEqual([90, 80, 70]);

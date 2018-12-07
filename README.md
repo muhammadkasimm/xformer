@@ -103,15 +103,16 @@ X.execute(
 
 You can describe following actions in transformation pipelines.
 
-| Action              | Params                                    | Description                                                                                                                                  |
-| ------------------- | ----------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
-| `pickFrom`          | `path: Array<string>, data: Object`       | Retrieves value at the specified path from a JSON object.                                                                                    |
-| `pickByRegex`       | `regex: string, data: Object`             | Filters key-value pairs from a JSON object when key matches the specified regular expression (or string).                                    |
-| `mergeWithAdd`      | `data: Array<Object>`                     | Merges a list of JSON objects into a single JSON object by adding values having the same key; treats a non-number value as zero.             |
-| `mergeWithSubtract` | `data: Array<Object>`                     | Merges a list of JSON objects into a single JSON object by subtracting values having the same key; treats a non-number value as zero.        |
-| `getUsedMemory`     | `data: (Object, Array)`                   | Calculates percentages of used memory when given a list or JSON object containing percentages of free memory.                                |
-| `getAvg`            | `data: (Object, Array)`                   | Calculates average of values in a list or JSON object; ignores values that are not numbers.                                                  |
-| `differential`      | `data: Object`                            | Applies iterative subtraction over consecutive values in a JSON object such that T[i] = T[i] - T[i-1]; first value is ignored in the result. |
-| `defaultAll`        | `data: (Object, Array)`                   | Replaces non-number values in a list or JSON object with the specified value.                                                                |
-| `getRate`           | `interval: number, data: (Object, Array)` | Calculates rate by dividing each value in a list or JSON object by the provided interval; ignores values that are not numbers.               |
-| `runAll`            | `pipes: Array<pipe>, data: any`           | Execute a list of pipelines on provided data.                                                                                                |
+| Action              | Params                                    | Description                                                                                                                                                          |
+| ------------------- | ----------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `pickFrom`          | `path: Array<string>, data: Object`       | Retrieves value at the specified path from a JSON object.                                                                                                            |
+| `pickByRegex`       | `regex: string, data: Object`             | Filters key-value pairs from a JSON object when key matches the specified regular expression (or string).                                                            |
+| `mergeWithAdd`      | `data: Array<Object>`                     | Merges a list of JSON objects into a single JSON object by adding values having the same key; treats a non-number value as zero.                                     |
+| `mergeWithSubtract` | `data: Array<Object>`                     | Merges a list of JSON objects into a single JSON object by subtracting values having the same key; treats a non-number value as zero.                                |
+| `getUsedMemory`     | `data: (Object, Array)`                   | Calculates percentages of used memory when given a list or JSON object containing percentages of free memory.                                                        |
+| `getAvg`            | `data: (Object, Array)`                   | Calculates average of values in a list or JSON object; ignores values that are not numbers.                                                                          |
+| `differential`      | `data: Object`                            | Applies iterative subtraction over consecutive values in a JSON object such that `T[i] = T[i] - T[i-1]`; first value is ignored in the result.                       |
+| `sumAll`            | `data: (Object, Array)`                   | Recieves an array or object, adds all the values and return a single number. All non-number values are treated as zero.                                              |
+| `defaultAll`        | `data: (Object, Array)`                   | Recieves an array or object and replaces each junky value with the provided fallback value. A value is considered junk if it can not be converted to a valid number. |
+| `getRate`           | `interval: number, data: (Object, Array)` | Calculates rate by dividing each value in a list or JSON object by the provided interval; ignores values that are not numbers.                                       |
+| `runAll`            | `pipes: Array<pipe>, data: any`           | Execute a list of pipelines on provided data.                                                                                                                        |

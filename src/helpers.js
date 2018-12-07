@@ -157,3 +157,68 @@ export const divideBy = R.curry((denominator, numerator) => {
     R.divide(defaultToZero(numerator))
   )(denominator);
 });
+
+/**
+ * @param  {string} prop
+ * @param  {Object|Array} data
+ * @returns {any}
+ */
+export const pickProp = R.curry((prop, data) =>
+  R.ifElse(
+    R.always(R.equals('*', prop)),
+    R.cond([
+      [typeMatches('object'), R.values],
+      [
+        typeMatches('array'),
+        R.pipe(
+          R.flatten,
+          R.map(R.values)
+        )
+      ]
+    ]),
+    R.cond([
+      [typeMatches('object'), R.prop(prop)],
+      [
+        typeMatches('array'),
+        R.pipe(
+          R.flatten,
+          mapIndexed((x, i) =>
+            R.ifElse(
+              R.always(
+                R.pipe(
+                  parseInt,
+                  R.equals(i)
+                )(prop)
+              ),
+              R.identity,
+              R.prop(prop)
+            )(x)
+          ),
+          R.reject(isNothing)
+        )
+      ]
+    ])
+  )(data)
+);
+
+/**
+ * @param  {Array<string>} path
+ * @param  {Object|Array} data
+ * @returns {any}
+ */
+export function pickFrom(path, data) {
+  if (R.isEmpty(path)) {
+    return R.when(
+      R.allPass([
+        typeMatches('array'),
+        R.pipe(
+          R.length,
+          R.equals(1)
+        )
+      ]),
+      R.head
+    )(data);
+  }
+
+  return pickFrom(R.tail(path), pickProp(R.head(path), data));
+}
