@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../">
+  <title data-ice="title">src/palette.js | xFormer</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  <script src="script/manual.js"></script>
+<meta name="description" content="xFormer makes data transformations easy on your cognition and hassle-free."><meta property="og:type" content="website"><meta property="og:url" content="https://www.npmjs.com/package/@muhammadkasim/xformer"><meta property="og:site_name" content="xFormer"><meta property="og:title" content="xFormer"><meta property="og:image" content="https://cdn-images-1.medium.com/max/1200/1*w1GC6zZbgdAXDKq01bmFWA.png"><meta property="og:description" content="xFormer makes data transformations easy on your cognition and hassle-free."><meta property="og:author" content="http://www.emumba.com/"><meta property="twitter:card" content="summary"><meta property="twitter:title" content="xFormer"><meta property="twitter:description" content="xFormer makes data transformations easy on your cognition and hassle-free."><meta property="twitter:image" content="https://cdn-images-1.medium.com/max/1200/1*w1GC6zZbgdAXDKq01bmFWA.png"></head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./" style="display: flex; align-items: center;"><img src="./image/brand_logo.png" style="width:34px;"></a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  <a href="test.html" data-ice="testLink">Test</a>
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+<a href="https://gitlab.com/muhammadkasim/xformer">Repository</a></header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-defaultAll">defaultAll</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-differential">differential</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-getAvg">getAvg</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-getRate">getRate</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-getUsedMemory">getUsedMemory</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-mergeWithAdd">mergeWithAdd</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-mergeWithSubtract">mergeWithSubtract</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-pickByRegex">pickByRegex</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-pickFrom">pickFrom</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-runAll">runAll</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-sumAll">sumAll</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">src/palette.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">/*
+  This file contains the xFormer functions; the end user will build queries using these functions.
+	This is the command pallete.
+*/
+
+import * as R from &apos;ramda&apos;;
+import * as E from &apos;./executor&apos;;
+import * as _ from &apos;./helpers&apos;;
+import { decodePipe } from &apos;./decoder&apos;;
+
+/**
+ * Retrieves value at the specified path from a JSON object. &apos;*&apos; in the path is regarded as
+ * a wildcard, meaning anything at this level will used to pick value from.
+ *
+ * @func
+ * @param  {Array&lt;string&gt;} path
+ * @param  {Object} input
+ * @returns {any}
+ * @example
+ *      pickFrom([&apos;a&apos;,&apos;b&apos;,&apos;c&apos;], {&apos;a&apos;: {&apos;b&apos;: {&apos;c&apos;: 20}}}) //=&gt; 20
+ *      pickFrom([&apos;a&apos;,&apos;*&apos;,&apos;x&apos;], {&apos;a&apos;: {&apos;b&apos;: {&apos;x&apos;: 20}, &apos;c&apos;: {&apos;x&apos;: 40}}}) //=&gt; [20, 40]
+ */
+export const pickFrom = R.curry(_.pickFrom);
+
+/**
+ * Filters key-value pairs from a JSON object when key matches the specified regular expression (or string).
+ *
+ * @func
+ * @param  {string} path
+ * @param  {Object} input
+ * @returns {Object}
+ * @example
+ *      pickByRegex(&apos;abc&apos;, {&apos;abcd&apos;: {&apos;b&apos;: {&apos;c&apos;: 20}}, &apos;efg&apos;: {&apos;h&apos;: {&apos;i&apos;: 20}}) //=&gt; {&apos;b&apos;: {&apos;c&apos;: 20}}
+ */
+export const pickByRegex = R.curry((text, data) =&gt;
+  R.ifElse(
+    R.always(_.isNothing(text)),
+    R.always({}),
+    R.pickBy((v, k) =&gt; R.test(new RegExp(text), k))
+  )(data)
+);
+
+/**
+ * @param  {Function} xformer
+ * @param  {Object|Array&lt;Object&gt;}  data
+ * @returns {Object}
+ */
+const mergeWithOp = R.curry((xformer, data) =&gt;
+  R.ifElse(
+    _.typeMatches(&apos;array&apos;),
+    R.pipe(
+      R.reject(_.isNothing),
+      R.reduce(R.mergeWith(xformer), {})
+    ),
+    R.pipe(
+      R.pickBy(_.typeMatches(&apos;object&apos;)),
+      R.values,
+      R.reduce(R.mergeWith(xformer), {})
+    )
+  )(data)
+);
+
+/**
+ * Merges a list of JSON objects into a single JSON object by adding values having the same key; treats a non-number value as zero.
+ *
+ * @func
+ * @param  {Array&lt;Object&gt;} data
+ * @returns {Object}
+ * @example
+ *      mergeWithAdd([{ a: 1, b: 5 }, { a: 2 }, { a: 3 }]) //=&gt; { a: 6, b: 5 }
+ */
+export const mergeWithAdd = mergeWithOp(_.sum);
+
+/**
+ * Merges a list of JSON objects into a single JSON object by subtracting values having the same key; treats a non-number value as zero.
+ *
+ * @func
+ * @param  {Array&lt;Object&gt;} data
+ * @returns {Object}
+ * @example
+ *      mergeWithAdd([{ a: 1, b: 5 }, { a: 2 }, { a: 3 }]) //=&gt; { a: 2, b: 5 }
+ */
+export const mergeWithSubtract = mergeWithOp(_.subtract);
+
+/**
+ * Applies iterative subtraction over consecutive values in a JSON object such that T[i] = T[i] - T[i-1]; first value is ignored in the result.
+ *
+ * @func
+ * @param  {Array&lt;Object&gt;} data
+ * @returns {Object}
+ * @example
+ *      differential({ a: 1, b: 2, c: 3 }) //=&gt; { b: 1, c: 1 }
+ */
+export const differential = R.curry(data =&gt; {
+  const calculator = R.pipe(
+    R.toPairs,
+    R.reject(x =&gt; _.isJunk(x[1])),
+    R.sortBy(R.prop(0)),
+    R.aperture(2),
+    R.map(([prev, next]) =&gt; [next[0], R.subtract(...R.pluck(1, [next, prev]))]),
+    R.map(
+      R.over(
+        R.lensIndex(1),
+        R.pipe(
+          _.defaultToZero,
+          _.bePositive
+        )
+      )
+    ),
+    R.fromPairs
+  );
+
+  return R.cond([
+    [_.typeMatches(&apos;object&apos;), calculator],
+    [
+      _.typeMatches(&apos;array&apos;),
+      R.pipe(
+        calculator,
+        R.values
+      )
+    ]
+  ])(data);
+});
+
+/**
+ * Recieves an array or object, adds all the values and return a single number. All non-number values
+ * are treated as zero.
+ *
+ * @func
+ * @param  {Object|Array} data
+ * @returns {number}
+ * @example
+ *      sumAll([1, 2, 3]) //=&gt; 6
+ *      sumAll({a: 1, b: 2, c: 3}) //=&gt; 6
+ */
+export const sumAll = R.cond([
+  [
+    _.typeMatches(&apos;object&apos;),
+    R.pipe(
+      R.values,
+      _.sumList
+    )
+  ],
+  [_.typeMatches(&apos;array&apos;), _.sumList],
+  [_.typeMatches(&apos;number&apos;), _.defaultToZero],
+  [_.typeMatches(&apos;string&apos;), _.defaultToZero],
+  [R.T, R.always(0)]
+]);
+
+/**
+ * Recieves an array or object and replaces each junky value with the provided fallback value.
+ * A value is considered junk if it can not be converted to a valid number. A stringy number
+ * is converted to number.
+ *
+ * @param  {number} value
+ * @param  {Object|Array} data
+ * @returns {number}
+ * @example
+ *      defaultAll(&apos;N/A&apos;, [1, NaN, &apos;3&apos;])) //=&gt; [1, &apos;N/A&apos;, 3]
+ */
+export const defaultAll = R.curry((value, data) =&gt; {
+  return R.cond([
+    [R.anyPass([_.typeMatches(&apos;array&apos;), _.typeMatches(&apos;object&apos;)]), R.map(_.defaultTo(value))],
+    [R.T, _.defaultTo(value)]
+  ])(data);
+});
+
+/**
+ * Calculates percentages of used memory when given a list or JSON object containing percentages of free memory.
+ *
+ * @func
+ * @param  {any} input
+ * @returns {number}
+ * @example
+ *      getUsedMemory([0.1, 0.2, 0.3]) //=&gt; [90, 80, 70]
+ */
+export const getUsedMemory = R.cond([
+  [_.typeMatches(&apos;array&apos;), R.map(_.getUsedMemoryForSingle)],
+  [_.typeMatches(&apos;object&apos;), R.map(_.getUsedMemoryForSingle)],
+  [R.T, _.getUsedMemoryForSingle]
+]);
+
+/**
+ * Calculates average of values in a list or JSON object; ignores values that are not numbers.
+ *
+ * @func
+ * @param  {any} input
+ * @returns {number}
+ * @example
+ *      getAvg([1, 2, 3]) //=&gt; 2
+ */
+export const getAvg = R.cond([
+  [_.typeMatches(&apos;array&apos;), _.getAverageForList],
+  [
+    _.typeMatches(&apos;object&apos;),
+    R.pipe(
+      R.values,
+      _.getAverageForList
+    )
+  ],
+  [R.T, _.defaultToZero]
+]);
+
+/**
+ * Execute a list of pipelines on provided data. A pipeline is an array of action descriptions.
+ * An action can be described in form of a string or JSON.
+ *
+ * @func
+ * @param  {Array} pipes
+ * @returns {Array}
+ * @example
+ *      runAll([
+ *        [&apos;pickFrom([&quot;alpha&quot;])&apos;, &apos;getAvg&apos;], // pipe 1
+ *        [&apos;pickFrom([&quot;beta&quot;])&apos;, &apos;getAvg&apos;],  // pipe 2
+ *      ], {
+ *        alpha: { a1: 1, a2: 2, a3: 3 },
+ *        beta: { b1: 11, b2: 22, b3: 33 },
+ *      })
+ *
+ *      =&gt; [2, 22]
+ */
+export const runAll = R.curry((pipes, data) =&gt; {
+  return R.juxt(
+    R.pipe(
+      decodePipe,
+      R.map(R.apply(R.pipe))
+    )(pipes)
+  )(data);
+});
+
+/**
+ * @param  {Array} pipes
+ * @returns {Array}
+ * @example
+ *       getRate(10, {&apos;a&apos;: 20, &apos;b&apos;: 30}) // =&gt; {&apos;a&apos;: 2, &apos;b&apos;: 3}
+ */
+export const getRate = R.curry((denominator, data) =&gt; {
+  return R.cond([
+    [R.anyPass([_.typeMatches(&apos;array&apos;), _.typeMatches(&apos;object&apos;)]), R.map(_.divideBy(denominator))],
+    [R.T, _.divideBy(denominator)]
+  ])(data);
+});
+</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(1.1.0)</span><img src="./image/esdoc-logo-mini-black.png"></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

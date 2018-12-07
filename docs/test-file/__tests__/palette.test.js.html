@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../">
+  <title data-ice="title">__tests__/palette.test.js | xFormer</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  <script src="script/manual.js"></script>
+<meta name="description" content="xFormer makes data transformations easy on your cognition and hassle-free."><meta property="og:type" content="website"><meta property="og:url" content="https://www.npmjs.com/package/@muhammadkasim/xformer"><meta property="og:site_name" content="xFormer"><meta property="og:title" content="xFormer"><meta property="og:image" content="https://cdn-images-1.medium.com/max/1200/1*w1GC6zZbgdAXDKq01bmFWA.png"><meta property="og:description" content="xFormer makes data transformations easy on your cognition and hassle-free."><meta property="og:author" content="http://www.emumba.com/"><meta property="twitter:card" content="summary"><meta property="twitter:title" content="xFormer"><meta property="twitter:description" content="xFormer makes data transformations easy on your cognition and hassle-free."><meta property="twitter:image" content="https://cdn-images-1.medium.com/max/1200/1*w1GC6zZbgdAXDKq01bmFWA.png"></head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./" style="display: flex; align-items: center;"><img src="./image/brand_logo.png" style="width:34px;"></a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  <a href="test.html" data-ice="testLink">Test</a>
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+<a href="https://gitlab.com/muhammadkasim/xformer">Repository</a></header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-defaultAll">defaultAll</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-differential">differential</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-getAvg">getAvg</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-getRate">getRate</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-getUsedMemory">getUsedMemory</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-mergeWithAdd">mergeWithAdd</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-mergeWithSubtract">mergeWithSubtract</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-pickByRegex">pickByRegex</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-pickFrom">pickFrom</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-runAll">runAll</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-sumAll">sumAll</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">__tests__/palette.test.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import * as _ from &apos;../src/palette&apos;;
+
+describe(&apos;Test palette functions&apos;, () =&gt; {
+  describe(&apos;Picks value at specified path from an Object or Array&apos;, () =&gt; {
+    it(&apos;picks values by keys only&apos;, () =&gt; {
+      expect(_.pickFrom([&apos;a&apos;, &apos;b&apos;, &apos;c&apos;], { a: { b: { c: 1 } } })).toBe(1);
+    });
+
+    it(&apos;picks values by keys and index&apos;, () =&gt; {
+      expect(_.pickFrom([&apos;a&apos;, &apos;b&apos;, 0, &apos;c&apos;], { a: { b: [{ c: 1 }] } })).toBe(1);
+    });
+
+    it(&apos;picks values from an Array&apos;, () =&gt; {
+      expect(_.pickFrom([0], [1, 2, 3])).toBe(1);
+    });
+  });
+
+  describe(&apos;Keeps only keys from an Object that match regex&apos;, () =&gt; {
+    const mockObj = { a1: 1, a2: 2, b1: 1, b2: 2 };
+
+    it(&apos;uses string for matching&apos;, () =&gt; {
+      expect(_.pickByRegex(&apos;a&apos;, mockObj)).toEqual({ a1: 1, a2: 2 });
+    });
+
+    it(&apos;uses regex for matching&apos;, () =&gt; {
+      expect(_.pickByRegex(/a1/, mockObj)).toEqual({ a1: 1 });
+    });
+
+    it(&apos;uses number for matching&apos;, () =&gt; {
+      expect(_.pickByRegex(1, mockObj)).toEqual({ a1: 1, b1: 1 });
+    });
+
+    it(&apos;empty Object on falsey value&apos;, () =&gt; {
+      expect(_.pickByRegex(undefined, mockObj)).toEqual({});
+    });
+
+    it(&apos;empty Object when nothing matches&apos;, () =&gt; {
+      expect(_.pickByRegex(/c/, mockObj)).toEqual({});
+    });
+  });
+
+  describe(&apos;Merges list of Objects by adding values of the same key&apos;, () =&gt; {
+    it(&apos;merges list of Objects&apos;, () =&gt; {
+      expect(_.mergeWithAdd([{ a: 1 }, { a: 2 }, { a: 3 }])).toEqual({ a: 6 });
+    });
+
+    it(&apos;merges values of an Object that are of Object type&apos;, () =&gt; {
+      expect(_.mergeWithAdd({ a: { x: 1 }, b: { x: 2 }, c: [1, 2, 3] })).toEqual({ x: 3 });
+    });
+
+    it(&apos;empty Object when none of the values in provied Object are of Object type&apos;, () =&gt; {
+      expect(_.mergeWithAdd({ a: [1, 2], b: undefined, c: &apos;hello&apos; })).toEqual({});
+    });
+  });
+
+  describe(&apos;Merges list of Objects by subtracting values of the same key&apos;, () =&gt; {
+    it(&apos;merges list of Objects&apos;, () =&gt; {
+      expect(_.mergeWithSubtract([{ a: 1 }, { a: 2 }, { a: 3 }])).toEqual({ a: 2 });
+    });
+
+    it(&apos;merges values of an Object that are of Object type&apos;, () =&gt; {
+      expect(_.mergeWithSubtract({ a: { x: 1 }, b: { x: 2 }, c: [1, 2, 3] })).toEqual({ x: 1 });
+    });
+
+    it(&apos;empty Object when none of the values in provied Object are of Object type&apos;, () =&gt; {
+      expect(_.mergeWithSubtract({ a: [1, 2], b: undefined, c: &apos;hello&apos; })).toEqual({});
+    });
+  });
+
+  describe(&apos;Applies differential logic (i.e x[i] = x[i] - x[i-1]) on an Object or Array&apos;, () =&gt; {
+    it(&apos;subtracts values of an Object&apos;, () =&gt; {
+      expect(_.differential({ a: 1, b: 2, c: 3 })).toEqual({ b: 1, c: 1 });
+    });
+
+    it(&apos;subtracts values of an Array&apos;, () =&gt; {
+      expect(_.differential([1, 2, 3])).toEqual([1, 1]);
+    });
+
+    it(&apos;empty Array when only one item in Array&apos;, () =&gt; {
+      expect(_.differential([1])).toEqual([]);
+    });
+  });
+
+  describe(&apos;Sums up all values in an Array or Object&apos;, () =&gt; {
+    it(&apos;sums values in an Array&apos;, () =&gt; {
+      expect(_.sumAll([1, 2, 3])).toBe(6);
+    });
+
+    it(&apos;sums values in an Object&apos;, () =&gt; {
+      expect(_.sumAll({ a: 1, b: 2, c: 3 })).toBe(6);
+    });
+
+    it(&apos;ignores junky values when summing&apos;, () =&gt; {
+      expect(_.sumAll([1, 2, 3, undefined, &apos;abc&apos;])).toBe(6);
+    });
+  });
+
+  describe(&apos;Defaults all values in an Array or Object&apos;, () =&gt; {
+    it(&apos;defaults values in an Array&apos;, () =&gt; {
+      expect(_.defaultAll(&apos;N/A&apos;, [1, NaN, &apos;3&apos;])).toEqual([1, &apos;N/A&apos;, 3]);
+    });
+
+    it(&apos;defaults values in an Object&apos;, () =&gt; {
+      expect(_.defaultAll(0, { a: 1, b: Infinity, c: 3 })).toEqual({ a: 1, b: 0, c: 3 });
+    });
+  });
+
+  describe(&apos;Calculates used memory for any input&apos;, () =&gt; {
+    it(&apos;calculates used memory for Array&apos;, () =&gt; {
+      expect(_.getUsedMemory([0.1, 0.2, 0.3])).toEqual([90, 80, 70]);
+    });
+
+    it(&apos;calculates used memory for Object&apos;, () =&gt; {
+      expect(_.getUsedMemory({ a: 0.1, b: 0.2, c: 0.3 })).toEqual({ a: 90, b: 80, c: 70 });
+    });
+  });
+
+  describe(&apos;Calculates average of values in an Array or Object&apos;, () =&gt; {
+    it(&apos;calculates average of items in a list&apos;, () =&gt; {
+      expect(_.getAvg([1, 2, 3])).toBe(2);
+    });
+
+    it(&apos;calculates average of items in an Object&apos;, () =&gt; {
+      expect(_.getAvg({ a: 1, b: 2, c: 3 })).toBe(2);
+    });
+
+    it(&apos;calculates average of an empty Object&apos;, () =&gt; {
+      expect(_.getAvg({})).toBe(0);
+    });
+
+    it(&apos;average of a number (or stringy number) is the number itself&apos;, () =&gt; {
+      expect(_.getAvg(2)).toBe(2);
+    });
+
+    it(&apos;average of a junky value is zero&apos;, () =&gt; {
+      expect(_.getAvg(false)).toBe(0);
+    });
+  });
+});
+</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(1.1.0)</span><img src="./image/esdoc-logo-mini-black.png"></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

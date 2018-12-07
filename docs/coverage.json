@@ -1,0 +1,12 @@
+{
+  "coverage": "100%",
+  "expectCount": 12,
+  "actualCount": 12,
+  "files": {
+    "src/palette.js": {
+      "expectCount": 12,
+      "actualCount": 12,
+      "undocumentLines": []
+    }
+  }
+}

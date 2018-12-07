@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../">
+  <title data-ice="title">lib/helpers.js | @muhammadkasim/xformer</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  <script src="script/manual.js"></script>
+<meta name="description" content="xFormer provides an extensive set of utilities, a way to define declarative transformation pipelines and a parser to facilitate easier data transformations."><meta property="twitter:card" content="summary"><meta property="twitter:title" content="@muhammadkasim/xformer"><meta property="twitter:description" content="xFormer provides an extensive set of utilities, a way to define declarative transformation pipelines and a parser to facilitate easier data transformations."></head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./">Home</a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+<a href="https://gitlab.com/muhammadkasim/xformer">Repository</a></header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  </ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">lib/helpers.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">&apos;use strict&apos;;
+
+Object.defineProperty(exports, &quot;__esModule&quot;, {
+  value: true
+});
+exports.isSomething = exports.isNothing = exports.logger = exports.getFirstMatch = exports.reduceIndexed = exports.mapIndexed = exports.zipValueWithStep = exports.sumList = exports.sum = exports.typeMatches = exports.bePositive = exports.defaultToZero = exports.isJunk = undefined;
+
+var _ramda = require(&apos;ramda&apos;);
+
+var R = _interopRequireWildcard(_ramda);
+
+function _interopRequireWildcard(obj) { if (obj &amp;&amp; obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+/**
+ * @param  {number} input
+ * @returns {number}
+ */
+const isJunk = exports.isJunk = R.pipe(parseFloat, R.anyPass([R.equals(NaN), R.equals(Infinity), R.equals(-Infinity)]));
+/**
+ * @param  {number} input
+ * @returns {number}
+ */
+/*
+  This file contains the smaller utilities and helpers that are used in the xFormer command pallete functions and parser.
+*/
+
+const defaultToZero = exports.defaultToZero = R.ifElse(isJunk, R.always(0), parseFloat);
+
+/**
+ * @param  {number} input
+ * @returns {number}
+ */
+const bePositive = exports.bePositive = R.pipe(defaultToZero, Math.abs);
+
+// /**
+//  * @param  {Object} input
+//  * @returns {Object}
+//  */
+// export const xformForChart = R.evolve({
+//   x: parseInt,
+//   y: R.pipe(
+//     defaultToZero,
+//     bePositive
+//   )
+// });
+
+/**
+ * @param  {string} typeToBe
+ * @param  {any} input
+ * @returns {boolean}
+ */
+const typeMatches = exports.typeMatches = R.curry((typeToBe, input) =&gt; R.pipe(R.type, R.toLower, R.equals(R.toLower(typeToBe)))(input));
+
+/**
+ * @param  {number} left
+ * @param  {number} right
+ * @returns {Object}
+ */
+const sum = exports.sum = R.curry((left, right) =&gt; R.add(defaultToZero(left), defaultToZero(right)));
+
+/**
+ * @param  {Array&lt;number&gt;} data
+ * @returns {number}
+ */
+const _sumList = R.reduce(sum, 0);
+
+/**
+ * @param  {Array&lt;number&gt; | Object} data
+ * @returns {number}
+ */
+const sumList = exports.sumList = R.cond([[typeMatches(&apos;object&apos;), R.pipe(R.values, _sumList)], [typeMatches(&apos;array&apos;), _sumList], [typeMatches(&apos;number&apos;), R.identity], [typeMatches(&apos;string&apos;), defaultToZero], [R.T, R.always(0)]]);
+
+/**
+ * @param  {string} step
+ * @param  {any} data
+ * @returns {Object}
+ */
+const zipValueWithStep = exports.zipValueWithStep = R.curry((step, data) =&gt; ({
+  [step]: data
+}));
+
+/**
+ * @param  {Function} fn(value, index)
+ * @param  {Array&lt;any&gt;} data
+ * @returns {Array&lt;any&gt;}
+ */
+const mapIndexed = exports.mapIndexed = R.addIndex(R.map);
+
+/**
+ * @param  {Function} fn
+ * @param  {Array&lt;any&gt;} data
+ * @returns {Array&lt;any&gt;}
+ */
+const reduceIndexed = exports.reduceIndexed = R.addIndex(R.reduce);
+
+/**
+ * @param  {string} regex
+ * @param  {string} input
+ * @returns {string}
+ */
+const getFirstMatch = exports.getFirstMatch = R.curry((regex, input) =&gt; R.pipe(R.match(new RegExp(regex)), R.pathOr(&apos;&apos;, [0]))(input));
+
+/**
+ * @param  {string} lbl
+ * @param  {any} data
+ * @returns {any}
+ */
+const logger = exports.logger = R.curry((lbl, data) =&gt; R.tap(x =&gt; console.log(`${lbl}:`, x), data));
+
+/**
+ * @param  {any} input
+ * @returns {boolean}
+ */
+const isNothing = exports.isNothing = R.either(R.isEmpty, R.isNil);
+
+/**
+ * @param  {any} input
+ * @returns {boolean}
+ */
+const isSomething = exports.isSomething = R.complement(isNothing);</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(1.1.0)</span><img src="./image/esdoc-logo-mini-black.png"></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../">
+  <title data-ice="title">src/helpers.js | xFormer</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  <script src="script/manual.js"></script>
+<meta name="description" content="xFormer makes data transformations easy on your cognition and hassle-free."><meta property="og:type" content="website"><meta property="og:url" content="https://www.npmjs.com/package/@muhammadkasim/xformer"><meta property="og:site_name" content="xFormer"><meta property="og:title" content="xFormer"><meta property="og:image" content="https://cdn-images-1.medium.com/max/1200/1*w1GC6zZbgdAXDKq01bmFWA.png"><meta property="og:description" content="xFormer makes data transformations easy on your cognition and hassle-free."><meta property="og:author" content="http://www.emumba.com/"><meta property="twitter:card" content="summary"><meta property="twitter:title" content="xFormer"><meta property="twitter:description" content="xFormer makes data transformations easy on your cognition and hassle-free."><meta property="twitter:image" content="https://cdn-images-1.medium.com/max/1200/1*w1GC6zZbgdAXDKq01bmFWA.png"></head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./" style="display: flex; align-items: center;"><img src="./image/brand_logo.png" style="width:34px;"></a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  <a href="test.html" data-ice="testLink">Test</a>
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+<a href="https://gitlab.com/muhammadkasim/xformer">Repository</a></header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/main.js~Xform.html">Xform</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-decodePipe">decodePipe</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getActionName">getActionName</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-execute">execute</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-executePipe">executePipe</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-pickFrom">pickFrom</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-bePositive">bePositive</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-defaultTo">defaultTo</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-defaultToZero">defaultToZero</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-divideBy">divideBy</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-getAverageForList">getAverageForList</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-getFirstMatch">getFirstMatch</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-getUsedMemoryForSingle">getUsedMemoryForSingle</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-isJunk">isJunk</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-isNothing">isNothing</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-isSomething">isSomething</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-logger">logger</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-mapIndexed">mapIndexed</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-pickProp">pickProp</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-reduceIndexed">reduceIndexed</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-subtract">subtract</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-sum">sum</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-sumList">sumList</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-typeMatches">typeMatches</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-zipValueWithStep">zipValueWithStep</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-xform">xform</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-defaultAll">defaultAll</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-differential">differential</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-getAvg">getAvg</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-getRate">getRate</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-getUsedMemory">getUsedMemory</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-mergeWithAdd">mergeWithAdd</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-mergeWithSubtract">mergeWithSubtract</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-pickByRegex">pickByRegex</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-pickFrom">pickFrom</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-runAll">runAll</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-sumAll">sumAll</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-PALETTE_INFO">PALETTE_INFO</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">src/helpers.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">/*
+  This file contains the smaller utilities and helpers that are used in the xFormer command pallete functions and parser.
+*/
+
+import * as R from &apos;ramda&apos;;
+
+/**
+ * @param  {number} input
+ * @returns {number}
+ */
+export const isJunk = R.pipe(
+  parseFloat,
+  R.anyPass([R.equals(NaN), R.equals(Infinity), R.equals(-Infinity)])
+);
+
+/**
+ * @param  {number} value
+ * @param  {number} input
+ * @returns {number}
+ */
+export const defaultTo = R.curry((value, input) =&gt;
+  R.ifElse(isJunk, R.always(value), parseFloat)(input)
+);
+
+/**
+ * @param  {number} input
+ * @returns {number}
+ */
+export const defaultToZero = defaultTo(0);
+
+/**
+ * @param  {number} input
+ * @returns {number}
+ */
+export const bePositive = R.pipe(
+  defaultToZero,
+  Math.abs
+);
+
+/**
+ * @param  {string} typeToBe
+ * @param  {any} input
+ * @returns {boolean}
+ */
+export const typeMatches = R.curry((typeToBe, input) =&gt;
+  R.pipe(
+    R.type,
+    R.toLower,
+    R.equals(R.toLower(typeToBe))
+  )(input)
+);
+
+/**
+ * @param  {number} left
+ * @param  {number} right
+ * @returns {Object}
+ */
+export const sum = R.curry((left, right) =&gt; R.add(defaultToZero(left), defaultToZero(right)));
+
+/**
+ * @param  {number} left
+ * @param  {number} right
+ * @returns {Object}
+ */
+export const subtract = R.curry((left, right) =&gt;
+  Math.abs(R.subtract(defaultToZero(left), defaultToZero(right)))
+);
+
+/**
+ * @param  {Array&lt;number&gt;} data
+ * @returns {number}
+ */
+export const sumList = R.reduce(sum, 0);
+
+/**
+ * @param  {string} step
+ * @param  {any} data
+ * @returns {Object}
+ */
+export const zipValueWithStep = R.curry((step, data) =&gt; ({
+  [step]: data
+}));
+
+/**
+ * @param  {Function} fn(value, index)
+ * @param  {Array&lt;any&gt;} data
+ * @returns {Array&lt;any&gt;}
+ */
+export const mapIndexed = R.addIndex(R.map);
+
+/**
+ * @param  {Function} fn
+ * @param  {Array&lt;any&gt;} data
+ * @returns {Array&lt;any&gt;}
+ */
+export const reduceIndexed = R.addIndex(R.reduce);
+
+/**
+ * @param  {string} regex
+ * @param  {string} input
+ * @returns {string}
+ */
+export const getFirstMatch = R.curry((regex, input) =&gt;
+  R.pipe(
+    R.match(new RegExp(regex)),
+    R.pathOr(&apos;&apos;, [0])
+  )(input)
+);
+
+/**
+ * @param  {string} lbl
+ * @param  {any} data
+ * @returns {any}
+ */
+export const logger = R.curry((lbl, data) =&gt; R.tap(x =&gt; console.log(`${lbl}:`, x), data));
+
+/**
+ * @param  {any} input
+ * @returns {boolean}
+ */
+export const isNothing = R.either(R.isEmpty, R.isNil);
+
+/**
+ * @param  {any} input
+ * @returns {boolean}
+ */
+export const isSomething = R.complement(isNothing);
+
+/**
+ * @param  {any} input
+ * @returns {boolean}
+ */
+export const getUsedMemoryForSingle = R.pipe(
+  defaultTo(1),
+  R.min(1),
+  R.subtract(1),
+  R.multiply(100)
+);
+
+/**
+ * @param  {any} input
+ * @returns {boolean}
+ */
+export const getAverageForList = R.pipe(
+  R.reject(isJunk),
+  R.converge(R.divide, [R.sum, R.length]),
+  defaultToZero
+);
+
+/**
+ * @param  {any} input
+ * @returns {boolean}
+ */
+export const divideBy = R.curry((denominator, numerator) =&gt; {
+  return R.pipe(
+    defaultTo(1),
+    R.divide(defaultToZero(numerator))
+  )(denominator);
+});
+
+/**
+ * @param  {string} prop
+ * @param  {Object|Array} data
+ * @returns {any}
+ */
+export const pickProp = R.curry((prop, data) =&gt;
+  R.ifElse(
+    R.always(R.equals(&apos;*&apos;, prop)),
+    R.cond([
+      [typeMatches(&apos;object&apos;), R.values],
+      [
+        typeMatches(&apos;array&apos;),
+        R.pipe(
+          R.flatten,
+          R.map(R.values)
+        )
+      ]
+    ]),
+    R.cond([
+      [typeMatches(&apos;object&apos;), R.prop(prop)],
+      [
+        typeMatches(&apos;array&apos;),
+        R.pipe(
+          R.flatten,
+          mapIndexed((x, i) =&gt;
+            R.ifElse(
+              R.always(
+                R.pipe(
+                  parseInt,
+                  R.equals(i)
+                )(prop)
+              ),
+              R.identity,
+              R.prop(prop)
+            )(x)
+          ),
+          R.reject(isNothing)
+        )
+      ]
+    ])
+  )(data)
+);
+
+/**
+ * @param  {Array&lt;string&gt;} path
+ * @param  {Object|Array} data
+ * @returns {any}
+ */
+export function pickFrom(path, data) {
+  if (R.isEmpty(path)) {
+    return R.when(
+      R.allPass([
+        typeMatches(&apos;array&apos;),
+        R.pipe(
+          R.length,
+          R.equals(1)
+        )
+      ]),
+      R.head
+    )(data);
+  }
+
+  return pickFrom(R.tail(path), pickProp(R.head(path), data));
+}
+</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(1.1.0)</span><img src="./image/esdoc-logo-mini-black.png"></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>
