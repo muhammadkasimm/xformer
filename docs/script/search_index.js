@@ -768,9 +768,9 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
-    "src/main.js~xform#_$",
-    "class/src/main.js~Xform.html#instance-member-_$",
-    "src/main.js~Xform#_$",
+    "src/main.js~xform#$",
+    "class/src/main.js~Xform.html#instance-member-$",
+    "src/main.js~Xform#$",
     "member"
   ],
   [

@@ -52,7 +52,7 @@ import { execute, executePipe } from &apos;./executor&apos;;
 
 class Xform {
   constructor() {
-    this._$ = {};
+    this.$ = {};
   }
 
   /**
@@ -64,7 +64,7 @@ class Xform {
    *      X.setExternals({ interval: 30 });
    */
   getExternals() {
-    return this._$;
+    return this.$;
   }
 
   /**
@@ -77,7 +77,7 @@ class Xform {
    *      X.setExternals({ interval: 30 });
    */
   setExternals(ext = {}) {
-    this._$ = merge(this.getExternals(), ext);
+    this.$ = merge(this.getExternals(), ext);
   }
 
   /**
