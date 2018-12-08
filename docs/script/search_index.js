@@ -1,5 +1,11 @@
 window.esdocSearchIndex = [
   [
+    "@muhammadkasim/xformer/src/main.js~xform",
+    "class/src/main.js~Xform.html",
+    "<span>Xform</span> <span class=\"search-result-import-path\">@muhammadkasim/xformer/src/main.js</span>",
+    "class"
+  ],
+  [
     "@muhammadkasim/xformer/src/palette.js~defaultall",
     "variable/index.html#static-variable-defaultAll",
     "<span>defaultAll</span> <span class=\"search-result-import-path\">@muhammadkasim/xformer/src/palette.js</span>",
@@ -63,6 +69,12 @@ window.esdocSearchIndex = [
     "@muhammadkasim/xformer/src/palette.js~sumall",
     "variable/index.html#static-variable-sumAll",
     "<span>sumAll</span> <span class=\"search-result-import-path\">@muhammadkasim/xformer/src/palette.js</span>",
+    "variable"
+  ],
+  [
+    "@muhammadkasim/xformer/src/main.js~xform",
+    "variable/index.html#static-variable-xform",
+    "<span>xform</span> <span class=\"search-result-import-path\">@muhammadkasim/xformer/src/main.js</span>",
     "variable"
   ],
   [
@@ -748,6 +760,48 @@ window.esdocSearchIndex = [
     "test-file/__tests__/palette.test.js.html",
     "__tests__/palette.test.js",
     "testFile"
+  ],
+  [
+    "src/main.js",
+    "file/src/main.js.html",
+    "src/main.js",
+    "file"
+  ],
+  [
+    "src/main.js~xform#_$",
+    "class/src/main.js~Xform.html#instance-member-_$",
+    "src/main.js~Xform#_$",
+    "member"
+  ],
+  [
+    "src/main.js~xform#constructor",
+    "class/src/main.js~Xform.html#instance-constructor-constructor",
+    "src/main.js~Xform#constructor",
+    "method"
+  ],
+  [
+    "src/main.js~xform#execute",
+    "class/src/main.js~Xform.html#instance-method-execute",
+    "src/main.js~Xform#execute",
+    "method"
+  ],
+  [
+    "src/main.js~xform#executepipe",
+    "class/src/main.js~Xform.html#instance-method-executePipe",
+    "src/main.js~Xform#executePipe",
+    "method"
+  ],
+  [
+    "src/main.js~xform#getexternals",
+    "class/src/main.js~Xform.html#instance-method-getExternals",
+    "src/main.js~Xform#getExternals",
+    "method"
+  ],
+  [
+    "src/main.js~xform#setexternals",
+    "class/src/main.js~Xform.html#instance-method-setExternals",
+    "src/main.js~Xform#setExternals",
+    "method"
   ],
   [
     "src/palette.js",

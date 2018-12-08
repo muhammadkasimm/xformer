@@ -1,7 +1,7 @@
 {
   "source": "./src",
   "destination": "./docs",
-  "includes": ["\\palette.js$"],
+  "includes": ["\\palette.js|main.js$"],
   "excludes": ["\\.config\\.js$"],
   "plugins": [
     {
