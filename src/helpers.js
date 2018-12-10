@@ -53,18 +53,25 @@ export const typeMatches = R.curry((typeToBe, input) =>
 /**
  * @param  {number} left
  * @param  {number} right
- * @returns {Object}
+ * @returns {number}
  */
 export const sum = R.curry((left, right) => R.add(defaultToZero(left), defaultToZero(right)));
 
 /**
  * @param  {number} left
  * @param  {number} right
- * @returns {Object}
+ * @returns {number}
  */
 export const subtract = R.curry((left, right) =>
   Math.abs(R.subtract(defaultToZero(left), defaultToZero(right)))
 );
+
+/**
+ * @param  {number} left
+ * @param  {number} right
+ * @returns {number}
+ */
+export const keepLatest = R.curry((left, right) => defaultToZero(right));
 
 /**
  * @param  {Array<number>} data
@@ -221,4 +228,18 @@ export function pickFrom(path, data) {
   }
 
   return pickFrom(R.tail(path), pickProp(R.head(path), data));
+}
+
+/**
+ * @param  {Array<string>} path
+ * @param  {Object|Array} data
+ * @returns {any}
+ */
+export function isDataRejectable(value, key) {
+  if (typeof key === 'undefined') {
+    // Array item
+    return R.anyPass([isNothing, isJunk])(value);
+  } else {
+    // Object item
+  }
 }

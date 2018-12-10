@@ -103,6 +103,10 @@ describe('Test palette functions', () => {
     it('defaults values in an Object', () => {
       expect(_.defaultAll(0, { a: 1, b: Infinity, c: 3 })).toEqual({ a: 1, b: 0, c: 3 });
     });
+
+    it('defaults a simple number', () => {
+      expect(_.defaultAll(100, Infinity)).toBe(100);
+    });
   });
 
   describe('Calculates used memory for any input', () => {
@@ -134,6 +138,98 @@ describe('Test palette functions', () => {
 
     it('average of a junky value is zero', () => {
       expect(_.getAvg(false)).toBe(0);
+    });
+  });
+
+  describe('Maps an Array or Object', () => {
+    it('maps an array with single action', () => {
+      expect(_.map(['sumAll'], [[20, 30], [40, 50]])).toEqual([50, 90]);
+    });
+
+    it('maps an array with multiple actions', () => {
+      expect(_.map(['sumAll', 'getRate(100)'], [[20, 30], [40, 50]])).toEqual([0.5, 0.9]);
+    });
+
+    it('maps an array with multiple actions on each item using runAll', () => {
+      expect(
+        _.map(
+          [
+            {
+              name: 'runAll',
+              params: [[['sumAll', 'getRate(100)'], ['getAvg']]]
+            }
+          ],
+          [[20, 30], [40, 50]]
+        )
+      ).toEqual([[0.5, 25], [0.9, 45]]);
+    });
+  });
+
+  describe('Sorts an Array or Object in ascending order', () => {
+    it('sorts an array of numbers', () => {
+      expect(_.sortAscending(null, [3, 2, 1])).toEqual([1, 2, 3]);
+    });
+
+    it('sorts an array of strings', () => {
+      expect(_.sortAscending(null, ['efg', 'uvx', 'jkl'])).toEqual(['efg', 'jkl', 'uvx']);
+    });
+
+    it('sorts an array of arrays', () => {
+      expect(_.sortAscending(1, [[1, 345], [2, 45], [3, 121]])).toEqual([
+        [2, 45],
+        [3, 121],
+        [1, 345]
+      ]);
+    });
+
+    it('sorts an object w.r.t keys', () => {
+      expect(_.sortAscending(0, { jkl: 345, efg: 121, uvx: 45 })).toEqual([
+        ['efg', 121],
+        ['jkl', 345],
+        ['uvx', 45]
+      ]);
+    });
+
+    it('sorts an object w.r.t values', () => {
+      expect(_.sortAscending(1, { jkl: 345, efg: 121, uvx: 45 })).toEqual([
+        ['uvx', 45],
+        ['efg', 121],
+        ['jkl', 345]
+      ]);
+    });
+  });
+
+  describe('Sorts an Array or Object in descending order', () => {
+    it('sorts an array of numbers', () => {
+      expect(_.sortDescending(null, [3, 2, 1])).toEqual([3, 2, 1]);
+    });
+
+    it('sorts an array of strings', () => {
+      expect(_.sortDescending(null, ['efg', 'uvx', 'jkl'])).toEqual(['uvx', 'jkl', 'efg']);
+    });
+
+    it('sorts an array of arrays', () => {
+      expect(_.sortDescending(1, [[1, 345], [2, 45], [3, 121]])).toEqual([
+        [1, 345],
+        [3, 121],
+        [2, 45]
+      ]);
+    });
+
+    it('sorts an object w.r.t keys', () => {
+      expect(_.sortDescending(0, { jkl: 345, efg: 121, uvx: 45 })).toEqual([
+        ['uvx', 45],
+        ['jkl', 345],
+        ['efg', 121]
+      ]);
+    });
+
+    it('sorts an object w.r.t values', () => {
+      expect(_.sortDescending(1, { jkl: 345, efg: 121, uvx: 45 })).toEqual([
+        ['jkl', 345],
+        ['efg', 121],
+        ['uvx', 45]
+      ]);
     });
   });
 });

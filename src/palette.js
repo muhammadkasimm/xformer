@@ -81,6 +81,16 @@ export const mergeWithAdd = mergeWithOp(_.sum);
  *      mergeWithAdd([{ a: 1, b: 5 }, { a: 2 }, { a: 3 }]) //=> { a: 2, b: 5 }
  */
 export const mergeWithSubtract = mergeWithOp(_.subtract);
+/**
+ * Merges a list of JSON objects into a single JSON object by subtracting values having the same key; treats a non-number value as zero.
+ *
+ * @func
+ * @param  {Array<Object>} data
+ * @returns {Object}
+ * @example
+ *      mergeWithAdd([{ a: 1, b: 5 }, { a: 2 }, { a: 3 }]) //=> { a: 2, b: 5 }
+ */
+export const mergeAll = mergeWithOp(_.keepLatest);
 
 /**
  * Applies iterative subtraction over consecutive values in a JSON object such that T[i] = T[i] - T[i-1]; first value is ignored in the result.
@@ -240,3 +250,80 @@ export const getRate = R.curry((denominator, data) => {
     [R.T, _.divideBy(denominator)]
   ])(data);
 });
+
+/**
+ * @param  {Array} pipe
+ * @param  {Array|Object} data
+ * @returns {Array|Object}
+ * @example
+ *       map(['sumAll', 'getRate(100)'], [[2, 4], [4, 6]])
+ */
+export const map = R.curry((pipe, data) => {
+  const _pipe = R.apply(R.pipe, decodePipe(pipe));
+  return R.map(_pipe, data);
+});
+
+/**
+ * Sort an Object or Array. Type can either be 'ascend' or 'descend'. When data is an array of
+ * objects or arrays, key refers to the value with respect to which you want the data sorted. When data is an
+ * object, key can either be `0` (sort by key) or `1` (sort by value); sorted object is returned as
+ * a list of `[key, value]` pairs. When data is simply an array of numbers, key is ignored even if provided.
+ *
+ * @param  {string} type
+ * @param  {string|number} key
+ * @returns {data}
+ * @example
+ *       map(['sumAll', 'getRate(100)'], [[2, 4], [4, 6]])
+ */
+const _sort = R.curry((type, key, data) => {
+  return R.cond([
+    [
+      _.typeMatches('array'),
+      R.cond([
+        [R.always(_.typeMatches('object', R.head(data))), R.sort(R[type](R.prop(key)))],
+        [R.always(_.typeMatches('array', R.head(data))), R.sort(R[type](R.prop(key)))],
+        [R.always(_.typeMatches('number', R.head(data))), R.sort(type === 'ascend' ? R.gt : R.lt)],
+        [R.always(_.typeMatches('string', R.head(data))), R.sort(type === 'ascend' ? R.gt : R.lt)]
+      ])
+    ],
+    [
+      _.typeMatches('object'),
+      R.pipe(
+        R.toPairs,
+        R.sort(R[type](R.prop(R.clamp(0, 1, _.defaultToZero(key)))))
+      )
+    ]
+  ])(data);
+});
+
+/**
+ * Sorts an array or object in ascending order. When data is an array of objects or arrays, key
+ * refers to the value with respect to which you want the data sorted. When data is an object, key
+ * can either be `0` (sort by key) or `1` (sort by value); sorted object is returned as a list
+ * of `[key, value]` pairs. When data is simply an array of numbers, key is ignored even if provided.
+ *
+ * @param  {string|number} key
+ * @returns {data}
+ * @example
+ *       sortAscending(null, [3, 2, 1]);    //=> [1, 2, 3]
+ *       sortAscending(1, [[1, 345], [2, 45], [3, 121]]);    //=> [[2, 45], [3, 121], [1, 345]]
+ *       sortAscending(0, { 'jkl': 345, 'efg': 121, 'uvx': 45 });    //=> [['efg', 121], ['jkl', 345], ['uvx', 45]]
+ *       sortAscending(1, { 'jkl': 345, 'efg': 121, 'uvx': 45 });    //=> [['uvx', 45], ['efg', 121], ['jkl', 345]]
+ */
+export const sortAscending = _sort('ascend');
+
+/**
+ * Sorts an array or object in descending order. When data is an array of objects or arrays, key
+ * refers to the value with respect to which you want the data sorted. When data is an object, key
+ * can either be `0` (sort by key) or `1` (sort by value); sorted object is returned as a list
+ * of `[key, value]` pairs. When data is simply an array of numbers, key is ignored even if provided.
+ *
+ * @param  {string|number} key
+ * @returns {data}
+ * @example
+ *       sortDescending(null, [3, 2, 1]);    //=> [3, 2, 1]
+ *       sortDescending(1, [[1, 345], [2, 45], [3, 121]]);    //=> [[1, 345], [3, 121], [2, 45]]
+ *       sortDescending(0, { 'jkl': 345, 'efg': 121, 'uvx': 45 });    //=> [['uvx', 45], ['jkl', 345], ['efg', 121]]
+ *       sortDescending(1, { 'jkl': 345, 'efg': 121, 'uvx': 45 });    //=> [['jkl', 345], ['efg', 121], ['uvx', 45]]
+ */
+export const sortDescending = _sort('descend');
