@@ -6,6 +6,12 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
+    "@muhammadkasim/xformer/src/palette.js~cleandata",
+    "variable/index.html#static-variable-cleanData",
+    "<span>cleanData</span> <span class=\"search-result-import-path\">@muhammadkasim/xformer/src/palette.js</span>",
+    "variable"
+  ],
+  [
     "@muhammadkasim/xformer/src/palette.js~defaultall",
     "variable/index.html#static-variable-defaultAll",
     "<span>defaultAll</span> <span class=\"search-result-import-path\">@muhammadkasim/xformer/src/palette.js</span>",
@@ -33,6 +39,48 @@ window.esdocSearchIndex = [
     "@muhammadkasim/xformer/src/palette.js~getusedmemory",
     "variable/index.html#static-variable-getUsedMemory",
     "<span>getUsedMemory</span> <span class=\"search-result-import-path\">@muhammadkasim/xformer/src/palette.js</span>",
+    "variable"
+  ],
+  [
+    "@muhammadkasim/xformer/src/palette.js~isequalto",
+    "variable/index.html#static-variable-isEqualTo",
+    "<span>isEqualTo</span> <span class=\"search-result-import-path\">@muhammadkasim/xformer/src/palette.js</span>",
+    "variable"
+  ],
+  [
+    "@muhammadkasim/xformer/src/palette.js~isgreaterthanequalto",
+    "variable/index.html#static-variable-isGreaterThanEqualTo",
+    "<span>isGreaterThanEqualTo</span> <span class=\"search-result-import-path\">@muhammadkasim/xformer/src/palette.js</span>",
+    "variable"
+  ],
+  [
+    "@muhammadkasim/xformer/src/palette.js~islessthanequalto",
+    "variable/index.html#static-variable-isLessThanEqualTo",
+    "<span>isLessThanEqualTo</span> <span class=\"search-result-import-path\">@muhammadkasim/xformer/src/palette.js</span>",
+    "variable"
+  ],
+  [
+    "@muhammadkasim/xformer/src/palette.js~isnothing",
+    "variable/index.html#static-variable-isNothing",
+    "<span>isNothing</span> <span class=\"search-result-import-path\">@muhammadkasim/xformer/src/palette.js</span>",
+    "variable"
+  ],
+  [
+    "@muhammadkasim/xformer/src/palette.js~makepair",
+    "variable/index.html#static-variable-makePair",
+    "<span>makePair</span> <span class=\"search-result-import-path\">@muhammadkasim/xformer/src/palette.js</span>",
+    "variable"
+  ],
+  [
+    "@muhammadkasim/xformer/src/palette.js~map",
+    "variable/index.html#static-variable-map",
+    "<span>map</span> <span class=\"search-result-import-path\">@muhammadkasim/xformer/src/palette.js</span>",
+    "variable"
+  ],
+  [
+    "@muhammadkasim/xformer/src/palette.js~mergeall",
+    "variable/index.html#static-variable-mergeAll",
+    "<span>mergeAll</span> <span class=\"search-result-import-path\">@muhammadkasim/xformer/src/palette.js</span>",
     "variable"
   ],
   [
@@ -66,9 +114,33 @@ window.esdocSearchIndex = [
     "variable"
   ],
   [
+    "@muhammadkasim/xformer/src/palette.js~sortascending",
+    "variable/index.html#static-variable-sortAscending",
+    "<span>sortAscending</span> <span class=\"search-result-import-path\">@muhammadkasim/xformer/src/palette.js</span>",
+    "variable"
+  ],
+  [
+    "@muhammadkasim/xformer/src/palette.js~sortdescending",
+    "variable/index.html#static-variable-sortDescending",
+    "<span>sortDescending</span> <span class=\"search-result-import-path\">@muhammadkasim/xformer/src/palette.js</span>",
+    "variable"
+  ],
+  [
     "@muhammadkasim/xformer/src/palette.js~sumall",
     "variable/index.html#static-variable-sumAll",
     "<span>sumAll</span> <span class=\"search-result-import-path\">@muhammadkasim/xformer/src/palette.js</span>",
+    "variable"
+  ],
+  [
+    "@muhammadkasim/xformer/src/palette.js~taketopandcombineothers",
+    "variable/index.html#static-variable-takeTopAndCombineOthers",
+    "<span>takeTopAndCombineOthers</span> <span class=\"search-result-import-path\">@muhammadkasim/xformer/src/palette.js</span>",
+    "variable"
+  ],
+  [
+    "@muhammadkasim/xformer/src/palette.js~taketoppairsandothers",
+    "variable/index.html#static-variable-takeTopPairsAndOthers",
+    "<span>takeTopPairsAndOthers</span> <span class=\"search-result-import-path\">@muhammadkasim/xformer/src/palette.js</span>",
     "variable"
   ],
   [
@@ -79,25 +151,91 @@ window.esdocSearchIndex = [
   ],
   [
     "",
+    "test-file/__tests__/decoder.test.js.html#lineNumber4",
+    "Decodes actions correctly",
+    "test"
+  ],
+  [
+    "",
+    "test-file/__tests__/decoder.test.js.html#lineNumber19",
+    "Decodes actions correctly Decodes object actions correctly",
+    "test"
+  ],
+  [
+    "",
+    "test-file/__tests__/decoder.test.js.html#lineNumber51",
+    "Decodes actions correctly Decodes object actions correctly decodes nested object actions",
+    "test"
+  ],
+  [
+    "",
+    "test-file/__tests__/decoder.test.js.html#lineNumber41",
+    "Decodes actions correctly Decodes object actions correctly decodes object action with a string action as param",
+    "test"
+  ],
+  [
+    "",
+    "test-file/__tests__/decoder.test.js.html#lineNumber32",
+    "Decodes actions correctly Decodes object actions correctly decodes object action with another object action as param",
+    "test"
+  ],
+  [
+    "",
+    "test-file/__tests__/decoder.test.js.html#lineNumber20",
+    "Decodes actions correctly Decodes object actions correctly decodes simple object action with data only",
+    "test"
+  ],
+  [
+    "",
+    "test-file/__tests__/decoder.test.js.html#lineNumber24",
+    "Decodes actions correctly Decodes object actions correctly decodes stringy action with extra params",
+    "test"
+  ],
+  [
+    "",
+    "test-file/__tests__/decoder.test.js.html#lineNumber5",
+    "Decodes actions correctly Decodes stringy actions correctly",
+    "test"
+  ],
+  [
+    "",
+    "test-file/__tests__/decoder.test.js.html#lineNumber6",
+    "Decodes actions correctly Decodes stringy actions correctly decodes stringy action",
+    "test"
+  ],
+  [
+    "",
+    "test-file/__tests__/decoder.test.js.html#lineNumber14",
+    "Decodes actions correctly Decodes stringy actions correctly decodes stringy action with another action as param",
+    "test"
+  ],
+  [
+    "",
+    "test-file/__tests__/decoder.test.js.html#lineNumber10",
+    "Decodes actions correctly Decodes stringy actions correctly decodes stringy action with extra params",
+    "test"
+  ],
+  [
+    "",
     "test-file/__tests__/executor.test.js.html#lineNumber43",
     "Parses xFormer queries",
     "test"
   ],
   [
     "",
-    "test-file/__tests__/executor.test.js.html#lineNumber153",
+    "test-file/__tests__/executor.test.js.html#lineNumber138",
     "Parses xFormer queries executes a single pipe",
     "test"
   ],
   [
     "",
-    "test-file/__tests__/executor.test.js.html#lineNumber100",
+    "test-file/__tests__/executor.test.js.html#lineNumber85",
     "Parses xFormer queries parses listy query with executeAll",
     "test"
   ],
   [
     "",
-    "test-file/__tests__/executor.test.js.html#lineNumber136",
+    "test-file/__tests__/executor.test.js.html#lineNumber121",
     "Parses xFormer queries parses object action with external dependencies",
     "test"
   ],
@@ -105,12 +243,6 @@ window.esdocSearchIndex = [
     "",
     "test-file/__tests__/executor.test.js.html#lineNumber70",
     "Parses xFormer queries parses queries containing combo actions",
-    "test"
-  ],
-  [
-    "",
-    "test-file/__tests__/executor.test.js.html#lineNumber85",
-    "Parses xFormer queries parses queries containing mixed type actions",
     "test"
   ],
   [
@@ -127,7 +259,7 @@ window.esdocSearchIndex = [
   ],
   [
     "",
-    "test-file/__tests__/executor.test.js.html#lineNumber124",
+    "test-file/__tests__/executor.test.js.html#lineNumber109",
     "Parses xFormer queries parses stringy action with external dependencies",
     "test"
   ],
@@ -145,181 +277,235 @@ window.esdocSearchIndex = [
   ],
   [
     "",
-    "test-file/__tests__/palette.test.js.html#lineNumber70",
+    "test-file/__tests__/palette.test.js.html#lineNumber78",
     "Test palette functions Applies differential logic (i.e x[i] = x[i] - x[i-1]) on an Object or Array",
     "test"
   ],
   [
     "",
-    "test-file/__tests__/palette.test.js.html#lineNumber79",
+    "test-file/__tests__/palette.test.js.html#lineNumber87",
     "Test palette functions Applies differential logic (i.e x[i] = x[i] - x[i-1]) on an Object or Array empty Array when only one item in Array",
     "test"
   ],
   [
     "",
-    "test-file/__tests__/palette.test.js.html#lineNumber75",
+    "test-file/__tests__/palette.test.js.html#lineNumber83",
     "Test palette functions Applies differential logic (i.e x[i] = x[i] - x[i-1]) on an Object or Array subtracts values of an Array",
     "test"
   ],
   [
     "",
-    "test-file/__tests__/palette.test.js.html#lineNumber71",
+    "test-file/__tests__/palette.test.js.html#lineNumber79",
     "Test palette functions Applies differential logic (i.e x[i] = x[i] - x[i-1]) on an Object or Array subtracts values of an Object",
     "test"
   ],
   [
     "",
-    "test-file/__tests__/palette.test.js.html#lineNumber118",
+    "test-file/__tests__/palette.test.js.html#lineNumber130",
     "Test palette functions Calculates average of values in an Array or Object",
     "test"
   ],
   [
     "",
-    "test-file/__tests__/palette.test.js.html#lineNumber135",
+    "test-file/__tests__/palette.test.js.html#lineNumber147",
     "Test palette functions Calculates average of values in an Array or Object average of a junky value is zero",
     "test"
   ],
   [
     "",
-    "test-file/__tests__/palette.test.js.html#lineNumber131",
+    "test-file/__tests__/palette.test.js.html#lineNumber143",
     "Test palette functions Calculates average of values in an Array or Object average of a number (or stringy number) is the number itself",
     "test"
   ],
   [
     "",
-    "test-file/__tests__/palette.test.js.html#lineNumber127",
+    "test-file/__tests__/palette.test.js.html#lineNumber139",
     "Test palette functions Calculates average of values in an Array or Object calculates average of an empty Object",
     "test"
   ],
   [
     "",
-    "test-file/__tests__/palette.test.js.html#lineNumber119",
+    "test-file/__tests__/palette.test.js.html#lineNumber131",
     "Test palette functions Calculates average of values in an Array or Object calculates average of items in a list",
     "test"
   ],
   [
     "",
-    "test-file/__tests__/palette.test.js.html#lineNumber123",
+    "test-file/__tests__/palette.test.js.html#lineNumber135",
     "Test palette functions Calculates average of values in an Array or Object calculates average of items in an Object",
     "test"
   ],
   [
     "",
-    "test-file/__tests__/palette.test.js.html#lineNumber108",
+    "test-file/__tests__/palette.test.js.html#lineNumber120",
     "Test palette functions Calculates used memory for any input",
     "test"
   ],
   [
     "",
-    "test-file/__tests__/palette.test.js.html#lineNumber109",
+    "test-file/__tests__/palette.test.js.html#lineNumber121",
     "Test palette functions Calculates used memory for any input calculates used memory for Array",
     "test"
   ],
   [
     "",
-    "test-file/__tests__/palette.test.js.html#lineNumber113",
+    "test-file/__tests__/palette.test.js.html#lineNumber125",
     "Test palette functions Calculates used memory for any input calculates used memory for Object",
     "test"
   ],
   [
     "",
-    "test-file/__tests__/palette.test.js.html#lineNumber98",
+    "test-file/__tests__/palette.test.js.html#lineNumber244",
+    "Test palette functions Cleans data by passing each value in data through the provided predicates",
+    "test"
+  ],
+  [
+    "",
+    "test-file/__tests__/palette.test.js.html#lineNumber245",
+    "Test palette functions Cleans data by passing each value in data through the provided predicates removes null or undefined values from an array",
+    "test"
+  ],
+  [
+    "",
+    "test-file/__tests__/palette.test.js.html#lineNumber255",
+    "Test palette functions Cleans data by passing each value in data through the provided predicates removes values according predicates from an object",
+    "test"
+  ],
+  [
+    "",
+    "test-file/__tests__/palette.test.js.html#lineNumber249",
+    "Test palette functions Cleans data by passing each value in data through the provided predicates removes values according to LTE predicate from an array",
+    "test"
+  ],
+  [
+    "",
+    "test-file/__tests__/palette.test.js.html#lineNumber106",
     "Test palette functions Defaults all values in an Array or Object",
     "test"
   ],
   [
     "",
-    "test-file/__tests__/palette.test.js.html#lineNumber99",
+    "test-file/__tests__/palette.test.js.html#lineNumber115",
+    "Test palette functions Defaults all values in an Array or Object defaults a simple number",
+    "test"
+  ],
+  [
+    "",
+    "test-file/__tests__/palette.test.js.html#lineNumber107",
     "Test palette functions Defaults all values in an Array or Object defaults values in an Array",
     "test"
   ],
   [
     "",
-    "test-file/__tests__/palette.test.js.html#lineNumber103",
+    "test-file/__tests__/palette.test.js.html#lineNumber111",
     "Test palette functions Defaults all values in an Array or Object defaults values in an Object",
     "test"
   ],
   [
     "",
-    "test-file/__tests__/palette.test.js.html#lineNumber18",
+    "test-file/__tests__/palette.test.js.html#lineNumber26",
     "Test palette functions Keeps only keys from an Object that match regex",
     "test"
   ],
   [
     "",
-    "test-file/__tests__/palette.test.js.html#lineNumber33",
+    "test-file/__tests__/palette.test.js.html#lineNumber41",
     "Test palette functions Keeps only keys from an Object that match regex empty Object on falsey value",
     "test"
   ],
   [
     "",
-    "test-file/__tests__/palette.test.js.html#lineNumber37",
+    "test-file/__tests__/palette.test.js.html#lineNumber45",
     "Test palette functions Keeps only keys from an Object that match regex empty Object when nothing matches",
     "test"
   ],
   [
     "",
-    "test-file/__tests__/palette.test.js.html#lineNumber29",
+    "test-file/__tests__/palette.test.js.html#lineNumber37",
     "Test palette functions Keeps only keys from an Object that match regex uses number for matching",
     "test"
   ],
   [
     "",
-    "test-file/__tests__/palette.test.js.html#lineNumber25",
+    "test-file/__tests__/palette.test.js.html#lineNumber33",
     "Test palette functions Keeps only keys from an Object that match regex uses regex for matching",
     "test"
   ],
   [
     "",
-    "test-file/__tests__/palette.test.js.html#lineNumber21",
+    "test-file/__tests__/palette.test.js.html#lineNumber29",
     "Test palette functions Keeps only keys from an Object that match regex uses string for matching",
     "test"
   ],
   [
     "",
-    "test-file/__tests__/palette.test.js.html#lineNumber42",
+    "test-file/__tests__/palette.test.js.html#lineNumber152",
+    "Test palette functions Maps an Array or Object",
+    "test"
+  ],
+  [
+    "",
+    "test-file/__tests__/palette.test.js.html#lineNumber157",
+    "Test palette functions Maps an Array or Object maps an array with multiple actions",
+    "test"
+  ],
+  [
+    "",
+    "test-file/__tests__/palette.test.js.html#lineNumber161",
+    "Test palette functions Maps an Array or Object maps an array with multiple actions on each item using runAll",
+    "test"
+  ],
+  [
+    "",
+    "test-file/__tests__/palette.test.js.html#lineNumber153",
+    "Test palette functions Maps an Array or Object maps an array with single action",
+    "test"
+  ],
+  [
+    "",
+    "test-file/__tests__/palette.test.js.html#lineNumber50",
     "Test palette functions Merges list of Objects by adding values of the same key",
     "test"
   ],
   [
     "",
-    "test-file/__tests__/palette.test.js.html#lineNumber51",
+    "test-file/__tests__/palette.test.js.html#lineNumber59",
     "Test palette functions Merges list of Objects by adding values of the same key empty Object when none of the values in provied Object are of Object type",
     "test"
   ],
   [
     "",
-    "test-file/__tests__/palette.test.js.html#lineNumber43",
+    "test-file/__tests__/palette.test.js.html#lineNumber51",
     "Test palette functions Merges list of Objects by adding values of the same key merges list of Objects",
     "test"
   ],
   [
     "",
-    "test-file/__tests__/palette.test.js.html#lineNumber47",
+    "test-file/__tests__/palette.test.js.html#lineNumber55",
     "Test palette functions Merges list of Objects by adding values of the same key merges values of an Object that are of Object type",
     "test"
   ],
   [
     "",
-    "test-file/__tests__/palette.test.js.html#lineNumber56",
+    "test-file/__tests__/palette.test.js.html#lineNumber64",
     "Test palette functions Merges list of Objects by subtracting values of the same key",
     "test"
   ],
   [
     "",
-    "test-file/__tests__/palette.test.js.html#lineNumber65",
+    "test-file/__tests__/palette.test.js.html#lineNumber73",
     "Test palette functions Merges list of Objects by subtracting values of the same key empty Object when none of the values in provied Object are of Object type",
     "test"
   ],
   [
     "",
-    "test-file/__tests__/palette.test.js.html#lineNumber57",
+    "test-file/__tests__/palette.test.js.html#lineNumber65",
     "Test palette functions Merges list of Objects by subtracting values of the same key merges list of Objects",
     "test"
   ],
   [
     "",
-    "test-file/__tests__/palette.test.js.html#lineNumber61",
+    "test-file/__tests__/palette.test.js.html#lineNumber69",
     "Test palette functions Merges list of Objects by subtracting values of the same key merges values of an Object that are of Object type",
     "test"
   ],
@@ -343,32 +529,134 @@ window.esdocSearchIndex = [
   ],
   [
     "",
+    "test-file/__tests__/palette.test.js.html#lineNumber17",
+    "Test palette functions Picks value at specified path from an Object or Array picks values by wild card symbol from an array",
+    "test"
+  ],
+  [
+    "",
+    "test-file/__tests__/palette.test.js.html#lineNumber21",
+    "Test palette functions Picks value at specified path from an Object or Array picks values by wild card symbol from an object",
+    "test"
+  ],
+  [
+    "",
     "test-file/__tests__/palette.test.js.html#lineNumber13",
     "Test palette functions Picks value at specified path from an Object or Array picks values from an Array",
     "test"
   ],
   [
     "",
-    "test-file/__tests__/palette.test.js.html#lineNumber84",
+    "test-file/__tests__/palette.test.js.html#lineNumber176",
+    "Test palette functions Sorts an Array or Object in ascending order",
+    "test"
+  ],
+  [
+    "",
+    "test-file/__tests__/palette.test.js.html#lineNumber185",
+    "Test palette functions Sorts an Array or Object in ascending order sorts an array of arrays",
+    "test"
+  ],
+  [
+    "",
+    "test-file/__tests__/palette.test.js.html#lineNumber177",
+    "Test palette functions Sorts an Array or Object in ascending order sorts an array of numbers",
+    "test"
+  ],
+  [
+    "",
+    "test-file/__tests__/palette.test.js.html#lineNumber181",
+    "Test palette functions Sorts an Array or Object in ascending order sorts an array of strings",
+    "test"
+  ],
+  [
+    "",
+    "test-file/__tests__/palette.test.js.html#lineNumber193",
+    "Test palette functions Sorts an Array or Object in ascending order sorts an object w.r.t keys",
+    "test"
+  ],
+  [
+    "",
+    "test-file/__tests__/palette.test.js.html#lineNumber201",
+    "Test palette functions Sorts an Array or Object in ascending order sorts an object w.r.t values",
+    "test"
+  ],
+  [
+    "",
+    "test-file/__tests__/palette.test.js.html#lineNumber210",
+    "Test palette functions Sorts an Array or Object in descending order",
+    "test"
+  ],
+  [
+    "",
+    "test-file/__tests__/palette.test.js.html#lineNumber219",
+    "Test palette functions Sorts an Array or Object in descending order sorts an array of arrays",
+    "test"
+  ],
+  [
+    "",
+    "test-file/__tests__/palette.test.js.html#lineNumber211",
+    "Test palette functions Sorts an Array or Object in descending order sorts an array of numbers",
+    "test"
+  ],
+  [
+    "",
+    "test-file/__tests__/palette.test.js.html#lineNumber215",
+    "Test palette functions Sorts an Array or Object in descending order sorts an array of strings",
+    "test"
+  ],
+  [
+    "",
+    "test-file/__tests__/palette.test.js.html#lineNumber227",
+    "Test palette functions Sorts an Array or Object in descending order sorts an object w.r.t keys",
+    "test"
+  ],
+  [
+    "",
+    "test-file/__tests__/palette.test.js.html#lineNumber235",
+    "Test palette functions Sorts an Array or Object in descending order sorts an object w.r.t values",
+    "test"
+  ],
+  [
+    "",
+    "test-file/__tests__/palette.test.js.html#lineNumber92",
     "Test palette functions Sums up all values in an Array or Object",
     "test"
   ],
   [
     "",
-    "test-file/__tests__/palette.test.js.html#lineNumber93",
+    "test-file/__tests__/palette.test.js.html#lineNumber101",
     "Test palette functions Sums up all values in an Array or Object ignores junky values when summing",
     "test"
   ],
   [
     "",
-    "test-file/__tests__/palette.test.js.html#lineNumber85",
+    "test-file/__tests__/palette.test.js.html#lineNumber93",
     "Test palette functions Sums up all values in an Array or Object sums values in an Array",
     "test"
   ],
   [
     "",
-    "test-file/__tests__/palette.test.js.html#lineNumber89",
+    "test-file/__tests__/palette.test.js.html#lineNumber97",
     "Test palette functions Sums up all values in an Array or Object sums values in an Object",
+    "test"
+  ],
+  [
+    "",
+    "test-file/__tests__/palette.test.js.html#lineNumber273",
+    "Test palette functions Takes top X items and combines others",
+    "test"
+  ],
+  [
+    "",
+    "test-file/__tests__/palette.test.js.html#lineNumber274",
+    "Test palette functions Takes top X items and combines others from a list of numbers, takes top X and combines others according to the provided xformer",
+    "test"
+  ],
+  [
+    "",
+    "test-file/__tests__/palette.test.js.html#lineNumber282",
+    "Test palette functions Takes top X items and combines others from a list of pairs, takes top X and combines others by adding",
     "test"
   ],
   [
@@ -736,6 +1024,12 @@ window.esdocSearchIndex = [
     "test-file/__tests__/helpers.test.js.html#lineNumber101",
     "Tests helper functions Sums up values in an Array ignore junky values when summing",
     "test"
+  ],
+  [
+    "__tests__/decoder.test.js",
+    "test-file/__tests__/decoder.test.js.html",
+    "__tests__/decoder.test.js",
+    "testFile"
   ],
   [
     "__tests__/executor.test.js",

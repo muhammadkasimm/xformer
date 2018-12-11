@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <base data-ice="baseUrl" href="../../">
-  <title data-ice="title">__tests__/executor.test.js | xFormer</title>
+  <title data-ice="title">__tests__/decoder.test.js | xFormer</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -58,157 +58,99 @@
 </div>
 </nav>
 
-<div class="content" data-ice="content"><h1 data-ice="title">__tests__/executor.test.js</h1>
+<div class="content" data-ice="content"><h1 data-ice="title">__tests__/decoder.test.js</h1>
 <pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import * as R from &apos;ramda&apos;;
-import E from &apos;../src/main&apos;;
-// import * as E from &apos;../src/executor&apos;;
-import { pickFrom, mergeWithSubtract } from &apos;../src/palette&apos;;
+import * as D from &apos;../src/decoder&apos;;
 
-const mockData = {
-  a_1: {
-    a1: 2,
-    a2: 4,
-    a3: 6,
-    a4: 8,
-    a5: 10
-  },
-  a_2: {
-    a1: 22,
-    a2: 24,
-    a3: 26,
-    a4: 28,
-    a5: 30
-  }
-};
-const mockData_2 = {
-  a_1: {
-    a1: {
-      x: 1,
-      y: 2,
-      z: 3
-    },
-    a2: 4,
-    a3: 6,
-    a4: 8,
-    a5: 10
-  },
-  a_2: {
-    a1: 22,
-    a2: 24,
-    a3: 26,
-    a4: 28,
-    a5: 30
-  }
-};
+describe(&apos;Decodes actions correctly&apos;, () =&gt; {
+  describe(&apos;Decodes stringy actions correctly&apos;, () =&gt; {
+    it(&apos;decodes stringy action&apos;, () =&gt; {
+      expect(D.decodeStringyAction(&apos;getAvg([1, 2, 3])&apos;)).toBe(2);
+    });
 
-describe(&apos;Parses xFormer queries&apos;, () =&gt; {
-  it(&apos;parses queries containing strings&apos;, () =&gt; {
-    const parsed = E.execute(
-      {
-        1: [&apos;pickByRegex(&quot;a_&quot;)&apos;, &apos;mergeWithAdd&apos;, &apos;differential&apos;]
-      },
-      mockData
-    );
+    it(&apos;decodes stringy action with extra params&apos;, () =&gt; {
+      expect(D.decodeStringyAction(&apos;getRate(2, [1, 2, 3])&apos;)).toEqual([0.5, 1, 1.5]);
+    });
 
-    expect(parsed[&apos;1&apos;].result).toEqual({ a2: 4, a3: 4, a4: 4, a5: 4 });
+    it(&apos;decodes stringy action with another action as param&apos;, () =&gt; {
+      expect(D.decodeStringyAction(&apos;getRate(2, &quot;X.getAvg([1, 2, 3])&quot;)&apos;)).toBe(1);
+    });
   });
 
-  it(&apos;parses queries containing objects&apos;, () =&gt; {
-    const parsed = E.execute(
-      {
-        1: [
-          { name: &apos;pickByRegex&apos;, params: [&apos;a_&apos;] },
-          { name: &apos;mergeWithAdd&apos; },
-          { name: &apos;differential&apos;, params: [] }
-        ]
-      },
-      mockData
-    );
+  describe(&apos;Decodes object actions correctly&apos;, () =&gt; {
+    it(&apos;decodes simple object action with data only&apos;, () =&gt; {
+      expect(D.decodeObjectAction({ name: &apos;getAvg&apos;, params: [[1, 2, 3]] })).toBe(2);
+    });
 
-    expect(parsed[&apos;1&apos;].result).toEqual({ a2: 4, a3: 4, a4: 4, a5: 4 });
-  });
+    it(&apos;decodes stringy action with extra params&apos;, () =&gt; {
+      expect(D.decodeObjectAction({ name: &apos;getRate&apos;, params: [2, [1, 2, 3]] })).toEqual([
+        0.5,
+        1,
+        1.5
+      ]);
+    });
 
-  it(&apos;parses queries containing combo actions&apos;, () =&gt; {
-    const parsed = E.execute(
-      {
-        1: [
-          { name: &apos;pickFrom&apos;, params: [[&apos;*&apos;]] },
-          { name: &apos;mergeWithAdd&apos; },
-          { name: &apos;differential&apos;, params: [] }
-        ]
-      },
-      mockData
-    );
+    it(&apos;decodes object action with another object action as param&apos;, () =&gt; {
+      expect(
+        D.decodeObjectAction({
+          name: &apos;getRate&apos;,
+          params: [2, { name: &apos;getAvg&apos;, params: [[1, 2, 3]] }]
+        })
+      ).toBe(1);
+    });
 
-    expect(parsed[&apos;1&apos;].result).toEqual({ a2: 4, a3: 4, a4: 4, a5: 4 });
-  });
+    it(&apos;decodes object action with a string action as param&apos;, () =&gt; {
+      // &apos;getRate(2, )&apos;)
+      expect(
+        D.decodeObjectAction({
+          name: &apos;getRate&apos;,
+          params: [2, &apos;X.getAvg([1, 2, 3])&apos;]
+        })
+      ).toBe(1);
+    });
 
-  it(&apos;parses listy query with executeAll&apos;, () =&gt; {
-    const parsed = E.execute(
-      {
-        1: [
-          {
-            name: &apos;runAll&apos;,
-            params: [[[&apos;pickByRegex(&quot;a&quot;)&apos;, &apos;mergeWithAdd&apos;], [&apos;pickByRegex(&quot;b&quot;)&apos;, &apos;mergeWithAdd&apos;]]]
-          },
-          &apos;mergeWithSubtract&apos;
-        ]
-      },
-      {
-        a1: { abc: 1, xyz: 2 },
-        a2: { abc: 11, xyz: 2 },
-        a3: { abc: 13, xyz: 6 },
-        b1: { abc: 1, xyz: 2 },
-        b2: { abc: 11, xyz: 2 },
-        b3: { abc: 14, xyz: 7 }
-      }
-    );
-
-    expect(parsed[&apos;1&apos;].result).toEqual({ abc: 1, xyz: 1 });
-  });
-
-  it(&apos;parses stringy action with external dependencies&apos;, () =&gt; {
-    const parsed = E.execute(
-      {
-        1: [&apos;pickByRegex(&quot;a_&quot;)&apos;, &apos;mergeWithAdd&apos;, &apos;differential&apos;, &apos;getRate(&quot;$.INTERVAL&quot;)&apos;]
-      },
-      mockData,
-      { INTERVAL: 4 }
-    );
-
-    expect(parsed[&apos;1&apos;].result).toEqual({ a2: 1, a3: 1, a4: 1, a5: 1 });
-  });
-
-  it(&apos;parses object action with external dependencies&apos;, () =&gt; {
-    const parsed = E.execute(
-      {
-        1: [
-          { name: &apos;pickByRegex&apos;, params: [&apos;a_&apos;] },
-          &apos;mergeWithAdd&apos;,
-          &apos;differential&apos;,
-          { name: &apos;getRate&apos;, params: [&apos;$.INTERVAL&apos;] }
-        ]
-      },
-      mockData,
-      { INTERVAL: 4 }
-    );
-
-    expect(parsed[&apos;1&apos;].result).toEqual({ a2: 1, a3: 1, a4: 1, a5: 1 });
-  });
-
-  it(&apos;executes a single pipe&apos;, () =&gt; {
-    const parsed = E.executePipe(
-      [
-        { name: &apos;pickByRegex&apos;, params: [&apos;a_&apos;] },
-        &apos;mergeWithAdd&apos;,
-        &apos;differential&apos;,
-        { name: &apos;getRate&apos;, params: [&apos;$.INTERVAL&apos;] }
-      ],
-      mockData,
-      { INTERVAL: 4 }
-    );
-
-    expect(parsed.result).toEqual({ a2: 1, a3: 1, a4: 1, a5: 1 });
+    it(&apos;decodes nested object actions&apos;, () =&gt; {
+      expect(
+        D.decodeObjectAction({
+          name: &apos;runAll&apos;,
+          params: [
+            [
+              [
+                { name: &apos;pickFrom&apos;, params: [[&apos;alpha&apos;, &apos;*&apos;]] },
+                &apos;mergeWithAdd&apos;,
+                { name: &apos;getRate&apos;, params: [10] }
+              ],
+              [
+                { name: &apos;pickFrom&apos;, params: [[&apos;beta&apos;, &apos;beta_2&apos;]] },
+                &apos;getAvg&apos;,
+                { name: &apos;getRate&apos;, params: [10] }
+              ]
+            ],
+            {
+              alpha: {
+                alpha_1: {
+                  a1: 3,
+                  a2: 5,
+                  a3: 7
+                },
+                alpha_2: {
+                  a1: 33,
+                  a2: 55,
+                  a3: 77
+                }
+              },
+              beta: {
+                beta_2: {
+                  a1: 22,
+                  a2: 44,
+                  a3: 66
+                }
+              }
+            }
+          ]
+        })
+      ).toEqual([{ a1: 3.6, a2: 6.0, a3: 8.4 }, 4.4]);
+    });
   });
 });
 </code></pre>

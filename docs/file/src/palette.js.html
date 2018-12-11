@@ -31,17 +31,29 @@
     
   <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/main.js~Xform.html">Xform</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-xform">xform</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-cleanData">cleanData</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-defaultAll">defaultAll</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-differential">differential</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-getAvg">getAvg</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-getRate">getRate</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-getUsedMemory">getUsedMemory</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-isEqualTo">isEqualTo</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-isGreaterThanEqualTo">isGreaterThanEqualTo</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-isLessThanEqualTo">isLessThanEqualTo</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-isNothing">isNothing</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-makePair">makePair</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-map">map</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-mergeAll">mergeAll</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-mergeWithAdd">mergeWithAdd</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-mergeWithSubtract">mergeWithSubtract</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-pickByRegex">pickByRegex</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-pickFrom">pickFrom</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-runAll">runAll</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-sortAscending">sortAscending</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-sortDescending">sortDescending</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-sumAll">sumAll</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-takeTopAndCombineOthers">takeTopAndCombineOthers</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-takeTopPairsAndOthers">takeTopPairsAndOthers</a></span></span></li>
 </ul>
 </div>
 </nav>
@@ -54,8 +66,19 @@
 
 import * as R from &apos;ramda&apos;;
 import * as E from &apos;./executor&apos;;
+import * as D from &apos;./decoder&apos;;
 import * as _ from &apos;./helpers&apos;;
-import { decodePipe } from &apos;./decoder&apos;;
+
+/**
+ * Returns `[x, y]`.
+ *
+ *
+ * @param  {any} x
+ * @param  {any} y
+ * @returns {Array}
+ * @example
+ */
+export const makePair = R.curry((x, y) =&gt; [x, y]);
 
 /**
  * Retrieves value at the specified path from a JSON object. &apos;*&apos; in the path is regarded as
@@ -130,6 +153,16 @@ export const mergeWithAdd = mergeWithOp(_.sum);
  *      mergeWithAdd([{ a: 1, b: 5 }, { a: 2 }, { a: 3 }]) //=&gt; { a: 2, b: 5 }
  */
 export const mergeWithSubtract = mergeWithOp(_.subtract);
+/**
+ * Merges a list of JSON objects into a single JSON object by subtracting values having the same key; treats a non-number value as zero.
+ *
+ * @func
+ * @param  {Array&lt;Object&gt;} data
+ * @returns {Object}
+ * @example
+ *      mergeWithAdd([{ a: 1, b: 5 }, { a: 2 }, { a: 3 }]) //=&gt; { a: 2, b: 5 }
+ */
+export const mergeAll = mergeWithOp(_.keepLatest);
 
 /**
  * Applies iterative subtraction over consecutive values in a JSON object such that T[i] = T[i] - T[i-1]; first value is ignored in the result.
@@ -269,12 +302,7 @@ export const getAvg = R.cond([
  *      =&gt; [2, 22]
  */
 export const runAll = R.curry((pipes, data) =&gt; {
-  return R.juxt(
-    R.pipe(
-      decodePipe,
-      R.map(R.apply(R.pipe))
-    )(pipes)
-  )(data);
+  return R.juxt(D.decodePipe(pipes))(data);
 });
 
 /**
@@ -289,6 +317,144 @@ export const getRate = R.curry((denominator, data) =&gt; {
     [R.T, _.divideBy(denominator)]
   ])(data);
 });
+
+/**
+ * @param  {Array} pipe
+ * @param  {Array|Object} data
+ * @returns {Array|Object}
+ * @example
+ *       map([&apos;sumAll&apos;, &apos;getRate(100)&apos;], [[2, 4], [4, 6]])
+ */
+export const map = R.curry((pipe, data) =&gt; {
+  const _pipe = R.apply(R.pipe, D.decodePipe(pipe));
+  return R.map(_pipe, data);
+});
+
+/**
+ * Sort an Object or Array. Type can either be &apos;ascend&apos; or &apos;descend&apos;. When data is an array of
+ * objects or arrays, key refers to the value with respect to which you want the data sorted. When data is an
+ * object, key can either be `0` (sort by key) or `1` (sort by value); sorted object is returned as
+ * a list of `[key, value]` pairs. When data is simply an array of numbers, key is ignored even if provided.
+ *
+ * @param  {string} type
+ * @param  {string|number} key
+ * @returns {data}
+ * @example
+ *       map([&apos;sumAll&apos;, &apos;getRate(100)&apos;], [[2, 4], [4, 6]])
+ */
+const _sort = R.curry((type, key, data) =&gt; {
+  return R.cond([
+    [
+      _.typeMatches(&apos;array&apos;),
+      R.cond([
+        [R.always(_.typeMatches(&apos;object&apos;, R.head(data))), R.sort(R[type](R.prop(key)))],
+        [R.always(_.typeMatches(&apos;array&apos;, R.head(data))), R.sort(R[type](R.prop(key)))],
+        [R.always(_.typeMatches(&apos;number&apos;, R.head(data))), R.sort(type === &apos;ascend&apos; ? R.gt : R.lt)],
+        [R.always(_.typeMatches(&apos;string&apos;, R.head(data))), R.sort(type === &apos;ascend&apos; ? R.gt : R.lt)]
+      ])
+    ],
+    [
+      _.typeMatches(&apos;object&apos;),
+      R.pipe(
+        R.toPairs,
+        R.sort(R[type](R.prop(R.clamp(0, 1, _.defaultToZero(key)))))
+      )
+    ]
+  ])(data);
+});
+
+/**
+ * Sorts an array or object in ascending order. When data is an array of objects or arrays, key
+ * refers to the value with respect to which you want the data sorted. When data is an object, key
+ * can either be `0` (sort by key) or `1` (sort by value); sorted object is returned as a list
+ * of `[key, value]` pairs. When data is simply an array of numbers, key is ignored even if provided.
+ *
+ * @param  {string|number} key
+ * @returns {data}
+ * @example
+ *       sortAscending(null, [3, 2, 1]);    //=&gt; [1, 2, 3]
+ *       sortAscending(1, [[1, 345], [2, 45], [3, 121]]);    //=&gt; [[2, 45], [3, 121], [1, 345]]
+ *       sortAscending(0, { &apos;jkl&apos;: 345, &apos;efg&apos;: 121, &apos;uvx&apos;: 45 });    //=&gt; [[&apos;efg&apos;, 121], [&apos;jkl&apos;, 345], [&apos;uvx&apos;, 45]]
+ *       sortAscending(1, { &apos;jkl&apos;: 345, &apos;efg&apos;: 121, &apos;uvx&apos;: 45 });    //=&gt; [[&apos;uvx&apos;, 45], [&apos;efg&apos;, 121], [&apos;jkl&apos;, 345]]
+ */
+export const sortAscending = _sort(&apos;ascend&apos;);
+
+/**
+ * Sorts an array or object in descending order. When data is an array of objects or arrays, key
+ * refers to the value with respect to which you want the data sorted. When data is an object, key
+ * can either be `0` (sort by key) or `1` (sort by value); sorted object is returned as a list
+ * of `[key, value]` pairs. When data is simply an array of numbers, key is ignored even if provided.
+ *
+ * @param  {string|number} key
+ * @returns {data}
+ * @example
+ *       sortDescending(null, [3, 2, 1]);    //=&gt; [3, 2, 1]
+ *       sortDescending(1, [[1, 345], [2, 45], [3, 121]]);    //=&gt; [[1, 345], [3, 121], [2, 45]]
+ *       sortDescending(0, { &apos;jkl&apos;: 345, &apos;efg&apos;: 121, &apos;uvx&apos;: 45 });    //=&gt; [[&apos;uvx&apos;, 45], [&apos;jkl&apos;, 345], [&apos;efg&apos;, 121]]
+ *       sortDescending(1, { &apos;jkl&apos;: 345, &apos;efg&apos;: 121, &apos;uvx&apos;: 45 });    //=&gt; [[&apos;jkl&apos;, 345], [&apos;efg&apos;, 121], [&apos;uvx&apos;, 45]]
+ */
+export const sortDescending = _sort(&apos;descend&apos;);
+
+/**
+ * Removes values from an array or object by applying the provided predicate functions on
+ * each value in an OR fashion. Additionally for an object, if a key is empty, it is removed
+ * regardless of the value.
+ *
+ * @param  {Array} predicates
+ * @param  {Array} data
+ * @returns {Array}
+ * @example
+ */
+export const cleanData = R.curry((predicates, data) =&gt; {
+  return R.cond([
+    [_.typeMatches(&apos;array&apos;), R.reject(R.anyPass(D.decodePipe(predicates)))],
+    [
+      _.typeMatches(&apos;object&apos;),
+      R.pickBy((v, k) =&gt;
+        R.and(_.isSomething(k), R.complement(R.anyPass(D.decodePipe(predicates)))(v))
+      )
+    ]
+  ])(data);
+});
+
+/**
+ * Takes top `x` items from a list and combines remaining by applying provided xformer.
+ * Returns `[topX, others]`.
+ *
+ * @param  {number} count
+ * @param  {string|Object|Array} xformer
+ * @param  {Array} data
+ * @returns {Array}
+ * @example
+ */
+export const takeTopAndCombineOthers = R.curry((x, xformer, data) =&gt; {
+  return R.pipe(
+    R.splitAt(x),
+    ([topX, others]) =&gt; [...topX, D.decodeAction(xformer)(others)]
+  )(data);
+});
+
+/**
+ * Takes top `x` pairs from a list of pairs and combines remaining pairs by adding values
+ * on index `1` of each pair; a pair should be of form `[x: any, y: number]`. Returns `[topX, others]`.
+ *
+ * @param  {number} count
+ * @param  {string|Object|Array} xformer
+ * @param  {Array} data
+ * @returns {Array}
+ * @example
+ */
+export const takeTopPairsAndOthers = takeTopAndCombineOthers(
+  R.__,
+  [&apos;pickFrom([&quot;*&quot;, 1])&apos;, &apos;sumAll&apos;, &apos;makePair(&quot;Others&quot;)&apos;],
+  R.__
+);
+
+// PREDICATES
+export const isNothing = _.isNothing;
+export const isEqualTo = R.equals;
+export const isLessThanEqualTo = R.flip(R.lte);
+export const isGreaterThanEqualTo = R.flip(R.gte);
 </code></pre>
 
 </div>
