@@ -13,6 +13,14 @@ describe('Test palette functions', () => {
     it('picks values from an Array', () => {
       expect(_.pickFrom([0], [1, 2, 3])).toBe(1);
     });
+
+    it('picks values by wild card symbol from an array', () => {
+      expect(_.pickFrom(['*', 1], [[0, 1], [1, 2], [2, 3]])).toEqual([1, 2, 3]);
+    });
+
+    it('picks values by wild card symbol from an object', () => {
+      expect(_.pickFrom(['*', 'a'], [{ a: 1 }, { a: 2 }, { a: 3 }])).toEqual([1, 2, 3]);
+    });
   });
 
   describe('Keeps only keys from an Object that match regex', () => {
@@ -230,6 +238,51 @@ describe('Test palette functions', () => {
         ['efg', 121],
         ['uvx', 45]
       ]);
+    });
+  });
+
+  describe('Cleans data by passing each value in data through the provided predicates', () => {
+    it('removes null or undefined values from an array', () => {
+      expect(_.cleanData(['isNothing'], [null, 1, 2, undefined, 3])).toEqual([1, 2, 3]);
+    });
+
+    it('removes values according to LTE predicate from an array', () => {
+      expect(
+        _.cleanData(['isNothing', 'isLessThanEqualTo(0)'], [-2, -1, undefined, 1, 2, 3])
+      ).toEqual([1, 2, 3]);
+    });
+
+    it('removes values according predicates from an object', () => {
+      expect(
+        _.cleanData(['isNothing', 'isLessThanEqualTo(0)'], {
+          '': 82634,
+          abc: 1,
+          efg: 2,
+          jkl: undefined,
+          stu: -2,
+          xyz: 3
+        })
+      ).toEqual({
+        abc: 1,
+        efg: 2,
+        xyz: 3
+      });
+    });
+  });
+
+  describe('Takes top X items and combines others', () => {
+    it('from a list of numbers, takes top X and combines others according to the provided xformer', () => {
+      expect(_.takeTopAndCombineOthers(2, ['getAvg', 'getRate(2)'], [2, 3, 1, 2, 3])).toEqual([
+        2,
+        3,
+        1
+      ]);
+    });
+
+    it('from a list of pairs, takes top X and combines others by adding', () => {
+      expect(
+        _.takeTopPairsAndOthers(2, [['abs', 2], ['fat', 3], ['net', 1], ['rip', 2], ['dom', 3]])
+      ).toEqual([['abs', 2], ['fat', 3], ['Others', 6]]);
     });
   });
 });

@@ -166,80 +166,52 @@ export const divideBy = R.curry((denominator, numerator) => {
 });
 
 /**
- * @param  {string} prop
- * @param  {Object|Array} data
+ * @param  {string|number} prop
+ * @param  {boolean} isPrevWildcard
+ * @param  {Array|Object} data
  * @returns {any}
  */
-export const pickProp = R.curry((prop, data) =>
-  R.ifElse(
-    R.always(R.equals('*', prop)),
-    R.cond([
-      [typeMatches('object'), R.values],
-      [
-        typeMatches('array'),
-        R.pipe(
-          R.flatten,
-          R.map(R.values)
-        )
-      ]
-    ]),
-    R.cond([
-      [typeMatches('object'), R.prop(prop)],
-      [
-        typeMatches('array'),
-        R.pipe(
-          R.flatten,
-          mapIndexed((x, i) =>
-            R.ifElse(
-              R.always(
-                R.pipe(
-                  parseInt,
-                  R.equals(i)
-                )(prop)
-              ),
-              R.identity,
-              R.prop(prop)
-            )(x)
+export const pickProp = R.curry((prop, isPrevWildcard, data) => {
+  return R.pipe(
+    R.ifElse(
+      R.always(R.equals('*', prop)),
+      R.when(typeMatches('object'), R.values), //pickByWildcard
+      R.ifElse(
+        R.always(isPrevWildcard),
+        R.pluck(prop),
+        R.ifElse(
+          R.pipe(
+            R.prop(prop),
+            isSomething
           ),
-          R.reject(isNothing)
+          R.prop(prop),
+          R.pluck(prop)
         )
-      ]
-    ])
-  )(data)
-);
+      )
+    ),
+    R.when(typeMatches('array'), R.reject(R.isNil))
+  )(data);
+});
 
 /**
- * @param  {Array<string>} path
- * @param  {Object|Array} data
- * @returns {any}
+ * @param  {number} idx
+ * @param  {Array<string|number>} path
+ * @param  {Array|Object} data
+ * @returns  {any}
  */
-export function pickFrom(path, data) {
-  if (R.isEmpty(path)) {
-    return R.when(
-      R.allPass([
-        typeMatches('array'),
-        R.pipe(
-          R.length,
-          R.equals(1)
-        )
-      ]),
-      R.head
-    )(data);
+function _pickFrom(idx, path, data) {
+  if (R.gte(idx, R.length(path))) {
+    return data;
   }
 
-  return pickFrom(R.tail(path), pickProp(R.head(path), data));
+  const isPrevWildcard = R.equals('*', path[R.dec(idx)]);
+  return _pickFrom(R.inc(idx), path, pickProp(R.nth(idx, path), isPrevWildcard, data));
 }
 
 /**
- * @param  {Array<string>} path
- * @param  {Object|Array} data
- * @returns {any}
+ * @param  {number} idx
+ * @param  {Array<string|number>} path
+ * @param  {Array|Object} data
+ * @returns  {any}
  */
-export function isDataRejectable(value, key) {
-  if (typeof key === 'undefined') {
-    // Array item
-    return R.anyPass([isNothing, isJunk])(value);
-  } else {
-    // Object item
-  }
-}
+export const pickFrom = R.curry(_pickFrom)(0);

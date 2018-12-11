@@ -12,7 +12,7 @@ const OPENING_PARAN_REGEX = /^[\(]?/;
 const CLOSING_PARAN_REGEX = /[\)]?$/;
 const SEPARATOR_REGEX = /[,][ ]?/;
 
-function evaluate(str) {
+export function evaluate(str) {
   return R.pipe(
     R.tryCatch(eval, R.always(str)),
     R.when(
@@ -21,6 +21,24 @@ function evaluate(str) {
         R.split('.'),
         R.path(R.__, this)
       )
+    ),
+    R.when(
+      R.test(/^[X.]/),
+      R.pipe(
+        R.split('.'),
+        R.last,
+        decodeStringyAction
+      )
+    ),
+    R.when(
+      R.both(
+        _.typeMatches('object'),
+        R.pipe(
+          R.prop('name'),
+          R.has(R.__, P)
+        )
+      ),
+      decodeObjectAction
     )
   )(str);
 }
@@ -33,7 +51,7 @@ function evaluate(str) {
  * params from this string and returns the function with the evaluated params. If no matching function is found, R.identity
  * is returned in its place.
  */
-function decodeStringyAction(action) {
+export function decodeStringyAction(action) {
   return R.pipe(
     R.juxt([
       _.getFirstMatch(ALIAS_REGEX),
@@ -67,18 +85,13 @@ function decodeStringyAction(action) {
 // TODO: You should maybe consult a map for checking if the provided action even needs
 // the func or params paramater or not. Maybe the user made a mistake or is just trying to mess
 // with the parser.
-function decodeObjectAction(action) {
-  const { name, params, func } = action;
+export function decodeObjectAction(action) {
+  const { name, params } = action;
   const _evaluate = evaluate.bind(this);
 
   if (R.has(name, P)) {
-    let _func = [];
     let _params = [];
-
-    if (_.typeMatches('array', func) && _.isSomething(func)) _func = decodePipe.call(this, func);
     if (_.isSomething(params)) _params = _.typeMatches('array', params) ? params : [params];
-    if (_.isSomething(_func)) return P[name](R.pipe(..._func), ...R.map(_evaluate, _params));
-
     return P[name](...R.map(_evaluate, _params));
   } else {
     return R.identity;
@@ -91,7 +104,7 @@ function decodeObjectAction(action) {
  *
  * Takes a JSON representation of an action and converts it into stringy representation.
  */
-function translateObjectToString(action) {
+export function translateObjectToString(action) {
   return R.converge(R.concat, [
     R.prop('name'),
     R.ifElse(
@@ -115,15 +128,34 @@ function translateObjectToString(action) {
  * matching function is found, R.identity is put in its place. R.identity is a function that returns the value
  * it was called with. Command pallete is located in src/XFormer/xformerFns.
  */
-export function decodePipe(pipe) {
-  return R.map(
-    R.cond([
+export function decodeAction(action) {
+  try {
+    return R.cond([
       [_.typeMatches('string'), decodeStringyAction.bind(this)],
       [_.typeMatches('object'), decodeObjectAction.bind(this)],
-      [_.typeMatches('array'), decodePipe.bind(this)]
-    ]),
-    pipe
-  );
+      [
+        _.typeMatches('array'),
+        R.pipe(
+          decodePipe.bind(this),
+          R.apply(R.pipe)
+        )
+      ]
+    ])(action);
+  } catch (error) {
+    return action;
+  }
+}
+
+/**
+ * @param  {Array<string>} pipe
+ * @returns {Array<Function>}
+ *
+ * Takes an array of strings and replaces each string with the matching function from the command pallete; if no
+ * matching function is found, R.identity is put in its place. R.identity is a function that returns the value
+ * it was called with. Command pallete is located in src/XFormer/xformerFns.
+ */
+export function decodePipe(pipe) {
+  return R.map(decodeAction.bind(this), pipe);
 }
 
 /**

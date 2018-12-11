@@ -5,8 +5,19 @@
 
 import * as R from 'ramda';
 import * as E from './executor';
+import * as D from './decoder';
 import * as _ from './helpers';
-import { decodePipe } from './decoder';
+
+/**
+ * Returns `[x, y]`.
+ *
+ *
+ * @param  {any} x
+ * @param  {any} y
+ * @returns {Array}
+ * @example
+ */
+export const makePair = R.curry((x, y) => [x, y]);
 
 /**
  * Retrieves value at the specified path from a JSON object. '*' in the path is regarded as
@@ -230,12 +241,7 @@ export const getAvg = R.cond([
  *      => [2, 22]
  */
 export const runAll = R.curry((pipes, data) => {
-  return R.juxt(
-    R.pipe(
-      decodePipe,
-      R.map(R.apply(R.pipe))
-    )(pipes)
-  )(data);
+  return R.juxt(D.decodePipe(pipes))(data);
 });
 
 /**
@@ -259,7 +265,7 @@ export const getRate = R.curry((denominator, data) => {
  *       map(['sumAll', 'getRate(100)'], [[2, 4], [4, 6]])
  */
 export const map = R.curry((pipe, data) => {
-  const _pipe = R.apply(R.pipe, decodePipe(pipe));
+  const _pipe = R.apply(R.pipe, D.decodePipe(pipe));
   return R.map(_pipe, data);
 });
 
@@ -327,3 +333,64 @@ export const sortAscending = _sort('ascend');
  *       sortDescending(1, { 'jkl': 345, 'efg': 121, 'uvx': 45 });    //=> [['jkl', 345], ['efg', 121], ['uvx', 45]]
  */
 export const sortDescending = _sort('descend');
+
+/**
+ * Removes values from an array or object by applying the provided predicate functions on
+ * each value in an OR fashion. Additionally for an object, if a key is empty, it is removed
+ * regardless of the value.
+ *
+ * @param  {Array} predicates
+ * @param  {Array} data
+ * @returns {Array}
+ * @example
+ */
+export const cleanData = R.curry((predicates, data) => {
+  return R.cond([
+    [_.typeMatches('array'), R.reject(R.anyPass(D.decodePipe(predicates)))],
+    [
+      _.typeMatches('object'),
+      R.pickBy((v, k) =>
+        R.and(_.isSomething(k), R.complement(R.anyPass(D.decodePipe(predicates)))(v))
+      )
+    ]
+  ])(data);
+});
+
+/**
+ * Takes top `x` items from a list and combines remaining by applying provided xformer.
+ * Returns `[topX, others]`.
+ *
+ * @param  {number} count
+ * @param  {string|Object|Array} xformer
+ * @param  {Array} data
+ * @returns {Array}
+ * @example
+ */
+export const takeTopAndCombineOthers = R.curry((x, xformer, data) => {
+  return R.pipe(
+    R.splitAt(x),
+    ([topX, others]) => [...topX, D.decodeAction(xformer)(others)]
+  )(data);
+});
+
+/**
+ * Takes top `x` pairs from a list of pairs and combines remaining pairs by adding values
+ * on index `1` of each pair; a pair should be of form `[x: any, y: number]`. Returns `[topX, others]`.
+ *
+ * @param  {number} count
+ * @param  {string|Object|Array} xformer
+ * @param  {Array} data
+ * @returns {Array}
+ * @example
+ */
+export const takeTopPairsAndOthers = takeTopAndCombineOthers(
+  R.__,
+  ['pickFrom(["*", 1])', 'sumAll', 'makePair("Others")'],
+  R.__
+);
+
+// PREDICATES
+export const isNothing = _.isNothing;
+export const isEqualTo = R.equals;
+export const isLessThanEqualTo = R.flip(R.lte);
+export const isGreaterThanEqualTo = R.flip(R.gte);

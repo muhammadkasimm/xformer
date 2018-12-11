@@ -71,23 +71,8 @@ describe('Parses xFormer queries', () => {
     const parsed = E.execute(
       {
         1: [
-          [{ name: 'pickFrom', params: [['a_1']] }, { name: 'pickFrom', params: [['a_2']] }],
+          { name: 'pickFrom', params: [['*']] },
           { name: 'mergeWithAdd' },
-          { name: 'differential', params: [] }
-        ]
-      },
-      mockData
-    );
-
-    expect(parsed['1'].result).toEqual({ a2: 4, a3: 4, a4: 4, a5: 4 });
-  });
-
-  it('parses queries containing mixed type actions', () => {
-    const parsed = E.execute(
-      {
-        1: [
-          [{ name: 'pickFrom', params: [['a_1']] }, { name: 'pickFrom', params: [['a_2']] }],
-          'mergeWithAdd',
           { name: 'differential', params: [] }
         ]
       },
