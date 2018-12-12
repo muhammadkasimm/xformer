@@ -343,6 +343,8 @@ export const sortDescending = _sort('descend');
  * @param  {Array} data
  * @returns {Array}
  * @example
+ *        cleanData(['isNothing'], [null, 1, 2, undefined, 3])
+ *        //=> [1, 2, 3]
  */
 export const cleanData = R.curry((predicates, data) => {
   return R.cond([
@@ -365,6 +367,9 @@ export const cleanData = R.curry((predicates, data) => {
  * @param  {Array} data
  * @returns {Array}
  * @example
+ *        takeTopAndCombineOthers(2, 'sumAll', [2, 3, 1, 2, 3])
+ *        //=> [2, 3, 6]
+ *
  */
 export const takeTopAndCombineOthers = R.curry((x, xformer, data) => {
   return R.pipe(
@@ -382,6 +387,8 @@ export const takeTopAndCombineOthers = R.curry((x, xformer, data) => {
  * @param  {Array} data
  * @returns {Array}
  * @example
+ *        takeTopPairsAndOthers(2, [['abs', 2], ['fat', 3], ['net', 1], ['rip', 2], ['dom', 3]])
+ *        //=> [['abs', 2], ['fat', 3], ['Others', 6]]
  */
 export const takeTopPairsAndOthers = takeTopAndCombineOthers(
   R.__,
