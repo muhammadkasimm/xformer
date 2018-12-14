@@ -144,9 +144,9 @@ window.esdocSearchIndex = [
     "variable"
   ],
   [
-    "@muhammadkasim/xformer/src/palette.js~taketoppairsandothers",
-    "variable/index.html#static-variable-takeTopPairsAndOthers",
-    "<span>takeTopPairsAndOthers</span> <span class=\"search-result-import-path\">@muhammadkasim/xformer/src/palette.js</span>",
+    "@muhammadkasim/xformer/src/palette.js~taketoppairsandaddothers",
+    "variable/index.html#static-variable-takeTopPairsAndAddOthers",
+    "<span>takeTopPairsAndAddOthers</span> <span class=\"search-result-import-path\">@muhammadkasim/xformer/src/palette.js</span>",
     "variable"
   ],
   [

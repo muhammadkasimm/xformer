@@ -53,7 +53,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-sortDescending">sortDescending</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-sumAll">sumAll</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-takeTopAndCombineOthers">takeTopAndCombineOthers</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-takeTopPairsAndOthers">takeTopPairsAndOthers</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-takeTopPairsAndAddOthers">takeTopPairsAndAddOthers</a></span></span></li>
 </ul>
 </div>
 </nav>
@@ -192,11 +192,63 @@ X.executePipe([&apos;mergeWithAdd&apos;, &apos;getAvg&apos;], mock_data);
 </tr>
 <tr>
 <td><code>runAll</code></td>
-<td><code>pipes: Array&lt;pipe&gt;, data: any</code></td>
+<td><code>pipes: Array, data: any</code></td>
 <td>Execute a list of pipelines on provided data.</td>
+</tr>
+<tr>
+<td><code>map</code></td>
+<td><code>action: (string, Object, Array), data: any</code></td>
+<td>Takes an action and data as input and returns the result of performing that action on each value in the data.</td>
+</tr>
+<tr>
+<td><code>sortAscending</code></td>
+<td><code>key: any, data: (Array, Object)</code></td>
+<td>Sorts an array or object in ascending order. When data is an array of objects or arrays, key refers to the value with respect to which you want the data sorted. When data is an object, key can either be <code>0</code> (sort by key) or <code>1</code> (sort by value); sorted object is returned as a list of <code>[key, value]</code> pairs. When data is simply an array of numbers, key is ignored even if provided.</td>
+</tr>
+<tr>
+<td><code>sortDescending</code></td>
+<td><code>key: any, data: (Array, Object)</code></td>
+<td>Sorts an array or object in descending order. When data is an array of objects or arrays, key refers to the value with respect to which you want the data sorted. When data is an object, key can either be <code>0</code> (sort by key) or <code>1</code> (sort by value); sorted object is returned as a list of <code>[key, value]</code> pairs. When data is simply an array of numbers, key is ignored even if provided.</td>
+</tr>
+<tr>
+<td><code>cleanData</code></td>
+<td><code>predicates: Array, data: (Array, Object)</code></td>
+<td>Removes values from an array or object by applying the provided predicate functions on each value in an OR fashion. Additionally for an object, if a key is empty, it is removed regardless of the value.</td>
+</tr>
+<tr>
+<td><code>takeTopAndCombineOthers</code></td>
+<td><code>x: number, xformer: Action, data: (Array, Object)</code></td>
+<td>Takes top <code>x</code> items from a list and combines remaining by applying provided xformer. Returns <code>[...topX, others]</code>.</td>
+</tr>
+<tr>
+<td><code>takeTopPairsAndAddOthers</code></td>
+<td><code>x: number, data: (Array, Object)</code></td>
+<td>Takes top <code>x</code> pairs from a list of pairs and combines remaining pairs by adding values on index <code>1</code> of each pair; a pair should be of form <code>[x: any, y: number]</code>. Returns <code>[topX, others]</code>.</td>
+</tr>
+<tr>
+<td><code>isNothing</code></td>
+<td><code>value: any</code></td>
+<td>Returns true if the value under test is empty or nil.</td>
+</tr>
+<tr>
+<td><code>isEqualTo</code></td>
+<td><code>x1: any, x2: any</code></td>
+<td>Returns true if the 2 provided values are deeply equal.</td>
+</tr>
+<tr>
+<td><code>isLessThanEqualTo</code></td>
+<td><code>x1: number, x2: number</code></td>
+<td>Returns true if the second value is less than the first value.</td>
+</tr>
+<tr>
+<td><code>isGreaterThanEqualTo</code></td>
+<td><code>x1: number, x2: number</code></td>
+<td>Returns true if the second value is greater than the first value.</td>
 </tr>
 </tbody>
 </table>
+<p><code>* Action = string|Object|Array</code></p>
+<p><code>* Pipe = Array&lt;action&gt;</code></p>
 </div>
 </div>
 
