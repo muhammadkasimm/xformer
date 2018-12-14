@@ -281,7 +281,7 @@ describe('Test palette functions', () => {
 
     it('from a list of pairs, takes top X and combines others by adding', () => {
       expect(
-        _.takeTopPairsAndOthers(2, [['abs', 2], ['fat', 3], ['net', 1], ['rip', 2], ['dom', 3]])
+        _.takeTopPairsAndAddOthers(2, [['abs', 2], ['fat', 3], ['net', 1], ['rip', 2], ['dom', 3]])
       ).toEqual([['abs', 2], ['fat', 3], ['Others', 6]]);
     });
   });
