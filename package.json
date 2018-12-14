@@ -1,6 +1,6 @@
 {
   "name": "@muhammadkasim/xformer",
-  "version": "0.1.0-alpha-2.6",
+  "version": "0.1.0-alpha-2.9",
   "description": "xFormer provides an extensive set of utilities, a way to define declarative transformation pipelines and a parser to facilitate easier data transformations.",
   "main": "lib/index.js",
   "author": "eMumba <muhammad.kasim@emumba.com>",

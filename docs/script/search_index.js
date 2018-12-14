@@ -1,11 +1,5 @@
 window.esdocSearchIndex = [
   [
-    "@muhammadkasim/xformer/src/main.js~xform",
-    "class/src/main.js~Xform.html",
-    "<span>Xform</span> <span class=\"search-result-import-path\">@muhammadkasim/xformer/src/main.js</span>",
-    "class"
-  ],
-  [
     "@muhammadkasim/xformer/src/palette.js~cleandata",
     "variable/index.html#static-variable-cleanData",
     "<span>cleanData</span> <span class=\"search-result-import-path\">@muhammadkasim/xformer/src/palette.js</span>",
@@ -28,6 +22,12 @@ window.esdocSearchIndex = [
     "variable/index.html#static-variable-getAvg",
     "<span>getAvg</span> <span class=\"search-result-import-path\">@muhammadkasim/xformer/src/palette.js</span>",
     "variable"
+  ],
+  [
+    "@muhammadkasim/xformer/src/main.js~getcontext",
+    "function/index.html#static-function-getContext",
+    "<span>getContext</span> <span class=\"search-result-import-path\">@muhammadkasim/xformer/src/main.js</span>",
+    "function"
   ],
   [
     "@muhammadkasim/xformer/src/palette.js~getrate",
@@ -114,6 +114,12 @@ window.esdocSearchIndex = [
     "variable"
   ],
   [
+    "@muhammadkasim/xformer/src/main.js~setcontext",
+    "function/index.html#static-function-setContext",
+    "<span>setContext</span> <span class=\"search-result-import-path\">@muhammadkasim/xformer/src/main.js</span>",
+    "function"
+  ],
+  [
     "@muhammadkasim/xformer/src/palette.js~sortascending",
     "variable/index.html#static-variable-sortAscending",
     "<span>sortAscending</span> <span class=\"search-result-import-path\">@muhammadkasim/xformer/src/palette.js</span>",
@@ -141,12 +147,6 @@ window.esdocSearchIndex = [
     "@muhammadkasim/xformer/src/palette.js~taketoppairsandothers",
     "variable/index.html#static-variable-takeTopPairsAndOthers",
     "<span>takeTopPairsAndOthers</span> <span class=\"search-result-import-path\">@muhammadkasim/xformer/src/palette.js</span>",
-    "variable"
-  ],
-  [
-    "@muhammadkasim/xformer/src/main.js~xform",
-    "variable/index.html#static-variable-xform",
-    "<span>xform</span> <span class=\"search-result-import-path\">@muhammadkasim/xformer/src/main.js</span>",
     "variable"
   ],
   [
@@ -1060,42 +1060,6 @@ window.esdocSearchIndex = [
     "file/src/main.js.html",
     "src/main.js",
     "file"
-  ],
-  [
-    "src/main.js~xform#$",
-    "class/src/main.js~Xform.html#instance-member-$",
-    "src/main.js~Xform#$",
-    "member"
-  ],
-  [
-    "src/main.js~xform#constructor",
-    "class/src/main.js~Xform.html#instance-constructor-constructor",
-    "src/main.js~Xform#constructor",
-    "method"
-  ],
-  [
-    "src/main.js~xform#execute",
-    "class/src/main.js~Xform.html#instance-method-execute",
-    "src/main.js~Xform#execute",
-    "method"
-  ],
-  [
-    "src/main.js~xform#executepipe",
-    "class/src/main.js~Xform.html#instance-method-executePipe",
-    "src/main.js~Xform#executePipe",
-    "method"
-  ],
-  [
-    "src/main.js~xform#getexternals",
-    "class/src/main.js~Xform.html#instance-method-getExternals",
-    "src/main.js~Xform#getExternals",
-    "method"
-  ],
-  [
-    "src/main.js~xform#setexternals",
-    "class/src/main.js~Xform.html#instance-method-setExternals",
-    "src/main.js~Xform#setExternals",
-    "method"
   ],
   [
     "src/palette.js",

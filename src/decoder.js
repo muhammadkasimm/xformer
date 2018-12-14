@@ -6,6 +6,7 @@
 import * as R from 'ramda';
 import * as P from './palette';
 import * as _ from './helpers';
+import { getContext } from './main';
 
 const ALIAS_REGEX = /^[a-zA-z0-9_]*/;
 const OPENING_PARAN_REGEX = /^[\(]?/;
@@ -13,13 +14,14 @@ const CLOSING_PARAN_REGEX = /[\)]?$/;
 const SEPARATOR_REGEX = /[,][ ]?/;
 
 export function evaluate(str) {
+  const context = getContext();
   return R.pipe(
     R.tryCatch(eval, R.always(str)),
     R.when(
       R.test(/^[\$.]/),
       R.pipe(
-        R.split('.'),
-        R.path(R.__, this)
+        R.replace(/^[\$]\./, ''),
+        R.prop(R.__, context)
       )
     ),
     R.when(
@@ -61,7 +63,7 @@ export function decodeStringyAction(action) {
         R.replace(CLOSING_PARAN_REGEX, ''),
         x => `[${x}]`,
         eval,
-        R.map(evaluate.bind(this))
+        R.map(evaluate)
       )
     ]),
     R.ifElse(
@@ -87,12 +89,11 @@ export function decodeStringyAction(action) {
 // with the parser.
 export function decodeObjectAction(action) {
   const { name, params } = action;
-  const _evaluate = evaluate.bind(this);
 
   if (R.has(name, P)) {
     let _params = [];
     if (_.isSomething(params)) _params = _.typeMatches('array', params) ? params : [params];
-    return P[name](...R.map(_evaluate, _params));
+    return P[name](...R.map(evaluate, _params));
   } else {
     return R.identity;
   }
@@ -131,12 +132,12 @@ export function translateObjectToString(action) {
 export function decodeAction(action) {
   try {
     return R.cond([
-      [_.typeMatches('string'), decodeStringyAction.bind(this)],
-      [_.typeMatches('object'), decodeObjectAction.bind(this)],
+      [_.typeMatches('string'), decodeStringyAction],
+      [_.typeMatches('object'), decodeObjectAction],
       [
         _.typeMatches('array'),
         R.pipe(
-          decodePipe.bind(this),
+          decodePipe,
           R.apply(R.pipe)
         )
       ]
@@ -155,7 +156,7 @@ export function decodeAction(action) {
  * it was called with. Command pallete is located in src/XFormer/xformerFns.
  */
 export function decodePipe(pipe) {
-  return R.map(decodeAction.bind(this), pipe);
+  return R.map(decodeAction, pipe);
 }
 
 /**
