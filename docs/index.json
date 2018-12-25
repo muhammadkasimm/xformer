@@ -3,7 +3,7 @@
     "__docId__": 0,
     "kind": "file",
     "name": "src/main.js",
-    "content": "import merge from 'ramda/src/merge';\nimport { execute, executePipe } from './executor';\n\nclass Xform {\n  constructor() {\n    this.$ = {};\n  }\n\n  /**\n   * Helps initilaize or update external dependencies needed to run queries.\n   *\n   * @func\n   * @returns {Object} $ // (external dependencies)\n   * @example\n   *      X.setExternals({ interval: 30 });\n   */\n  getExternals() {\n    return this.$;\n  }\n\n  /**\n   * Helps initilaize or update external dependencies needed to run queries.\n   *\n   * @func\n   * @param  {Object} ext\n   * @returns {undefined}\n   * @example\n   *      X.setExternals({ interval: 30 });\n   */\n  setExternals(ext = {}) {\n    this.$ = merge(this.getExternals(), ext);\n  }\n\n  /**\n   * Takes a query and data as input and executes all pipelines within the query, with each pipeline receiving the\n   * provided data. A query can be a list of pipes or a JSON structure. A pipe is an array of action\n   * descriptions. An action can be described as a string or JSON.\n   *\n   * Read docs for the available action palette.\n   *\n   * @func\n   * @param  {Array|Object} query\n   * @param  {any} data\n   * @param  {Object} ext = {}\n   * @returns {Object}\n   * @example\n   *      E.execute({ avg_by_30: ['getAvg', 'getRate(30)'] }, [1, 2 , 3]);\n   *\n   *      //=>\n   *      {\n   *        avg_by_30: {\n   *          buffer: [\n   *            { title: 'Original Data', data: [1, 2, 3] },\n   *            { title: 'getAvg', data: 2 },\n   *            { title: 'getRate(30)', data: 0.067 }\n   *          ],\n   *          result: 0.067\n   *        }\n   *      }\n   */\n  execute(query, data, ext = {}) {\n    this.setExternals(ext);\n    return execute.call(this, query, data);\n  }\n\n  /**\n   * Takes a pipe and data as input and executes all actions from left to right. A pipe is an array of action\n   * descriptions. An action can be described as a string or JSON.\n   *\n   * @func\n   * @param  {Array<string|Object>} pipe\n   * @param  {any} data\n   * @param  {Object} ext = {}\n   * @returns {Object}\n   * @example\n   *      E.executePipe(['getAvg', 'getRate(30)'], [1, 2 , 3]);\n   *\n   *      //=>\n   *      {\n   *        buffer: [\n   *          { title: 'Original Data', data: [1, 2, 3] },\n   *          { title: 'getAvg', data: 2 },\n   *          { title: 'getRate(30)', data: 0.067 }\n   *        ],\n   *        result: 0.067\n   *      }\n   */\n  executePipe(pipe, data, ext = {}) {\n    this.setExternals(ext);\n    return executePipe.call(this, pipe, data);\n  }\n}\n\nexport default new Xform();\n",
+    "content": "import merge from 'ramda/src/merge';\nimport { execute, executePipe } from './executor';\n\nlet context = {};\nexport const getContext = () => context;\nexport const setContext = (ctx = {}) => {\n  context = merge(getContext(), ctx);\n};\n\nfunction Xform() {\n  setContext({});\n\n  return {\n    execute: (query, data, ctx = {}) => {\n      setContext(ctx);\n      return execute(query, data);\n    },\n    executePipe: (pipe, data, ctx = {}) => {\n      setContext(ctx);\n      return executePipe(pipe, data);\n    }\n  };\n}\n\nexport default Xform();\n",
     "static": true,
     "longname": "/home/atom/Documents/Emumba/xformer/src/main.js",
     "access": "public",
@@ -12,291 +12,102 @@
   },
   {
     "__docId__": 1,
-    "kind": "class",
-    "name": "Xform",
+    "kind": "variable",
+    "name": "context",
     "memberof": "src/main.js",
     "static": true,
-    "longname": "src/main.js~Xform",
+    "longname": "src/main.js~context",
     "access": "public",
-    "export": true,
+    "export": false,
     "importPath": "@muhammadkasim/xformer/src/main.js",
     "importStyle": null,
     "description": null,
     "lineNumber": 4,
-    "pseudoExport": true,
-    "undocument": true,
-    "interface": false
-  },
-  {
-    "__docId__": 2,
-    "kind": "constructor",
-    "name": "constructor",
-    "memberof": "src/main.js~Xform",
-    "generator": false,
-    "async": false,
-    "static": false,
-    "longname": "src/main.js~Xform#constructor",
-    "access": "public",
-    "description": null,
-    "lineNumber": 5,
-    "undocument": true
-  },
-  {
-    "__docId__": 3,
-    "kind": "member",
-    "name": "$",
-    "memberof": "src/main.js~Xform",
-    "static": false,
-    "longname": "src/main.js~Xform#$",
-    "access": "public",
-    "description": null,
-    "lineNumber": 6,
     "undocument": true,
     "type": {
       "types": [
         "{}"
       ]
-    }
-  },
-  {
-    "__docId__": 4,
-    "kind": "method",
-    "name": "getExternals",
-    "memberof": "src/main.js~Xform",
-    "generator": false,
-    "async": false,
-    "static": false,
-    "longname": "src/main.js~Xform#getExternals",
-    "access": "public",
-    "description": "Helps initilaize or update external dependencies needed to run queries.",
-    "examples": [
-      "     X.setExternals({ interval: 30 });"
-    ],
-    "lineNumber": 17,
-    "unknown": [
-      {
-        "tagName": "@func",
-        "tagValue": ""
-      },
-      {
-        "tagName": "@returns",
-        "tagValue": "{Object} $ // (external dependencies)"
-      }
-    ],
-    "return": {
-      "nullable": null,
-      "types": [
-        "Object"
-      ],
-      "spread": false,
-      "description": "$ // (external dependencies)"
     },
-    "params": []
+    "ignore": true
   },
   {
-    "__docId__": 5,
-    "kind": "method",
-    "name": "setExternals",
-    "memberof": "src/main.js~Xform",
-    "generator": false,
-    "async": false,
-    "static": false,
-    "longname": "src/main.js~Xform#setExternals",
-    "access": "public",
-    "description": "Helps initilaize or update external dependencies needed to run queries.",
-    "examples": [
-      "     X.setExternals({ interval: 30 });"
-    ],
-    "lineNumber": 30,
-    "unknown": [
-      {
-        "tagName": "@func",
-        "tagValue": ""
-      },
-      {
-        "tagName": "@returns",
-        "tagValue": "{undefined}"
-      }
-    ],
-    "params": [
-      {
-        "nullable": null,
-        "types": [
-          "Object"
-        ],
-        "spread": false,
-        "optional": false,
-        "name": "ext",
-        "description": ""
-      }
-    ],
-    "return": {
-      "nullable": null,
-      "types": [
-        "undefined"
-      ],
-      "spread": false,
-      "description": ""
-    }
-  },
-  {
-    "__docId__": 7,
-    "kind": "method",
-    "name": "execute",
-    "memberof": "src/main.js~Xform",
-    "generator": false,
-    "async": false,
-    "static": false,
-    "longname": "src/main.js~Xform#execute",
-    "access": "public",
-    "description": "Takes a query and data as input and executes all pipelines within the query, with each pipeline receiving the\nprovided data. A query can be a list of pipes or a JSON structure. A pipe is an array of action\ndescriptions. An action can be described as a string or JSON.\n\nRead docs for the available action palette.",
-    "examples": [
-      "     E.execute({ avg_by_30: ['getAvg', 'getRate(30)'] }, [1, 2 , 3]);\n\n     //=>\n     {\n       avg_by_30: {\n         buffer: [\n           { title: 'Original Data', data: [1, 2, 3] },\n           { title: 'getAvg', data: 2 },\n           { title: 'getRate(30)', data: 0.067 }\n         ],\n         result: 0.067\n       }\n     }"
-    ],
-    "lineNumber": 61,
-    "unknown": [
-      {
-        "tagName": "@func",
-        "tagValue": ""
-      },
-      {
-        "tagName": "@returns",
-        "tagValue": "{Object}"
-      }
-    ],
-    "params": [
-      {
-        "nullable": null,
-        "types": [
-          "Array",
-          "Object"
-        ],
-        "spread": false,
-        "optional": false,
-        "name": "query",
-        "description": ""
-      },
-      {
-        "nullable": null,
-        "types": [
-          "any"
-        ],
-        "spread": false,
-        "optional": false,
-        "name": "data",
-        "description": ""
-      },
-      {
-        "nullable": null,
-        "types": [
-          "Object"
-        ],
-        "spread": false,
-        "optional": false,
-        "name": "ext",
-        "description": "= {}"
-      }
-    ],
-    "return": {
-      "nullable": null,
-      "types": [
-        "Object"
-      ],
-      "spread": false,
-      "description": ""
-    }
-  },
-  {
-    "__docId__": 8,
-    "kind": "method",
-    "name": "executePipe",
-    "memberof": "src/main.js~Xform",
-    "generator": false,
-    "async": false,
-    "static": false,
-    "longname": "src/main.js~Xform#executePipe",
-    "access": "public",
-    "description": "Takes a pipe and data as input and executes all actions from left to right. A pipe is an array of action\ndescriptions. An action can be described as a string or JSON.",
-    "examples": [
-      "     E.executePipe(['getAvg', 'getRate(30)'], [1, 2 , 3]);\n\n     //=>\n     {\n       buffer: [\n         { title: 'Original Data', data: [1, 2, 3] },\n         { title: 'getAvg', data: 2 },\n         { title: 'getRate(30)', data: 0.067 }\n       ],\n       result: 0.067\n     }"
-    ],
-    "lineNumber": 88,
-    "unknown": [
-      {
-        "tagName": "@func",
-        "tagValue": ""
-      },
-      {
-        "tagName": "@returns",
-        "tagValue": "{Object}"
-      }
-    ],
-    "params": [
-      {
-        "nullable": null,
-        "types": [
-          "Array<string|Object>"
-        ],
-        "spread": false,
-        "optional": false,
-        "name": "pipe",
-        "description": ""
-      },
-      {
-        "nullable": null,
-        "types": [
-          "any"
-        ],
-        "spread": false,
-        "optional": false,
-        "name": "data",
-        "description": ""
-      },
-      {
-        "nullable": null,
-        "types": [
-          "Object"
-        ],
-        "spread": false,
-        "optional": false,
-        "name": "ext",
-        "description": "= {}"
-      }
-    ],
-    "return": {
-      "nullable": null,
-      "types": [
-        "Object"
-      ],
-      "spread": false,
-      "description": ""
-    }
-  },
-  {
-    "__docId__": 9,
-    "kind": "variable",
-    "name": "xform",
+    "__docId__": 2,
+    "kind": "function",
+    "name": "getContext",
     "memberof": "src/main.js",
+    "generator": false,
+    "async": false,
     "static": true,
-    "longname": "src/main.js~xform",
+    "longname": "src/main.js~getContext",
     "access": "public",
     "export": true,
     "importPath": "@muhammadkasim/xformer/src/main.js",
-    "importStyle": "xform",
+    "importStyle": "{getContext}",
     "description": null,
-    "lineNumber": 94,
+    "lineNumber": 5,
     "undocument": true,
-    "type": {
-      "types": [
-        "src/main.js~Xform"
-      ]
-    }
+    "params": [],
+    "return": null
   },
   {
-    "__docId__": 10,
+    "__docId__": 3,
+    "kind": "function",
+    "name": "setContext",
+    "memberof": "src/main.js",
+    "generator": false,
+    "async": false,
+    "static": true,
+    "longname": "src/main.js~setContext",
+    "access": "public",
+    "export": true,
+    "importPath": "@muhammadkasim/xformer/src/main.js",
+    "importStyle": "{setContext}",
+    "description": null,
+    "lineNumber": 6,
+    "undocument": true,
+    "params": [
+      {
+        "name": "ctx",
+        "optional": true,
+        "types": [
+          "{}"
+        ],
+        "defaultRaw": {},
+        "defaultValue": "{}"
+      }
+    ],
+    "return": null
+  },
+  {
+    "__docId__": 4,
+    "kind": "function",
+    "name": "Xform",
+    "memberof": "src/main.js",
+    "generator": false,
+    "async": false,
+    "static": true,
+    "longname": "src/main.js~Xform",
+    "access": "public",
+    "export": false,
+    "importPath": "@muhammadkasim/xformer/src/main.js",
+    "importStyle": null,
+    "description": null,
+    "lineNumber": 10,
+    "undocument": true,
+    "params": [],
+    "return": {
+      "types": [
+        "{\"execute\": *, \"executePipe\": *}"
+      ]
+    },
+    "ignore": true
+  },
+  {
+    "__docId__": 5,
     "kind": "file",
     "name": "src/palette.js",
-    "content": "/*\n  This file contains the xFormer functions; the end user will build queries using these functions.\n\tThis is the command pallete.\n*/\n\nimport * as R from 'ramda';\nimport * as E from './executor';\nimport * as D from './decoder';\nimport * as _ from './helpers';\n\n/**\n * Returns `[x, y]`.\n *\n *\n * @param  {any} x\n * @param  {any} y\n * @returns {Array}\n * @example\n */\nexport const makePair = R.curry((x, y) => [x, y]);\n\n/**\n * Retrieves value at the specified path from a JSON object. '*' in the path is regarded as\n * a wildcard, meaning anything at this level will used to pick value from.\n *\n * @func\n * @param  {Array<string>} path\n * @param  {Object} input\n * @returns {any}\n * @example\n *      pickFrom(['a','b','c'], {'a': {'b': {'c': 20}}}) //=> 20\n *      pickFrom(['a','*','x'], {'a': {'b': {'x': 20}, 'c': {'x': 40}}}) //=> [20, 40]\n */\nexport const pickFrom = R.curry(_.pickFrom);\n\n/**\n * Filters key-value pairs from a JSON object when key matches the specified regular expression (or string).\n *\n * @func\n * @param  {string} path\n * @param  {Object} input\n * @returns {Object}\n * @example\n *      pickByRegex('abc', {'abcd': {'b': {'c': 20}}, 'efg': {'h': {'i': 20}}) //=> {'b': {'c': 20}}\n */\nexport const pickByRegex = R.curry((text, data) =>\n  R.ifElse(\n    R.always(_.isNothing(text)),\n    R.always({}),\n    R.pickBy((v, k) => R.test(new RegExp(text), k))\n  )(data)\n);\n\n/**\n * @param  {Function} xformer\n * @param  {Object|Array<Object>}  data\n * @returns {Object}\n */\nconst mergeWithOp = R.curry((xformer, data) =>\n  R.ifElse(\n    _.typeMatches('array'),\n    R.pipe(\n      R.reject(_.isNothing),\n      R.reduce(R.mergeWith(xformer), {})\n    ),\n    R.pipe(\n      R.pickBy(_.typeMatches('object')),\n      R.values,\n      R.reduce(R.mergeWith(xformer), {})\n    )\n  )(data)\n);\n\n/**\n * Merges a list of JSON objects into a single JSON object by adding values having the same key; treats a non-number value as zero.\n *\n * @func\n * @param  {Array<Object>} data\n * @returns {Object}\n * @example\n *      mergeWithAdd([{ a: 1, b: 5 }, { a: 2 }, { a: 3 }]) //=> { a: 6, b: 5 }\n */\nexport const mergeWithAdd = mergeWithOp(_.sum);\n\n/**\n * Merges a list of JSON objects into a single JSON object by subtracting values having the same key; treats a non-number value as zero.\n *\n * @func\n * @param  {Array<Object>} data\n * @returns {Object}\n * @example\n *      mergeWithAdd([{ a: 1, b: 5 }, { a: 2 }, { a: 3 }]) //=> { a: 2, b: 5 }\n */\nexport const mergeWithSubtract = mergeWithOp(_.subtract);\n/**\n * Merges a list of JSON objects into a single JSON object by subtracting values having the same key; treats a non-number value as zero.\n *\n * @func\n * @param  {Array<Object>} data\n * @returns {Object}\n * @example\n *      mergeWithAdd([{ a: 1, b: 5 }, { a: 2 }, { a: 3 }]) //=> { a: 2, b: 5 }\n */\nexport const mergeAll = mergeWithOp(_.keepLatest);\n\n/**\n * Applies iterative subtraction over consecutive values in a JSON object such that T[i] = T[i] - T[i-1]; first value is ignored in the result.\n *\n * @func\n * @param  {Array<Object>} data\n * @returns {Object}\n * @example\n *      differential({ a: 1, b: 2, c: 3 }) //=> { b: 1, c: 1 }\n */\nexport const differential = R.curry(data => {\n  const calculator = R.pipe(\n    R.toPairs,\n    R.reject(x => _.isJunk(x[1])),\n    R.sortBy(R.prop(0)),\n    R.aperture(2),\n    R.map(([prev, next]) => [next[0], R.subtract(...R.pluck(1, [next, prev]))]),\n    R.map(\n      R.over(\n        R.lensIndex(1),\n        R.pipe(\n          _.defaultToZero,\n          _.bePositive\n        )\n      )\n    ),\n    R.fromPairs\n  );\n\n  return R.cond([\n    [_.typeMatches('object'), calculator],\n    [\n      _.typeMatches('array'),\n      R.pipe(\n        calculator,\n        R.values\n      )\n    ]\n  ])(data);\n});\n\n/**\n * Recieves an array or object, adds all the values and return a single number. All non-number values\n * are treated as zero.\n *\n * @func\n * @param  {Object|Array} data\n * @returns {number}\n * @example\n *      sumAll([1, 2, 3]) //=> 6\n *      sumAll({a: 1, b: 2, c: 3}) //=> 6\n */\nexport const sumAll = R.cond([\n  [\n    _.typeMatches('object'),\n    R.pipe(\n      R.values,\n      _.sumList\n    )\n  ],\n  [_.typeMatches('array'), _.sumList],\n  [_.typeMatches('number'), _.defaultToZero],\n  [_.typeMatches('string'), _.defaultToZero],\n  [R.T, R.always(0)]\n]);\n\n/**\n * Recieves an array or object and replaces each junky value with the provided fallback value.\n * A value is considered junk if it can not be converted to a valid number. A stringy number\n * is converted to number.\n *\n * @param  {number} value\n * @param  {Object|Array} data\n * @returns {number}\n * @example\n *      defaultAll('N/A', [1, NaN, '3'])) //=> [1, 'N/A', 3]\n */\nexport const defaultAll = R.curry((value, data) => {\n  return R.cond([\n    [R.anyPass([_.typeMatches('array'), _.typeMatches('object')]), R.map(_.defaultTo(value))],\n    [R.T, _.defaultTo(value)]\n  ])(data);\n});\n\n/**\n * Calculates percentages of used memory when given a list or JSON object containing percentages of free memory.\n *\n * @func\n * @param  {any} input\n * @returns {number}\n * @example\n *      getUsedMemory([0.1, 0.2, 0.3]) //=> [90, 80, 70]\n */\nexport const getUsedMemory = R.cond([\n  [_.typeMatches('array'), R.map(_.getUsedMemoryForSingle)],\n  [_.typeMatches('object'), R.map(_.getUsedMemoryForSingle)],\n  [R.T, _.getUsedMemoryForSingle]\n]);\n\n/**\n * Calculates average of values in a list or JSON object; ignores values that are not numbers.\n *\n * @func\n * @param  {any} input\n * @returns {number}\n * @example\n *      getAvg([1, 2, 3]) //=> 2\n */\nexport const getAvg = R.cond([\n  [_.typeMatches('array'), _.getAverageForList],\n  [\n    _.typeMatches('object'),\n    R.pipe(\n      R.values,\n      _.getAverageForList\n    )\n  ],\n  [R.T, _.defaultToZero]\n]);\n\n/**\n * Execute a list of pipelines on provided data. A pipeline is an array of action descriptions.\n * An action can be described in form of a string or JSON.\n *\n * @func\n * @param  {Array} pipes\n * @returns {Array}\n * @example\n *      runAll([\n *        ['pickFrom([\"alpha\"])', 'getAvg'], // pipe 1\n *        ['pickFrom([\"beta\"])', 'getAvg'],  // pipe 2\n *      ], {\n *        alpha: { a1: 1, a2: 2, a3: 3 },\n *        beta: { b1: 11, b2: 22, b3: 33 },\n *      })\n *\n *      => [2, 22]\n */\nexport const runAll = R.curry((pipes, data) => {\n  return R.juxt(D.decodePipe(pipes))(data);\n});\n\n/**\n * @param  {Array} pipes\n * @returns {Array}\n * @example\n *       getRate(10, {'a': 20, 'b': 30}) // => {'a': 2, 'b': 3}\n */\nexport const getRate = R.curry((denominator, data) => {\n  return R.cond([\n    [R.anyPass([_.typeMatches('array'), _.typeMatches('object')]), R.map(_.divideBy(denominator))],\n    [R.T, _.divideBy(denominator)]\n  ])(data);\n});\n\n/**\n * @param  {Array} pipe\n * @param  {Array|Object} data\n * @returns {Array|Object}\n * @example\n *       map(['sumAll', 'getRate(100)'], [[2, 4], [4, 6]])\n */\nexport const map = R.curry((pipe, data) => {\n  const _pipe = R.apply(R.pipe, D.decodePipe(pipe));\n  return R.map(_pipe, data);\n});\n\n/**\n * Sort an Object or Array. Type can either be 'ascend' or 'descend'. When data is an array of\n * objects or arrays, key refers to the value with respect to which you want the data sorted. When data is an\n * object, key can either be `0` (sort by key) or `1` (sort by value); sorted object is returned as\n * a list of `[key, value]` pairs. When data is simply an array of numbers, key is ignored even if provided.\n *\n * @param  {string} type\n * @param  {string|number} key\n * @returns {data}\n * @example\n *       map(['sumAll', 'getRate(100)'], [[2, 4], [4, 6]])\n */\nconst _sort = R.curry((type, key, data) => {\n  return R.cond([\n    [\n      _.typeMatches('array'),\n      R.cond([\n        [R.always(_.typeMatches('object', R.head(data))), R.sort(R[type](R.prop(key)))],\n        [R.always(_.typeMatches('array', R.head(data))), R.sort(R[type](R.prop(key)))],\n        [R.always(_.typeMatches('number', R.head(data))), R.sort(type === 'ascend' ? R.gt : R.lt)],\n        [R.always(_.typeMatches('string', R.head(data))), R.sort(type === 'ascend' ? R.gt : R.lt)]\n      ])\n    ],\n    [\n      _.typeMatches('object'),\n      R.pipe(\n        R.toPairs,\n        R.sort(R[type](R.prop(R.clamp(0, 1, _.defaultToZero(key)))))\n      )\n    ]\n  ])(data);\n});\n\n/**\n * Sorts an array or object in ascending order. When data is an array of objects or arrays, key\n * refers to the value with respect to which you want the data sorted. When data is an object, key\n * can either be `0` (sort by key) or `1` (sort by value); sorted object is returned as a list\n * of `[key, value]` pairs. When data is simply an array of numbers, key is ignored even if provided.\n *\n * @param  {string|number} key\n * @returns {data}\n * @example\n *       sortAscending(null, [3, 2, 1]);    //=> [1, 2, 3]\n *       sortAscending(1, [[1, 345], [2, 45], [3, 121]]);    //=> [[2, 45], [3, 121], [1, 345]]\n *       sortAscending(0, { 'jkl': 345, 'efg': 121, 'uvx': 45 });    //=> [['efg', 121], ['jkl', 345], ['uvx', 45]]\n *       sortAscending(1, { 'jkl': 345, 'efg': 121, 'uvx': 45 });    //=> [['uvx', 45], ['efg', 121], ['jkl', 345]]\n */\nexport const sortAscending = _sort('ascend');\n\n/**\n * Sorts an array or object in descending order. When data is an array of objects or arrays, key\n * refers to the value with respect to which you want the data sorted. When data is an object, key\n * can either be `0` (sort by key) or `1` (sort by value); sorted object is returned as a list\n * of `[key, value]` pairs. When data is simply an array of numbers, key is ignored even if provided.\n *\n * @param  {string|number} key\n * @returns {data}\n * @example\n *       sortDescending(null, [3, 2, 1]);    //=> [3, 2, 1]\n *       sortDescending(1, [[1, 345], [2, 45], [3, 121]]);    //=> [[1, 345], [3, 121], [2, 45]]\n *       sortDescending(0, { 'jkl': 345, 'efg': 121, 'uvx': 45 });    //=> [['uvx', 45], ['jkl', 345], ['efg', 121]]\n *       sortDescending(1, { 'jkl': 345, 'efg': 121, 'uvx': 45 });    //=> [['jkl', 345], ['efg', 121], ['uvx', 45]]\n */\nexport const sortDescending = _sort('descend');\n\n/**\n * Removes values from an array or object by applying the provided predicate functions on\n * each value in an OR fashion. Additionally for an object, if a key is empty, it is removed\n * regardless of the value.\n *\n * @param  {Array} predicates\n * @param  {Array} data\n * @returns {Array}\n * @example\n *        cleanData(['isNothing'], [null, 1, 2, undefined, 3])\n *        //=> [1, 2, 3]\n */\nexport const cleanData = R.curry((predicates, data) => {\n  return R.cond([\n    [_.typeMatches('array'), R.reject(R.anyPass(D.decodePipe(predicates)))],\n    [\n      _.typeMatches('object'),\n      R.pickBy((v, k) =>\n        R.and(_.isSomething(k), R.complement(R.anyPass(D.decodePipe(predicates)))(v))\n      )\n    ]\n  ])(data);\n});\n\n/**\n * Takes top `x` items from a list and combines remaining by applying provided xformer.\n * Returns `[topX, others]`.\n *\n * @param  {number} count\n * @param  {string|Object|Array} xformer\n * @param  {Array} data\n * @returns {Array}\n * @example\n *        takeTopAndCombineOthers(2, 'sumAll', [2, 3, 1, 2, 3])\n *        //=> [2, 3, 6]\n *\n */\nexport const takeTopAndCombineOthers = R.curry((x, xformer, data) => {\n  return R.pipe(\n    R.splitAt(x),\n    ([topX, others]) => [...topX, D.decodeAction(xformer)(others)]\n  )(data);\n});\n\n/**\n * Takes top `x` pairs from a list of pairs and combines remaining pairs by adding values\n * on index `1` of each pair; a pair should be of form `[x: any, y: number]`. Returns `[topX, others]`.\n *\n * @param  {number} count\n * @param  {string|Object|Array} xformer\n * @param  {Array} data\n * @returns {Array}\n * @example\n *        takeTopPairsAndOthers(2, [['abs', 2], ['fat', 3], ['net', 1], ['rip', 2], ['dom', 3]])\n *        //=> [['abs', 2], ['fat', 3], ['Others', 6]]\n */\nexport const takeTopPairsAndOthers = takeTopAndCombineOthers(\n  R.__,\n  ['pickFrom([\"*\", 1])', 'sumAll', 'makePair(\"Others\")'],\n  R.__\n);\n\n// PREDICATES\nexport const isNothing = _.isNothing;\nexport const isEqualTo = R.equals;\nexport const isLessThanEqualTo = R.flip(R.lte);\nexport const isGreaterThanEqualTo = R.flip(R.gte);\n",
+    "content": "/*\n  This file contains the xFormer functions; the end user will build queries using these functions.\n\tThis is the command pallete.\n*/\n\nimport * as R from 'ramda';\nimport * as E from './executor';\nimport * as D from './decoder';\nimport * as _ from './helpers';\n\n/**\n * Returns `[x, y]`.\n *\n *\n * @param  {any} x\n * @param  {any} y\n * @returns {Array}\n * @example\n */\nexport const makePair = R.curry((x, y) => [x, y]);\n\n/**\n * Retrieves value at the specified path from a JSON object. '*' in the path is regarded as\n * a wildcard, meaning anything at this level will used to pick value from.\n *\n * @func\n * @param  {Array<string>} path\n * @param  {Object} input\n * @returns {any}\n * @example\n *      pickFrom(['a','b','c'], {'a': {'b': {'c': 20}}}) //=> 20\n *      pickFrom(['a','*','x'], {'a': {'b': {'x': 20}, 'c': {'x': 40}}}) //=> [20, 40]\n */\nexport const pickFrom = R.curry(_.pickFrom);\n\n/**\n * Filters key-value pairs from a JSON object when key matches the specified regular expression (or string).\n *\n * @func\n * @param  {string} path\n * @param  {Object} input\n * @returns {Object}\n * @example\n *      pickByRegex('abc', {'abcd': {'b': {'c': 20}}, 'efg': {'h': {'i': 20}}) //=> {'b': {'c': 20}}\n */\nexport const pickByRegex = R.curry((text, data) =>\n  R.ifElse(\n    R.always(_.isNothing(text)),\n    R.always({}),\n    R.pickBy((v, k) => R.test(new RegExp(text), k))\n  )(data)\n);\n\n/**\n * @param  {Function} xformer\n * @param  {Object|Array<Object>}  data\n * @returns {Object}\n */\nconst mergeWithOp = R.curry((xformer, data) =>\n  R.ifElse(\n    _.typeMatches('array'),\n    R.pipe(\n      R.reject(_.isNothing),\n      R.reduce(R.mergeWith(xformer), {})\n    ),\n    R.pipe(\n      R.pickBy(_.typeMatches('object')),\n      R.values,\n      R.reduce(R.mergeWith(xformer), {})\n    )\n  )(data)\n);\n\n/**\n * Merges a list of JSON objects into a single JSON object by adding values having the same key; treats a non-number value as zero.\n *\n * @func\n * @param  {Array<Object>} data\n * @returns {Object}\n * @example\n *      mergeWithAdd([{ a: 1, b: 5 }, { a: 2 }, { a: 3 }]) //=> { a: 6, b: 5 }\n */\nexport const mergeWithAdd = mergeWithOp(_.sum);\n\n/**\n * Merges a list of JSON objects into a single JSON object by subtracting values having the same key; treats a non-number value as zero.\n *\n * @func\n * @param  {Array<Object>} data\n * @returns {Object}\n * @example\n *      mergeWithAdd([{ a: 1, b: 5 }, { a: 2 }, { a: 3 }]) //=> { a: 2, b: 5 }\n */\nexport const mergeWithSubtract = mergeWithOp(_.subtract);\n/**\n * Merges a list of JSON objects into a single JSON object by subtracting values having the same key; treats a non-number value as zero.\n *\n * @func\n * @param  {Array<Object>} data\n * @returns {Object}\n * @example\n *      mergeWithAdd([{ a: 1, b: 5 }, { a: 2 }, { a: 3 }]) //=> { a: 2, b: 5 }\n */\nexport const mergeAll = mergeWithOp(_.keepLatest);\n\n/**\n * Applies iterative subtraction over consecutive values in a JSON object such that T[i] = T[i] - T[i-1]; first value is ignored in the result.\n *\n * @func\n * @param  {Array<Object>} data\n * @returns {Object}\n * @example\n *      differential({ a: 1, b: 2, c: 3 }) //=> { b: 1, c: 1 }\n */\nexport const differential = R.curry(data => {\n  const calculator = R.pipe(\n    R.toPairs,\n    R.reject(x => _.isJunk(x[1])),\n    R.sortBy(R.prop(0)),\n    R.aperture(2),\n    R.map(([prev, next]) => [next[0], R.subtract(...R.pluck(1, [next, prev]))]),\n    R.map(\n      R.over(\n        R.lensIndex(1),\n        R.pipe(\n          _.defaultToZero,\n          _.bePositive\n        )\n      )\n    ),\n    R.fromPairs\n  );\n\n  return R.cond([\n    [_.typeMatches('object'), calculator],\n    [\n      _.typeMatches('array'),\n      R.pipe(\n        calculator,\n        R.values\n      )\n    ]\n  ])(data);\n});\n\n/**\n * Recieves an array or object, adds all the values and return a single number. All non-number values\n * are treated as zero.\n *\n * @func\n * @param  {Object|Array} data\n * @returns {number}\n * @example\n *      sumAll([1, 2, 3]) //=> 6\n *      sumAll({a: 1, b: 2, c: 3}) //=> 6\n */\nexport const sumAll = R.cond([\n  [\n    _.typeMatches('object'),\n    R.pipe(\n      R.values,\n      _.sumList\n    )\n  ],\n  [_.typeMatches('array'), _.sumList],\n  [_.typeMatches('number'), _.defaultToZero],\n  [_.typeMatches('string'), _.defaultToZero],\n  [R.T, R.always(0)]\n]);\n\n/**\n * Recieves an array or object and replaces each junky value with the provided fallback value.\n * A value is considered junk if it can not be converted to a valid number. A stringy number\n * is converted to number.\n *\n * @param  {number} value\n * @param  {Object|Array} data\n * @returns {number}\n * @example\n *      defaultAll('N/A', [1, NaN, '3'])) //=> [1, 'N/A', 3]\n */\nexport const defaultAll = R.curry((value, data) => {\n  return R.cond([\n    [R.anyPass([_.typeMatches('array'), _.typeMatches('object')]), R.map(_.defaultTo(value))],\n    [R.T, _.defaultTo(value)]\n  ])(data);\n});\n\n/**\n * Calculates percentages of used memory when given a list or JSON object containing percentages of free memory.\n *\n * @func\n * @param  {any} input\n * @returns {number}\n * @example\n *      getUsedMemory([0.1, 0.2, 0.3]) //=> [90, 80, 70]\n */\nexport const getUsedMemory = R.cond([\n  [_.typeMatches('array'), R.map(_.getUsedMemoryForSingle)],\n  [_.typeMatches('object'), R.map(_.getUsedMemoryForSingle)],\n  [R.T, _.getUsedMemoryForSingle]\n]);\n\n/**\n * Calculates average of values in a list or JSON object; ignores values that are not numbers.\n *\n * @func\n * @param  {any} input\n * @returns {number}\n * @example\n *      getAvg([1, 2, 3]) //=> 2\n */\nexport const getAvg = R.cond([\n  [_.typeMatches('array'), _.getAverageForList],\n  [\n    _.typeMatches('object'),\n    R.pipe(\n      R.values,\n      _.getAverageForList\n    )\n  ],\n  [R.T, _.defaultToZero]\n]);\n\n/**\n * Execute a list of pipelines on provided data. A pipeline is an array of action descriptions.\n * An action can be described in form of a string or JSON.\n *\n * @func\n * @param  {Array} pipes\n * @returns {Array}\n * @example\n *      runAll([\n *        ['pickFrom([\"alpha\"])', 'getAvg'], // pipe 1\n *        ['pickFrom([\"beta\"])', 'getAvg'],  // pipe 2\n *      ], {\n *        alpha: { a1: 1, a2: 2, a3: 3 },\n *        beta: { b1: 11, b2: 22, b3: 33 },\n *      })\n *\n *      => [2, 22]\n */\nexport const runAll = R.curry((pipes, data) => {\n  return R.juxt(D.decodePipe(pipes))(data);\n});\n\n/**\n * @param  {Array} pipes\n * @returns {Array}\n * @example\n *       getRate(10, {'a': 20, 'b': 30}) // => {'a': 2, 'b': 3}\n */\nexport const getRate = R.curry((denominator, data) => {\n  return R.cond([\n    [R.anyPass([_.typeMatches('array'), _.typeMatches('object')]), R.map(_.divideBy(denominator))],\n    [R.T, _.divideBy(denominator)]\n  ])(data);\n});\n\n/**\n * Takes an action and data as input and returns the result of performing that action on each value in the data.\n *\n * @param  {Array} action\n * @param  {Array|Object} data\n * @returns {Array|Object}\n * @example\n *       map(['sumAll', 'getRate(100)'], [[2, 4], [4, 6]])\n */\nexport const map = R.curry((action, data) => {\n  return R.map(D.decodeAction(action), data);\n});\n\n/**\n * Sort an Object or Array. Type can either be 'ascend' or 'descend'. When data is an array of\n * objects or arrays, key refers to the value with respect to which you want the data sorted. When data is an\n * object, key can either be `0` (sort by key) or `1` (sort by value); sorted object is returned as\n * a list of `[key, value]` pairs. When data is simply an array of numbers, key is ignored even if provided.\n *\n * @param  {string} type\n * @param  {string|number} key\n * @returns {data}\n * @example\n *       map(['sumAll', 'getRate(100)'], [[2, 4], [4, 6]])\n */\nconst _sort = R.curry((type, key, data) => {\n  return R.cond([\n    [\n      _.typeMatches('array'),\n      R.cond([\n        [R.always(_.typeMatches('object', R.head(data))), R.sort(R[type](R.prop(key)))],\n        [R.always(_.typeMatches('array', R.head(data))), R.sort(R[type](R.prop(key)))],\n        [R.always(_.typeMatches('number', R.head(data))), R.sort(type === 'ascend' ? R.gt : R.lt)],\n        [R.always(_.typeMatches('string', R.head(data))), R.sort(type === 'ascend' ? R.gt : R.lt)]\n      ])\n    ],\n    [\n      _.typeMatches('object'),\n      R.pipe(\n        R.toPairs,\n        R.sort(R[type](R.prop(R.clamp(0, 1, _.defaultToZero(key)))))\n      )\n    ]\n  ])(data);\n});\n\n/**\n * Sorts an array or object in ascending order. When data is an array of objects or arrays, key\n * refers to the value with respect to which you want the data sorted. When data is an object, key\n * can either be `0` (sort by key) or `1` (sort by value); sorted object is returned as a list\n * of `[key, value]` pairs. When data is simply an array of numbers, key is ignored even if provided.\n *\n * @param  {string|number} key\n * @returns {data}\n * @example\n *       sortAscending(null, [3, 2, 1]);    //=> [1, 2, 3]\n *       sortAscending(1, [[1, 345], [2, 45], [3, 121]]);    //=> [[2, 45], [3, 121], [1, 345]]\n *       sortAscending(0, { 'jkl': 345, 'efg': 121, 'uvx': 45 });    //=> [['efg', 121], ['jkl', 345], ['uvx', 45]]\n *       sortAscending(1, { 'jkl': 345, 'efg': 121, 'uvx': 45 });    //=> [['uvx', 45], ['efg', 121], ['jkl', 345]]\n */\nexport const sortAscending = _sort('ascend');\n\n/**\n * Sorts an array or object in descending order. When data is an array of objects or arrays, key\n * refers to the value with respect to which you want the data sorted. When data is an object, key\n * can either be `0` (sort by key) or `1` (sort by value); sorted object is returned as a list\n * of `[key, value]` pairs. When data is simply an array of numbers, key is ignored even if provided.\n *\n * @param  {string|number} key\n * @returns {data}\n * @example\n *       sortDescending(null, [3, 2, 1]);    //=> [3, 2, 1]\n *       sortDescending(1, [[1, 345], [2, 45], [3, 121]]);    //=> [[1, 345], [3, 121], [2, 45]]\n *       sortDescending(0, { 'jkl': 345, 'efg': 121, 'uvx': 45 });    //=> [['uvx', 45], ['jkl', 345], ['efg', 121]]\n *       sortDescending(1, { 'jkl': 345, 'efg': 121, 'uvx': 45 });    //=> [['jkl', 345], ['efg', 121], ['uvx', 45]]\n */\nexport const sortDescending = _sort('descend');\n\n/**\n * Removes values from an array or object by applying the provided predicate functions on\n * each value in an OR fashion. Additionally for an object, if a key is empty, it is removed\n * regardless of the value.\n *\n * @param  {Array} predicates\n * @param  {Array} data\n * @returns {Array}\n * @example\n *        cleanData(['isNothing'], [null, 1, 2, undefined, 3])\n *        //=> [1, 2, 3]\n */\nexport const cleanData = R.curry((predicates, data) => {\n  return R.cond([\n    [_.typeMatches('array'), R.reject(R.anyPass(D.decodePipe(predicates)))],\n    [\n      _.typeMatches('object'),\n      R.pickBy((v, k) =>\n        R.and(_.isSomething(k), R.complement(R.anyPass(D.decodePipe(predicates)))(v))\n      )\n    ]\n  ])(data);\n});\n\n/**\n * Takes top `x` items from a list and combines remaining by applying provided xformer.\n * Returns `[...topX, others]`.\n *\n * @param  {number} count\n * @param  {string|Object|Array} xformer\n * @param  {Array} data\n * @returns {Array}\n * @example\n *        takeTopAndCombineOthers(2, 'sumAll', [2, 3, 1, 2, 3])\n *        //=> [2, 3, 6]\n *\n */\nexport const takeTopAndCombineOthers = R.curry((x, xformer, data) => {\n  return R.pipe(\n    R.splitAt(x),\n    ([topX, others]) => [...topX, D.decodeAction(xformer)(others)]\n  )(data);\n});\n\n/**\n * Takes top `x` pairs from a list of pairs and combines remaining pairs by adding values\n * on index `1` of each pair; a pair should be of form `[x: any, y: number]`. Returns `[topX, others]`.\n *\n * @param  {number} count\n * @param  {string|Object|Array} xformer\n * @param  {Array} data\n * @returns {Array}\n * @example\n *        takeTopPairsAndAddOthers(2, [['abs', 2], ['fat', 3], ['net', 1], ['rip', 2], ['dom', 3]])\n *        //=> [['abs', 2], ['fat', 3], ['Others', 6]]\n */\nexport const takeTopPairsAndAddOthers = takeTopAndCombineOthers(\n  R.__,\n  ['pickFrom([\"*\", 1])', 'sumAll', 'makePair(\"Others\")'],\n  R.__\n);\n\n// PREDICATES\n/**\n * Returns true if the value under test is empty or nil.\n *\n * @param  {any} value\n * @returns {boolean}\n * @example\n *        isNothing(undefined) //=> true\n *        isNothing(null) //=> true\n *        isNothing([]) //=> true\n *        isNothing({}) //=> true\n *        isNothing('') //=> true\n *        isNothing('Hello, world!') //=> false\n */\nexport const isNothing = _.isNothing;\n\n/**\n * Returns true if the 2 provided values are deeply equal.\n *\n * @param  {any} value\n * @returns {boolean}\n * @example\n *        isEqualTo('Batman', 'Bruce Wayne') //=> false\n *        isEqualTo([1], [1]) //=> true\n */\nexport const isEqualTo = R.equals;\n\n/**\n * Returns true if the second value is less than the first value.\n *\n * @param  {any} value\n * @returns {boolean}\n * @example\n *        isLessThanEqualTo(0, -2) //=> true\n *        isLessThanEqualTo(-4, -2) //=> false\n */\nexport const isLessThanEqualTo = R.flip(R.lte);\n\n/**\n * Returns true if the second value is greater than the first value.\n *\n * @param  {any} value\n * @returns {boolean}\n * @example\n *        isGreaterThanEqualTo(0, -2) //=> false\n *        isGreaterThanEqualTo(-4, -2) //=> true\n */\nexport const isGreaterThanEqualTo = R.flip(R.gte);\n",
     "static": true,
     "longname": "/home/atom/Documents/Emumba/xformer/src/palette.js",
     "access": "public",
@@ -304,7 +115,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 11,
+    "__docId__": 6,
     "kind": "variable",
     "name": "makePair",
     "memberof": "src/palette.js",
@@ -362,7 +173,7 @@
     }
   },
   {
-    "__docId__": 12,
+    "__docId__": 7,
     "kind": "variable",
     "name": "pickFrom",
     "memberof": "src/palette.js",
@@ -424,7 +235,7 @@
     }
   },
   {
-    "__docId__": 13,
+    "__docId__": 8,
     "kind": "variable",
     "name": "pickByRegex",
     "memberof": "src/palette.js",
@@ -486,7 +297,7 @@
     }
   },
   {
-    "__docId__": 14,
+    "__docId__": 9,
     "kind": "variable",
     "name": "mergeWithOp",
     "memberof": "src/palette.js",
@@ -543,7 +354,7 @@
     "ignore": true
   },
   {
-    "__docId__": 15,
+    "__docId__": 10,
     "kind": "variable",
     "name": "mergeWithAdd",
     "memberof": "src/palette.js",
@@ -595,7 +406,7 @@
     }
   },
   {
-    "__docId__": 16,
+    "__docId__": 11,
     "kind": "variable",
     "name": "mergeWithSubtract",
     "memberof": "src/palette.js",
@@ -647,7 +458,7 @@
     }
   },
   {
-    "__docId__": 17,
+    "__docId__": 12,
     "kind": "variable",
     "name": "mergeAll",
     "memberof": "src/palette.js",
@@ -699,7 +510,7 @@
     }
   },
   {
-    "__docId__": 18,
+    "__docId__": 13,
     "kind": "variable",
     "name": "differential",
     "memberof": "src/palette.js",
@@ -751,7 +562,7 @@
     }
   },
   {
-    "__docId__": 19,
+    "__docId__": 14,
     "kind": "variable",
     "name": "sumAll",
     "memberof": "src/palette.js",
@@ -804,7 +615,7 @@
     }
   },
   {
-    "__docId__": 20,
+    "__docId__": 15,
     "kind": "variable",
     "name": "defaultAll",
     "memberof": "src/palette.js",
@@ -863,7 +674,7 @@
     }
   },
   {
-    "__docId__": 21,
+    "__docId__": 16,
     "kind": "variable",
     "name": "getUsedMemory",
     "memberof": "src/palette.js",
@@ -915,7 +726,7 @@
     }
   },
   {
-    "__docId__": 22,
+    "__docId__": 17,
     "kind": "variable",
     "name": "getAvg",
     "memberof": "src/palette.js",
@@ -967,7 +778,7 @@
     }
   },
   {
-    "__docId__": 23,
+    "__docId__": 18,
     "kind": "variable",
     "name": "runAll",
     "memberof": "src/palette.js",
@@ -1019,7 +830,7 @@
     }
   },
   {
-    "__docId__": 24,
+    "__docId__": 19,
     "kind": "variable",
     "name": "getRate",
     "memberof": "src/palette.js",
@@ -1067,7 +878,7 @@
     }
   },
   {
-    "__docId__": 25,
+    "__docId__": 20,
     "kind": "variable",
     "name": "map",
     "memberof": "src/palette.js",
@@ -1077,11 +888,11 @@
     "export": true,
     "importPath": "@muhammadkasim/xformer/src/palette.js",
     "importStyle": "{map}",
-    "description": "",
+    "description": "Takes an action and data as input and returns the result of performing that action on each value in the data.",
     "examples": [
       "      map(['sumAll', 'getRate(100)'], [[2, 4], [4, 6]])"
     ],
-    "lineNumber": 267,
+    "lineNumber": 269,
     "unknown": [
       {
         "tagName": "@returns",
@@ -1096,7 +907,7 @@
         ],
         "spread": false,
         "optional": false,
-        "name": "pipe",
+        "name": "action",
         "description": ""
       },
       {
@@ -1127,7 +938,7 @@
     }
   },
   {
-    "__docId__": 26,
+    "__docId__": 21,
     "kind": "variable",
     "name": "_sort",
     "memberof": "src/palette.js",
@@ -1141,7 +952,7 @@
     "examples": [
       "      map(['sumAll', 'getRate(100)'], [[2, 4], [4, 6]])"
     ],
-    "lineNumber": 284,
+    "lineNumber": 285,
     "unknown": [
       {
         "tagName": "@returns",
@@ -1187,7 +998,7 @@
     "ignore": true
   },
   {
-    "__docId__": 27,
+    "__docId__": 22,
     "kind": "variable",
     "name": "sortAscending",
     "memberof": "src/palette.js",
@@ -1201,7 +1012,7 @@
     "examples": [
       "      sortAscending(null, [3, 2, 1]);    //=> [1, 2, 3]\n      sortAscending(1, [[1, 345], [2, 45], [3, 121]]);    //=> [[2, 45], [3, 121], [1, 345]]\n      sortAscending(0, { 'jkl': 345, 'efg': 121, 'uvx': 45 });    //=> [['efg', 121], ['jkl', 345], ['uvx', 45]]\n      sortAscending(1, { 'jkl': 345, 'efg': 121, 'uvx': 45 });    //=> [['uvx', 45], ['efg', 121], ['jkl', 345]]"
     ],
-    "lineNumber": 319,
+    "lineNumber": 320,
     "unknown": [
       {
         "tagName": "@returns",
@@ -1236,7 +1047,7 @@
     }
   },
   {
-    "__docId__": 28,
+    "__docId__": 23,
     "kind": "variable",
     "name": "sortDescending",
     "memberof": "src/palette.js",
@@ -1250,7 +1061,7 @@
     "examples": [
       "      sortDescending(null, [3, 2, 1]);    //=> [3, 2, 1]\n      sortDescending(1, [[1, 345], [2, 45], [3, 121]]);    //=> [[1, 345], [3, 121], [2, 45]]\n      sortDescending(0, { 'jkl': 345, 'efg': 121, 'uvx': 45 });    //=> [['uvx', 45], ['jkl', 345], ['efg', 121]]\n      sortDescending(1, { 'jkl': 345, 'efg': 121, 'uvx': 45 });    //=> [['jkl', 345], ['efg', 121], ['uvx', 45]]"
     ],
-    "lineNumber": 335,
+    "lineNumber": 336,
     "unknown": [
       {
         "tagName": "@returns",
@@ -1285,7 +1096,7 @@
     }
   },
   {
-    "__docId__": 29,
+    "__docId__": 24,
     "kind": "variable",
     "name": "cleanData",
     "memberof": "src/palette.js",
@@ -1299,7 +1110,7 @@
     "examples": [
       "       cleanData(['isNothing'], [null, 1, 2, undefined, 3])\n       //=> [1, 2, 3]"
     ],
-    "lineNumber": 349,
+    "lineNumber": 350,
     "unknown": [
       {
         "tagName": "@returns",
@@ -1343,7 +1154,7 @@
     }
   },
   {
-    "__docId__": 30,
+    "__docId__": 25,
     "kind": "variable",
     "name": "takeTopAndCombineOthers",
     "memberof": "src/palette.js",
@@ -1353,11 +1164,11 @@
     "export": true,
     "importPath": "@muhammadkasim/xformer/src/palette.js",
     "importStyle": "{takeTopAndCombineOthers}",
-    "description": "Takes top `x` items from a list and combines remaining by applying provided xformer.\nReturns `[topX, others]`.",
+    "description": "Takes top `x` items from a list and combines remaining by applying provided xformer.\nReturns `[...topX, others]`.",
     "examples": [
       "       takeTopAndCombineOthers(2, 'sumAll', [2, 3, 1, 2, 3])\n       //=> [2, 3, 6]"
     ],
-    "lineNumber": 374,
+    "lineNumber": 375,
     "unknown": [
       {
         "tagName": "@returns",
@@ -1413,21 +1224,21 @@
     }
   },
   {
-    "__docId__": 31,
+    "__docId__": 26,
     "kind": "variable",
-    "name": "takeTopPairsAndOthers",
+    "name": "takeTopPairsAndAddOthers",
     "memberof": "src/palette.js",
     "static": true,
-    "longname": "src/palette.js~takeTopPairsAndOthers",
+    "longname": "src/palette.js~takeTopPairsAndAddOthers",
     "access": "public",
     "export": true,
     "importPath": "@muhammadkasim/xformer/src/palette.js",
-    "importStyle": "{takeTopPairsAndOthers}",
+    "importStyle": "{takeTopPairsAndAddOthers}",
     "description": "Takes top `x` pairs from a list of pairs and combines remaining pairs by adding values\non index `1` of each pair; a pair should be of form `[x: any, y: number]`. Returns `[topX, others]`.",
     "examples": [
-      "       takeTopPairsAndOthers(2, [['abs', 2], ['fat', 3], ['net', 1], ['rip', 2], ['dom', 3]])\n       //=> [['abs', 2], ['fat', 3], ['Others', 6]]"
+      "       takeTopPairsAndAddOthers(2, [['abs', 2], ['fat', 3], ['net', 1], ['rip', 2], ['dom', 3]])\n       //=> [['abs', 2], ['fat', 3], ['Others', 6]]"
     ],
-    "lineNumber": 393,
+    "lineNumber": 394,
     "unknown": [
       {
         "tagName": "@returns",
@@ -1483,7 +1294,7 @@
     }
   },
   {
-    "__docId__": 32,
+    "__docId__": 27,
     "kind": "variable",
     "name": "isNothing",
     "memberof": "src/palette.js",
@@ -1493,9 +1304,37 @@
     "export": true,
     "importPath": "@muhammadkasim/xformer/src/palette.js",
     "importStyle": "{isNothing}",
-    "description": null,
-    "lineNumber": 400,
-    "undocument": true,
+    "description": "Returns true if the value under test is empty or nil.",
+    "examples": [
+      "       isNothing(undefined) //=> true\n       isNothing(null) //=> true\n       isNothing([]) //=> true\n       isNothing({}) //=> true\n       isNothing('') //=> true\n       isNothing('Hello, world!') //=> false"
+    ],
+    "lineNumber": 414,
+    "unknown": [
+      {
+        "tagName": "@returns",
+        "tagValue": "{boolean}"
+      }
+    ],
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "any"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "value",
+        "description": ""
+      }
+    ],
+    "return": {
+      "nullable": null,
+      "types": [
+        "boolean"
+      ],
+      "spread": false,
+      "description": ""
+    },
     "type": {
       "types": [
         "*"
@@ -1503,7 +1342,7 @@
     }
   },
   {
-    "__docId__": 33,
+    "__docId__": 28,
     "kind": "variable",
     "name": "isEqualTo",
     "memberof": "src/palette.js",
@@ -1513,9 +1352,37 @@
     "export": true,
     "importPath": "@muhammadkasim/xformer/src/palette.js",
     "importStyle": "{isEqualTo}",
-    "description": null,
-    "lineNumber": 401,
-    "undocument": true,
+    "description": "Returns true if the 2 provided values are deeply equal.",
+    "examples": [
+      "       isEqualTo('Batman', 'Bruce Wayne') //=> false\n       isEqualTo([1], [1]) //=> true"
+    ],
+    "lineNumber": 425,
+    "unknown": [
+      {
+        "tagName": "@returns",
+        "tagValue": "{boolean}"
+      }
+    ],
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "any"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "value",
+        "description": ""
+      }
+    ],
+    "return": {
+      "nullable": null,
+      "types": [
+        "boolean"
+      ],
+      "spread": false,
+      "description": ""
+    },
     "type": {
       "types": [
         "*"
@@ -1523,7 +1390,7 @@
     }
   },
   {
-    "__docId__": 34,
+    "__docId__": 29,
     "kind": "variable",
     "name": "isLessThanEqualTo",
     "memberof": "src/palette.js",
@@ -1533,9 +1400,37 @@
     "export": true,
     "importPath": "@muhammadkasim/xformer/src/palette.js",
     "importStyle": "{isLessThanEqualTo}",
-    "description": null,
-    "lineNumber": 402,
-    "undocument": true,
+    "description": "Returns true if the second value is less than the first value.",
+    "examples": [
+      "       isLessThanEqualTo(0, -2) //=> true\n       isLessThanEqualTo(-4, -2) //=> false"
+    ],
+    "lineNumber": 436,
+    "unknown": [
+      {
+        "tagName": "@returns",
+        "tagValue": "{boolean}"
+      }
+    ],
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "any"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "value",
+        "description": ""
+      }
+    ],
+    "return": {
+      "nullable": null,
+      "types": [
+        "boolean"
+      ],
+      "spread": false,
+      "description": ""
+    },
     "type": {
       "types": [
         "*"
@@ -1543,7 +1438,7 @@
     }
   },
   {
-    "__docId__": 35,
+    "__docId__": 30,
     "kind": "variable",
     "name": "isGreaterThanEqualTo",
     "memberof": "src/palette.js",
@@ -1553,9 +1448,37 @@
     "export": true,
     "importPath": "@muhammadkasim/xformer/src/palette.js",
     "importStyle": "{isGreaterThanEqualTo}",
-    "description": null,
-    "lineNumber": 403,
-    "undocument": true,
+    "description": "Returns true if the second value is greater than the first value.",
+    "examples": [
+      "       isGreaterThanEqualTo(0, -2) //=> false\n       isGreaterThanEqualTo(-4, -2) //=> true"
+    ],
+    "lineNumber": 447,
+    "unknown": [
+      {
+        "tagName": "@returns",
+        "tagValue": "{boolean}"
+      }
+    ],
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "any"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "value",
+        "description": ""
+      }
+    ],
+    "return": {
+      "nullable": null,
+      "types": [
+        "boolean"
+      ],
+      "spread": false,
+      "description": ""
+    },
     "type": {
       "types": [
         "*"
@@ -1564,14 +1487,14 @@
   },
   {
     "kind": "index",
-    "content": "## XFormer: Easier Data Transformations\n\nXFormer makes data transformations easy on your cognition and hassle-free.\n\n#### Features\n\n- Provides an intuitive way to express transformation pipelines\n- Supports a flexible palette of actions\n- Provides 2 ways of describing an action: a string or JSON\n\n#### Installation\n\n```\nnpm i @muhammadkasim/xformer --save\n```\n\n#### Usage\n\nWith Xformer, you can execute a simple pipeline of actions by providing a list of action descriptions to the `executePipe` method on the imported instance.\n\n```javascript\nimport X from '@muhammadkasim/xformer';\n\nconst mock_data = [{ a: 1 }, { a: 2 }, { b: 3 }];\nX.executePipe(['mergeWithAdd', 'getAvg'], mock_data);\n\n// Returns an object containing the result of executing the pipeline and the\n// corresponding result of each step.\n// {\n//   buffer: [\n//     { data: [{a: 1}, {a: 2}, {b: 3}], title: 'Original Data' },\n//     { data: {a: 3, b: 3}, title: 'mergeWithAdd' },\n//     { data: 3, title: 'getAvg' }\n//   ],\n//   result: 3\n// }\n```\n\nAn action can be described either as a string or JSON.\n\n```javascript\nX.executePipe([{ name: 'pickByRegex', params: ['a'] }, 'getAvg'], mock_data); //=> 1.5\n```\n\nXformer also provides a short hand for passing params when describing an action in string form.\n\n```javascript\nX.executePipe(['pickByRegex(a)', 'getAvg'], mock_data); //=> 1.5\n```\n\nYou can perform also perform multiple actions on the same data.\n\n```javascript\nX.executePipe(\n  [\n    ['pickFrom([0, \"a\"])', 'pickFrom([2, \"b\"])'], //=> [1, 3]\n    'getAvg'\n  ],\n  mock_data\n); //=> 2\n```\n\nIf you need to pass some external values to assist execution of the pipe, you can do so like shown below.\n\n```javascript\nX.executePipe(['mergeWithAdd', 'getRate($.interval)'], mock_data, { interval: 30 }); //=> {a: 0.1, b: 0.1}\n```\n\nYou can also group and `execute` multiple pipelines on the same data. This group of pipelines is called a query and can be a list of pipelines or a JSON structure where value in each key-value pair is a pipeline.\n\n```javascript\nX.execute(\n  {\n    avg_by_key: ['mergeWithAdd', 'getAvg'],\n    rate_by_30: ['mergeWithAdd', 'getRate($.interval)']\n  },\n  mock_data\n);\n\n// Takes a query and data as input and executes all pipelines within the query, with\n// each pipeline receiving the provided data.\n// {\n//     avg_by_key: {\n//         buffer: [\n//           { data: [{a: 1}, {a: 2}, {b: 3}], title: 'Original Data' },\n//           { data: {a: 3, b: 3}, title: 'mergeWithAdd' },\n//           { data: 3, title: 'getAvg' }\n//         ],\n//         result: 3\n//     },\n//     rate_by_30: {\n//         buffer: [\n//           { data: [{a: 1}, {a: 2}, {b: 3}], title: 'Original Data' },\n//           { data: {a: 3, b: 3}, title: 'mergeWithAdd' },\n//           { data: {a: 0.1, b: 0.1}, title: 'getRate($.interval)' }\n//         ],\n//         result: {a: 0.1, b: 0.1}\n//     }\n// }\n```\n\n#### Action Palette\n\nYou can describe following actions in transformation pipelines.\n\n| Action              | Params                                    | Description                                                                                                                                                          |\n| ------------------- | ----------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |\n| `pickFrom`          | `path: Array<string>, data: Object`       | Retrieves value at the specified path from a JSON object.                                                                                                            |\n| `pickByRegex`       | `regex: string, data: Object`             | Filters key-value pairs from a JSON object when key matches the specified regular expression (or string).                                                            |\n| `mergeWithAdd`      | `data: Array<Object>`                     | Merges a list of JSON objects into a single JSON object by adding values having the same key; treats a non-number value as zero.                                     |\n| `mergeWithSubtract` | `data: Array<Object>`                     | Merges a list of JSON objects into a single JSON object by subtracting values having the same key; treats a non-number value as zero.                                |\n| `getUsedMemory`     | `data: (Object, Array)`                   | Calculates percentages of used memory when given a list or JSON object containing percentages of free memory.                                                        |\n| `getAvg`            | `data: (Object, Array)`                   | Calculates average of values in a list or JSON object; ignores values that are not numbers.                                                                          |\n| `differential`      | `data: Object`                            | Applies iterative subtraction over consecutive values in a JSON object such that `T[i] = T[i] - T[i-1]`; first value is ignored in the result.                       |\n| `sumAll`            | `data: (Object, Array)`                   | Recieves an array or object, adds all the values and return a single number. All non-number values are treated as zero.                                              |\n| `defaultAll`        | `data: (Object, Array)`                   | Recieves an array or object and replaces each junky value with the provided fallback value. A value is considered junk if it can not be converted to a valid number. |\n| `getRate`           | `interval: number, data: (Object, Array)` | Calculates rate by dividing each value in a list or JSON object by the provided interval; ignores values that are not numbers.                                       |\n| `runAll`            | `pipes: Array<pipe>, data: any`           | Execute a list of pipelines on provided data.                                                                                                                        |\n",
+    "content": "## XFormer: Easier Data Transformations\n\nXFormer makes data transformations easy on your cognition and hassle-free.\n\n#### Features\n\n- Provides an intuitive way to express transformation pipelines\n- Supports a flexible palette of actions\n- Provides 2 ways of describing an action: a string or JSON\n\n#### Installation\n\n```\nnpm i @muhammadkasim/xformer --save\n```\n\n#### Usage\n\nWith Xformer, you can execute a simple pipeline of actions by providing a list of action descriptions to the `executePipe` method on the imported instance.\n\n```javascript\nimport X from '@muhammadkasim/xformer';\n\nconst mock_data = [{ a: 1 }, { a: 2 }, { b: 3 }];\nX.executePipe(['mergeWithAdd', 'getAvg'], mock_data);\n\n// Returns an object containing the result of executing the pipeline and the\n// corresponding result of each step.\n// {\n//   buffer: [\n//     { data: [{a: 1}, {a: 2}, {b: 3}], title: 'Original Data' },\n//     { data: {a: 3, b: 3}, title: 'mergeWithAdd' },\n//     { data: 3, title: 'getAvg' }\n//   ],\n//   result: 3\n// }\n```\n\nAn action can be described either as a string or JSON.\n\n```javascript\nX.executePipe([{ name: 'pickByRegex', params: ['a'] }, 'getAvg'], mock_data); //=> 1.5\n```\n\nXformer also provides a short hand for passing params when describing an action in string form.\n\n```javascript\nX.executePipe(['pickByRegex(a)', 'getAvg'], mock_data); //=> 1.5\n```\n\nYou can perform also perform multiple actions on the same data.\n\n```javascript\nX.executePipe(\n  [\n    ['pickFrom([0, \"a\"])', 'pickFrom([2, \"b\"])'], //=> [1, 3]\n    'getAvg'\n  ],\n  mock_data\n); //=> 2\n```\n\nIf you need to pass some external values to assist execution of the pipe, you can do so like shown below.\n\n```javascript\nX.executePipe(['mergeWithAdd', 'getRate($.interval)'], mock_data, { interval: 30 }); //=> {a: 0.1, b: 0.1}\n```\n\nYou can also group and `execute` multiple pipelines on the same data. This group of pipelines is called a query and can be a list of pipelines or a JSON structure where value in each key-value pair is a pipeline.\n\n```javascript\nX.execute(\n  {\n    avg_by_key: ['mergeWithAdd', 'getAvg'],\n    rate_by_30: ['mergeWithAdd', 'getRate($.interval)']\n  },\n  mock_data\n);\n\n// Takes a query and data as input and executes all pipelines within the query, with\n// each pipeline receiving the provided data.\n// {\n//     avg_by_key: {\n//         buffer: [\n//           { data: [{a: 1}, {a: 2}, {b: 3}], title: 'Original Data' },\n//           { data: {a: 3, b: 3}, title: 'mergeWithAdd' },\n//           { data: 3, title: 'getAvg' }\n//         ],\n//         result: 3\n//     },\n//     rate_by_30: {\n//         buffer: [\n//           { data: [{a: 1}, {a: 2}, {b: 3}], title: 'Original Data' },\n//           { data: {a: 3, b: 3}, title: 'mergeWithAdd' },\n//           { data: {a: 0.1, b: 0.1}, title: 'getRate($.interval)' }\n//         ],\n//         result: {a: 0.1, b: 0.1}\n//     }\n// }\n```\n\n#### Action Palette\n\nYou can describe following actions in transformation pipelines.\n\n| Action                     | Params                                              | Description                                                                                                                                                                                                                                                                                                                                                                                  |\n| -------------------------- | --------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |\n| `pickFrom`                 | `path: Array<string>, data: Object`                 | Retrieves value at the specified path from a JSON object.                                                                                                                                                                                                                                                                                                                                    |\n| `pickByRegex`              | `regex: string, data: Object`                       | Filters key-value pairs from a JSON object when key matches the specified regular expression (or string).                                                                                                                                                                                                                                                                                    |\n| `mergeWithAdd`             | `data: Array<Object>`                               | Merges a list of JSON objects into a single JSON object by adding values having the same key; treats a non-number value as zero.                                                                                                                                                                                                                                                             |\n| `mergeWithSubtract`        | `data: Array<Object>`                               | Merges a list of JSON objects into a single JSON object by subtracting values having the same key; treats a non-number value as zero.                                                                                                                                                                                                                                                        |\n| `getUsedMemory`            | `data: (Object, Array)`                             | Calculates percentages of used memory when given a list or JSON object containing percentages of free memory.                                                                                                                                                                                                                                                                                |\n| `getAvg`                   | `data: (Object, Array)`                             | Calculates average of values in a list or JSON object; ignores values that are not numbers.                                                                                                                                                                                                                                                                                                  |\n| `differential`             | `data: Object`                                      | Applies iterative subtraction over consecutive values in a JSON object such that `T[i] = T[i] - T[i-1]`; first value is ignored in the result.                                                                                                                                                                                                                                               |\n| `sumAll`                   | `data: (Object, Array)`                             | Recieves an array or object, adds all the values and return a single number. All non-number values are treated as zero.                                                                                                                                                                                                                                                                      |\n| `defaultAll`               | `data: (Object, Array)`                             | Recieves an array or object and replaces each junky value with the provided fallback value. A value is considered junk if it can not be converted to a valid number.                                                                                                                                                                                                                         |\n| `getRate`                  | `interval: number, data: (Object, Array)`           | Calculates rate by dividing each value in a list or JSON object by the provided interval; ignores values that are not numbers.                                                                                                                                                                                                                                                               |\n| `runAll`                   | `pipes: Array, data: any`                           | Execute a list of pipelines on provided data.                                                                                                                                                                                                                                                                                                                                                |\n| `map`                      | `action: (string, Object, Array), data: any`        | Takes an action and data as input and returns the result of performing that action on each value in the data.                                                                                                                                                                                                                                                                                |\n| `sortAscending`            | `key: any, data: (Array, Object)`                   | Sorts an array or object in ascending order. When data is an array of objects or arrays, key refers to the value with respect to which you want the data sorted. When data is an object, key can either be `0` (sort by key) or `1` (sort by value); sorted object is returned as a list of `[key, value]` pairs. When data is simply an array of numbers, key is ignored even if provided.  |\n| `sortDescending`           | `key: any, data: (Array, Object)`                   | Sorts an array or object in descending order. When data is an array of objects or arrays, key refers to the value with respect to which you want the data sorted. When data is an object, key can either be `0` (sort by key) or `1` (sort by value); sorted object is returned as a list of `[key, value]` pairs. When data is simply an array of numbers, key is ignored even if provided. |\n| `cleanData`                | `predicates: Array, data: (Array, Object)`          | Removes values from an array or object by applying the provided predicate functions on each value in an OR fashion. Additionally for an object, if a key is empty, it is removed regardless of the value.                                                                                                                                                                                    |\n| `takeTopAndCombineOthers`  | `x: number, xformer: Action, data: (Array, Object)` | Takes top `x` items from a list and combines remaining by applying provided xformer. Returns `[...topX, others]`.                                                                                                                                                                                                                                                                            |\n| `takeTopPairsAndAddOthers` | `x: number, data: (Array, Object)`                  | Takes top `x` pairs from a list of pairs and combines remaining pairs by adding values on index `1` of each pair; a pair should be of form `[x: any, y: number]`. Returns `[topX, others]`.                                                                                                                                                                                                  |\n| `isNothing`                | `value: any`                                        | Returns true if the value under test is empty or nil.                                                                                                                                                                                                                                                                                                                                        |\n| `isEqualTo`                | `x1: any, x2: any`                                  | Returns true if the 2 provided values are deeply equal.                                                                                                                                                                                                                                                                                                                                      |\n| `isLessThanEqualTo`        | `x1: number, x2: number`                            | Returns true if the second value is less than the first value.                                                                                                                                                                                                                                                                                                                               |\n| `isGreaterThanEqualTo`     | `x1: number, x2: number`                            | Returns true if the second value is greater than the first value.                                                                                                                                                                                                                                                                                                                            |\n\n`* Action = string|Object|Array`\n\n`* Pipe = Array<action>`\n",
     "longname": "/home/atom/Documents/Emumba/xformer/README.md",
     "name": "./README.md",
     "static": true,
     "access": "public"
   },
   {
-    "__docId__": 36,
+    "__docId__": 31,
     "kind": "testFile",
     "name": "__tests__/decoder.test.js",
     "content": "import * as R from 'ramda';\nimport * as D from '../src/decoder';\n\ndescribe('Decodes actions correctly', () => {\n  describe('Decodes stringy actions correctly', () => {\n    it('decodes stringy action', () => {\n      expect(D.decodeStringyAction('getAvg([1, 2, 3])')).toBe(2);\n    });\n\n    it('decodes stringy action with extra params', () => {\n      expect(D.decodeStringyAction('getRate(2, [1, 2, 3])')).toEqual([0.5, 1, 1.5]);\n    });\n\n    it('decodes stringy action with another action as param', () => {\n      expect(D.decodeStringyAction('getRate(2, \"X.getAvg([1, 2, 3])\")')).toBe(1);\n    });\n  });\n\n  describe('Decodes object actions correctly', () => {\n    it('decodes simple object action with data only', () => {\n      expect(D.decodeObjectAction({ name: 'getAvg', params: [[1, 2, 3]] })).toBe(2);\n    });\n\n    it('decodes stringy action with extra params', () => {\n      expect(D.decodeObjectAction({ name: 'getRate', params: [2, [1, 2, 3]] })).toEqual([\n        0.5,\n        1,\n        1.5\n      ]);\n    });\n\n    it('decodes object action with another object action as param', () => {\n      expect(\n        D.decodeObjectAction({\n          name: 'getRate',\n          params: [2, { name: 'getAvg', params: [[1, 2, 3]] }]\n        })\n      ).toBe(1);\n    });\n\n    it('decodes object action with a string action as param', () => {\n      // 'getRate(2, )')\n      expect(\n        D.decodeObjectAction({\n          name: 'getRate',\n          params: [2, 'X.getAvg([1, 2, 3])']\n        })\n      ).toBe(1);\n    });\n\n    it('decodes nested object actions', () => {\n      expect(\n        D.decodeObjectAction({\n          name: 'runAll',\n          params: [\n            [\n              [\n                { name: 'pickFrom', params: [['alpha', '*']] },\n                'mergeWithAdd',\n                { name: 'getRate', params: [10] }\n              ],\n              [\n                { name: 'pickFrom', params: [['beta', 'beta_2']] },\n                'getAvg',\n                { name: 'getRate', params: [10] }\n              ]\n            ],\n            {\n              alpha: {\n                alpha_1: {\n                  a1: 3,\n                  a2: 5,\n                  a3: 7\n                },\n                alpha_2: {\n                  a1: 33,\n                  a2: 55,\n                  a3: 77\n                }\n              },\n              beta: {\n                beta_2: {\n                  a1: 22,\n                  a2: 44,\n                  a3: 66\n                }\n              }\n            }\n          ]\n        })\n      ).toEqual([{ a1: 3.6, a2: 6.0, a3: 8.4 }, 4.4]);\n    });\n  });\n});\n",
@@ -1582,7 +1505,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 37,
+    "__docId__": 32,
     "kind": "test",
     "name": "describe0",
     "testId": 0,
@@ -1595,7 +1518,7 @@
     "lineNumber": 4
   },
   {
-    "__docId__": 38,
+    "__docId__": 33,
     "kind": "test",
     "name": "describe1",
     "testId": 1,
@@ -1608,7 +1531,7 @@
     "lineNumber": 5
   },
   {
-    "__docId__": 39,
+    "__docId__": 34,
     "kind": "test",
     "name": "it2",
     "testId": 2,
@@ -1621,7 +1544,7 @@
     "lineNumber": 6
   },
   {
-    "__docId__": 40,
+    "__docId__": 35,
     "kind": "test",
     "name": "it3",
     "testId": 3,
@@ -1634,7 +1557,7 @@
     "lineNumber": 10
   },
   {
-    "__docId__": 41,
+    "__docId__": 36,
     "kind": "test",
     "name": "it4",
     "testId": 4,
@@ -1647,7 +1570,7 @@
     "lineNumber": 14
   },
   {
-    "__docId__": 42,
+    "__docId__": 37,
     "kind": "test",
     "name": "describe5",
     "testId": 5,
@@ -1660,7 +1583,7 @@
     "lineNumber": 19
   },
   {
-    "__docId__": 43,
+    "__docId__": 38,
     "kind": "test",
     "name": "it6",
     "testId": 6,
@@ -1673,7 +1596,7 @@
     "lineNumber": 20
   },
   {
-    "__docId__": 44,
+    "__docId__": 39,
     "kind": "test",
     "name": "it7",
     "testId": 7,
@@ -1686,7 +1609,7 @@
     "lineNumber": 24
   },
   {
-    "__docId__": 45,
+    "__docId__": 40,
     "kind": "test",
     "name": "it8",
     "testId": 8,
@@ -1699,7 +1622,7 @@
     "lineNumber": 32
   },
   {
-    "__docId__": 46,
+    "__docId__": 41,
     "kind": "test",
     "name": "it9",
     "testId": 9,
@@ -1712,7 +1635,7 @@
     "lineNumber": 41
   },
   {
-    "__docId__": 47,
+    "__docId__": 42,
     "kind": "test",
     "name": "it10",
     "testId": 10,
@@ -1725,7 +1648,7 @@
     "lineNumber": 51
   },
   {
-    "__docId__": 48,
+    "__docId__": 43,
     "kind": "testFile",
     "name": "__tests__/executor.test.js",
     "content": "import * as R from 'ramda';\nimport E from '../src/main';\n// import * as E from '../src/executor';\nimport { pickFrom, mergeWithSubtract } from '../src/palette';\n\nconst mockData = {\n  a_1: {\n    a1: 2,\n    a2: 4,\n    a3: 6,\n    a4: 8,\n    a5: 10\n  },\n  a_2: {\n    a1: 22,\n    a2: 24,\n    a3: 26,\n    a4: 28,\n    a5: 30\n  }\n};\nconst mockData_2 = {\n  a_1: {\n    a1: {\n      x: 1,\n      y: 2,\n      z: 3\n    },\n    a2: 4,\n    a3: 6,\n    a4: 8,\n    a5: 10\n  },\n  a_2: {\n    a1: 22,\n    a2: 24,\n    a3: 26,\n    a4: 28,\n    a5: 30\n  }\n};\n\ndescribe('Parses xFormer queries', () => {\n  it('parses queries containing strings', () => {\n    const parsed = E.execute(\n      {\n        1: ['pickByRegex(\"a_\")', 'mergeWithAdd', 'differential']\n      },\n      mockData\n    );\n\n    expect(parsed['1'].result).toEqual({ a2: 4, a3: 4, a4: 4, a5: 4 });\n  });\n\n  it('parses queries containing objects', () => {\n    const parsed = E.execute(\n      {\n        1: [\n          { name: 'pickByRegex', params: ['a_'] },\n          { name: 'mergeWithAdd' },\n          { name: 'differential', params: [] }\n        ]\n      },\n      mockData\n    );\n\n    expect(parsed['1'].result).toEqual({ a2: 4, a3: 4, a4: 4, a5: 4 });\n  });\n\n  it('parses queries containing combo actions', () => {\n    const parsed = E.execute(\n      {\n        1: [\n          { name: 'pickFrom', params: [['*']] },\n          { name: 'mergeWithAdd' },\n          { name: 'differential', params: [] }\n        ]\n      },\n      mockData\n    );\n\n    expect(parsed['1'].result).toEqual({ a2: 4, a3: 4, a4: 4, a5: 4 });\n  });\n\n  it('parses listy query with executeAll', () => {\n    const parsed = E.execute(\n      {\n        1: [\n          {\n            name: 'runAll',\n            params: [[['pickByRegex(\"a\")', 'mergeWithAdd'], ['pickByRegex(\"b\")', 'mergeWithAdd']]]\n          },\n          'mergeWithSubtract'\n        ]\n      },\n      {\n        a1: { abc: 1, xyz: 2 },\n        a2: { abc: 11, xyz: 2 },\n        a3: { abc: 13, xyz: 6 },\n        b1: { abc: 1, xyz: 2 },\n        b2: { abc: 11, xyz: 2 },\n        b3: { abc: 14, xyz: 7 }\n      }\n    );\n\n    expect(parsed['1'].result).toEqual({ abc: 1, xyz: 1 });\n  });\n\n  it('parses stringy action with external dependencies', () => {\n    const parsed = E.execute(\n      {\n        1: ['pickByRegex(\"a_\")', 'mergeWithAdd', 'differential', 'getRate(\"$.INTERVAL\")']\n      },\n      mockData,\n      { INTERVAL: 4 }\n    );\n\n    expect(parsed['1'].result).toEqual({ a2: 1, a3: 1, a4: 1, a5: 1 });\n  });\n\n  it('parses object action with external dependencies', () => {\n    const parsed = E.execute(\n      {\n        1: [\n          { name: 'pickByRegex', params: ['a_'] },\n          'mergeWithAdd',\n          'differential',\n          { name: 'getRate', params: ['$.INTERVAL'] }\n        ]\n      },\n      mockData,\n      { INTERVAL: 4 }\n    );\n\n    expect(parsed['1'].result).toEqual({ a2: 1, a3: 1, a4: 1, a5: 1 });\n  });\n\n  it('executes a single pipe', () => {\n    const parsed = E.executePipe(\n      [\n        { name: 'pickByRegex', params: ['a_'] },\n        'mergeWithAdd',\n        'differential',\n        { name: 'getRate', params: ['$.INTERVAL'] }\n      ],\n      mockData,\n      { INTERVAL: 4 }\n    );\n\n    expect(parsed.result).toEqual({ a2: 1, a3: 1, a4: 1, a5: 1 });\n  });\n});\n",
@@ -1736,7 +1659,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 49,
+    "__docId__": 44,
     "kind": "test",
     "name": "describe11",
     "testId": 11,
@@ -1749,7 +1672,7 @@
     "lineNumber": 43
   },
   {
-    "__docId__": 50,
+    "__docId__": 45,
     "kind": "test",
     "name": "it12",
     "testId": 12,
@@ -1762,7 +1685,7 @@
     "lineNumber": 44
   },
   {
-    "__docId__": 51,
+    "__docId__": 46,
     "kind": "test",
     "name": "it13",
     "testId": 13,
@@ -1775,7 +1698,7 @@
     "lineNumber": 55
   },
   {
-    "__docId__": 52,
+    "__docId__": 47,
     "kind": "test",
     "name": "it14",
     "testId": 14,
@@ -1788,7 +1711,7 @@
     "lineNumber": 70
   },
   {
-    "__docId__": 53,
+    "__docId__": 48,
     "kind": "test",
     "name": "it15",
     "testId": 15,
@@ -1801,7 +1724,7 @@
     "lineNumber": 85
   },
   {
-    "__docId__": 54,
+    "__docId__": 49,
     "kind": "test",
     "name": "it16",
     "testId": 16,
@@ -1814,7 +1737,7 @@
     "lineNumber": 109
   },
   {
-    "__docId__": 55,
+    "__docId__": 50,
     "kind": "test",
     "name": "it17",
     "testId": 17,
@@ -1827,7 +1750,7 @@
     "lineNumber": 121
   },
   {
-    "__docId__": 56,
+    "__docId__": 51,
     "kind": "test",
     "name": "it18",
     "testId": 18,
@@ -1840,7 +1763,7 @@
     "lineNumber": 138
   },
   {
-    "__docId__": 57,
+    "__docId__": 52,
     "kind": "testFile",
     "name": "__tests__/helpers.test.js",
     "content": "import * as _ from '../src/helpers';\n\ndescribe('Tests helper functions', () => {\n  describe('Checks for a string or number to be junk', () => {\n    it('a number is not junk', () => {\n      expect(_.isJunk(1)).toBe(false);\n    });\n\n    it('a stringy number is not junk', () => {\n      expect(_.isJunk('1')).toBe(false);\n    });\n\n    it('a random string is junk', () => {\n      expect(_.isJunk('abc')).toBe(true);\n    });\n  });\n\n  describe('Converts junky values to the provided fallback value', () => {\n    it('stringy numbers as numbers', () => {\n      expect(_.defaultToZero('123')).toBe(123);\n    });\n\n    it('junky strings are zero', () => {\n      expect(_.defaultToZero('abc')).toBe(0);\n    });\n\n    it('undefined is zero', () => {\n      expect(_.defaultTo(1, undefined)).toBe(1);\n    });\n\n    it('an Object is zero', () => {\n      expect(_.defaultTo(100, { a: 1 })).toBe(100);\n    });\n  });\n\n  describe('Converts negative number to positive', () => {\n    it('negative numbers to positive', () => {\n      expect(_.bePositive(-1)).toBe(1);\n    });\n\n    it('positive numbers as they are', () => {\n      expect(_.bePositive(1)).toBe(1);\n    });\n  });\n\n  describe('Matches if input type is equal to provided type', () => {\n    it('a string is a string', () => {\n      expect(_.typeMatches('string', 'abc')).toBe(true);\n    });\n\n    it('an Object is not a Function', () => {\n      expect(_.typeMatches('function', { a: 1 })).toBe(false);\n    });\n\n    it('an Array is not an Object', () => {\n      expect(_.typeMatches('array', [1, 2, 3])).toBe(true);\n    });\n  });\n\n  describe('Sums up two values safely', () => {\n    it('adds two numbers', () => {\n      expect(_.sum(2, 2)).toBe(4);\n    });\n\n    it('adds a number and a stringy number', () => {\n      expect(_.sum(2, '2')).toBe(4);\n    });\n\n    it('adds a number and a junky value', () => {\n      expect(_.sum(2, null)).toBe(2);\n    });\n\n    it('adds two junky values', () => {\n      expect(_.sum(undefined, null)).toBe(0);\n    });\n  });\n\n  describe('Subtracts two values safely', () => {\n    it('subtracts two numbers', () => {\n      expect(_.subtract(4, 2)).toBe(2);\n    });\n\n    it('subtracts a number and a stringy number', () => {\n      expect(_.subtract(4, '2')).toBe(2);\n    });\n\n    it('subtracts a number and a junky value', () => {\n      expect(_.subtract(4, null)).toBe(4);\n    });\n\n    it('subtracts two junky values', () => {\n      expect(_.subtract(undefined, null)).toBe(0);\n    });\n  });\n\n  describe('Sums up values in an Array', () => {\n    it('adds values in an Array', () => {\n      expect(_.sumList([1, 2, 3])).toBe(6);\n    });\n\n    it('ignore junky values when summing', () => {\n      expect(_.sumList([1, 2, 3, undefined, 'abc'])).toBe(6);\n    });\n  });\n\n  describe('Makes an Object when given a key-value', () => {\n    it('makes an Object', () => {\n      expect(_.zipValueWithStep('step1', [1, 2, 3])).toEqual({ step1: [1, 2, 3] });\n    });\n  });\n\n  describe('Maps an Array or Object with access to index', () => {\n    it('maps Array with index', () => {\n      expect(_.mapIndexed((x, i) => `${i}${x}`, [1, 2, 3])).toEqual(['01', '12', '23']);\n    });\n\n    it('maps Array without index', () => {\n      expect(_.mapIndexed(x => `${x}`, [1, 2, 3])).toEqual(['1', '2', '3']);\n    });\n\n    it('maps Object with index', () => {\n      expect(_.mapIndexed((x, i) => `${i}${x}`, { a: 1, b: 2, c: 3 })).toEqual({\n        a: '01',\n        b: '12',\n        c: '23'\n      });\n    });\n  });\n\n  describe('Reduces an Array with access to index', () => {\n    it('reduces Array with index', () => {\n      expect(_.reduceIndexed((a, v, i) => a + v + i, 0, [1, 2, 3])).toBe(9);\n    });\n\n    it('reduces Array without index', () => {\n      expect(_.reduceIndexed((a, v) => a + v, 0, [1, 2, 3])).toBe(6);\n    });\n  });\n\n  describe('Gets the first item that matches regex', () => {\n    it('accepts string to match', () => {\n      expect(_.getFirstMatch('EFG', 'ABCDEFGH')).toBe('EFG');\n    });\n\n    it('accepts regex to match', () => {\n      expect(_.getFirstMatch(/EFG/, 'ABCDEFGH')).toBe('EFG');\n    });\n\n    it('accepts number to match', () => {\n      expect(_.getFirstMatch(123, 'ABCD123EFGH')).toBe('123');\n    });\n  });\n\n  describe('Logs value and returns it', () => {\n    it('logs number with label', () => {\n      expect(_.logger('some number', 123)).toBe(123);\n    });\n\n    it('logs object with label', () => {\n      expect(_.logger('some Object', { a: 1, b: 2 })).toEqual({ a: 1, b: 2 });\n    });\n  });\n\n  describe('Checks if a value is falsy or empty', () => {\n    it('undefined is falsy', () => {\n      expect(_.isNothing(undefined)).toBe(true);\n    });\n\n    it('empty string is falsy', () => {\n      expect(_.isNothing('')).toBe(true);\n    });\n\n    it('empty Array is falsy', () => {\n      expect(_.isNothing([])).toBe(true);\n    });\n\n    it('empty Object is falsy', () => {\n      expect(_.isNothing({})).toBe(true);\n    });\n\n    it('Array is not falsy', () => {\n      expect(_.isNothing([1, 2, 3])).toBe(false);\n    });\n  });\n\n  describe('Calculates percentage for used memory (1 - x * 100)', () => {\n    it('calculates used memory for valid input', () => {\n      expect(_.getUsedMemoryForSingle(0.3)).toBe(70);\n    });\n\n    it('calculates used memory for junky input', () => {\n      expect(_.getUsedMemoryForSingle(undefined)).toBe(0);\n    });\n\n    it('calculates used memory for number greater than 1', () => {\n      expect(_.getUsedMemoryForSingle(2)).toBe(0);\n    });\n\n    it('calculates used memory for stringy number', () => {\n      expect(_.getUsedMemoryForSingle('0.15')).toBe(85);\n    });\n  });\n\n  describe('Calculates average of values in a list', () => {\n    it('calculates average for valid values', () => {\n      expect(_.getAverageForList([1, 2, 3])).toBe(2);\n    });\n\n    it('ignores invalid values while averaging', () => {\n      expect(_.getAverageForList([1, 2, 3, null])).toBe(2);\n    });\n\n    it('takes stringy numbers into account while averaging', () => {\n      expect(_.getAverageForList([1, 2, '3'])).toBe(2);\n    });\n  });\n});\n",
@@ -1851,7 +1774,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 58,
+    "__docId__": 53,
     "kind": "test",
     "name": "describe19",
     "testId": 19,
@@ -1864,7 +1787,7 @@
     "lineNumber": 3
   },
   {
-    "__docId__": 59,
+    "__docId__": 54,
     "kind": "test",
     "name": "describe20",
     "testId": 20,
@@ -1877,7 +1800,7 @@
     "lineNumber": 4
   },
   {
-    "__docId__": 60,
+    "__docId__": 55,
     "kind": "test",
     "name": "it21",
     "testId": 21,
@@ -1890,7 +1813,7 @@
     "lineNumber": 5
   },
   {
-    "__docId__": 61,
+    "__docId__": 56,
     "kind": "test",
     "name": "it22",
     "testId": 22,
@@ -1903,7 +1826,7 @@
     "lineNumber": 9
   },
   {
-    "__docId__": 62,
+    "__docId__": 57,
     "kind": "test",
     "name": "it23",
     "testId": 23,
@@ -1916,7 +1839,7 @@
     "lineNumber": 13
   },
   {
-    "__docId__": 63,
+    "__docId__": 58,
     "kind": "test",
     "name": "describe24",
     "testId": 24,
@@ -1929,7 +1852,7 @@
     "lineNumber": 18
   },
   {
-    "__docId__": 64,
+    "__docId__": 59,
     "kind": "test",
     "name": "it25",
     "testId": 25,
@@ -1942,7 +1865,7 @@
     "lineNumber": 19
   },
   {
-    "__docId__": 65,
+    "__docId__": 60,
     "kind": "test",
     "name": "it26",
     "testId": 26,
@@ -1955,7 +1878,7 @@
     "lineNumber": 23
   },
   {
-    "__docId__": 66,
+    "__docId__": 61,
     "kind": "test",
     "name": "it27",
     "testId": 27,
@@ -1968,7 +1891,7 @@
     "lineNumber": 27
   },
   {
-    "__docId__": 67,
+    "__docId__": 62,
     "kind": "test",
     "name": "it28",
     "testId": 28,
@@ -1981,7 +1904,7 @@
     "lineNumber": 31
   },
   {
-    "__docId__": 68,
+    "__docId__": 63,
     "kind": "test",
     "name": "describe29",
     "testId": 29,
@@ -1994,7 +1917,7 @@
     "lineNumber": 36
   },
   {
-    "__docId__": 69,
+    "__docId__": 64,
     "kind": "test",
     "name": "it30",
     "testId": 30,
@@ -2007,7 +1930,7 @@
     "lineNumber": 37
   },
   {
-    "__docId__": 70,
+    "__docId__": 65,
     "kind": "test",
     "name": "it31",
     "testId": 31,
@@ -2020,7 +1943,7 @@
     "lineNumber": 41
   },
   {
-    "__docId__": 71,
+    "__docId__": 66,
     "kind": "test",
     "name": "describe32",
     "testId": 32,
@@ -2033,7 +1956,7 @@
     "lineNumber": 46
   },
   {
-    "__docId__": 72,
+    "__docId__": 67,
     "kind": "test",
     "name": "it33",
     "testId": 33,
@@ -2046,7 +1969,7 @@
     "lineNumber": 47
   },
   {
-    "__docId__": 73,
+    "__docId__": 68,
     "kind": "test",
     "name": "it34",
     "testId": 34,
@@ -2059,7 +1982,7 @@
     "lineNumber": 51
   },
   {
-    "__docId__": 74,
+    "__docId__": 69,
     "kind": "test",
     "name": "it35",
     "testId": 35,
@@ -2072,7 +1995,7 @@
     "lineNumber": 55
   },
   {
-    "__docId__": 75,
+    "__docId__": 70,
     "kind": "test",
     "name": "describe36",
     "testId": 36,
@@ -2085,7 +2008,7 @@
     "lineNumber": 60
   },
   {
-    "__docId__": 76,
+    "__docId__": 71,
     "kind": "test",
     "name": "it37",
     "testId": 37,
@@ -2098,7 +2021,7 @@
     "lineNumber": 61
   },
   {
-    "__docId__": 77,
+    "__docId__": 72,
     "kind": "test",
     "name": "it38",
     "testId": 38,
@@ -2111,7 +2034,7 @@
     "lineNumber": 65
   },
   {
-    "__docId__": 78,
+    "__docId__": 73,
     "kind": "test",
     "name": "it39",
     "testId": 39,
@@ -2124,7 +2047,7 @@
     "lineNumber": 69
   },
   {
-    "__docId__": 79,
+    "__docId__": 74,
     "kind": "test",
     "name": "it40",
     "testId": 40,
@@ -2137,7 +2060,7 @@
     "lineNumber": 73
   },
   {
-    "__docId__": 80,
+    "__docId__": 75,
     "kind": "test",
     "name": "describe41",
     "testId": 41,
@@ -2150,7 +2073,7 @@
     "lineNumber": 78
   },
   {
-    "__docId__": 81,
+    "__docId__": 76,
     "kind": "test",
     "name": "it42",
     "testId": 42,
@@ -2163,7 +2086,7 @@
     "lineNumber": 79
   },
   {
-    "__docId__": 82,
+    "__docId__": 77,
     "kind": "test",
     "name": "it43",
     "testId": 43,
@@ -2176,7 +2099,7 @@
     "lineNumber": 83
   },
   {
-    "__docId__": 83,
+    "__docId__": 78,
     "kind": "test",
     "name": "it44",
     "testId": 44,
@@ -2189,7 +2112,7 @@
     "lineNumber": 87
   },
   {
-    "__docId__": 84,
+    "__docId__": 79,
     "kind": "test",
     "name": "it45",
     "testId": 45,
@@ -2202,7 +2125,7 @@
     "lineNumber": 91
   },
   {
-    "__docId__": 85,
+    "__docId__": 80,
     "kind": "test",
     "name": "describe46",
     "testId": 46,
@@ -2215,7 +2138,7 @@
     "lineNumber": 96
   },
   {
-    "__docId__": 86,
+    "__docId__": 81,
     "kind": "test",
     "name": "it47",
     "testId": 47,
@@ -2228,7 +2151,7 @@
     "lineNumber": 97
   },
   {
-    "__docId__": 87,
+    "__docId__": 82,
     "kind": "test",
     "name": "it48",
     "testId": 48,
@@ -2241,7 +2164,7 @@
     "lineNumber": 101
   },
   {
-    "__docId__": 88,
+    "__docId__": 83,
     "kind": "test",
     "name": "describe49",
     "testId": 49,
@@ -2254,7 +2177,7 @@
     "lineNumber": 106
   },
   {
-    "__docId__": 89,
+    "__docId__": 84,
     "kind": "test",
     "name": "it50",
     "testId": 50,
@@ -2267,7 +2190,7 @@
     "lineNumber": 107
   },
   {
-    "__docId__": 90,
+    "__docId__": 85,
     "kind": "test",
     "name": "describe51",
     "testId": 51,
@@ -2280,7 +2203,7 @@
     "lineNumber": 112
   },
   {
-    "__docId__": 91,
+    "__docId__": 86,
     "kind": "test",
     "name": "it52",
     "testId": 52,
@@ -2293,7 +2216,7 @@
     "lineNumber": 113
   },
   {
-    "__docId__": 92,
+    "__docId__": 87,
     "kind": "test",
     "name": "it53",
     "testId": 53,
@@ -2306,7 +2229,7 @@
     "lineNumber": 117
   },
   {
-    "__docId__": 93,
+    "__docId__": 88,
     "kind": "test",
     "name": "it54",
     "testId": 54,
@@ -2319,7 +2242,7 @@
     "lineNumber": 121
   },
   {
-    "__docId__": 94,
+    "__docId__": 89,
     "kind": "test",
     "name": "describe55",
     "testId": 55,
@@ -2332,7 +2255,7 @@
     "lineNumber": 130
   },
   {
-    "__docId__": 95,
+    "__docId__": 90,
     "kind": "test",
     "name": "it56",
     "testId": 56,
@@ -2345,7 +2268,7 @@
     "lineNumber": 131
   },
   {
-    "__docId__": 96,
+    "__docId__": 91,
     "kind": "test",
     "name": "it57",
     "testId": 57,
@@ -2358,7 +2281,7 @@
     "lineNumber": 135
   },
   {
-    "__docId__": 97,
+    "__docId__": 92,
     "kind": "test",
     "name": "describe58",
     "testId": 58,
@@ -2371,7 +2294,7 @@
     "lineNumber": 140
   },
   {
-    "__docId__": 98,
+    "__docId__": 93,
     "kind": "test",
     "name": "it59",
     "testId": 59,
@@ -2384,7 +2307,7 @@
     "lineNumber": 141
   },
   {
-    "__docId__": 99,
+    "__docId__": 94,
     "kind": "test",
     "name": "it60",
     "testId": 60,
@@ -2397,7 +2320,7 @@
     "lineNumber": 145
   },
   {
-    "__docId__": 100,
+    "__docId__": 95,
     "kind": "test",
     "name": "it61",
     "testId": 61,
@@ -2410,7 +2333,7 @@
     "lineNumber": 149
   },
   {
-    "__docId__": 101,
+    "__docId__": 96,
     "kind": "test",
     "name": "describe62",
     "testId": 62,
@@ -2423,7 +2346,7 @@
     "lineNumber": 154
   },
   {
-    "__docId__": 102,
+    "__docId__": 97,
     "kind": "test",
     "name": "it63",
     "testId": 63,
@@ -2436,7 +2359,7 @@
     "lineNumber": 155
   },
   {
-    "__docId__": 103,
+    "__docId__": 98,
     "kind": "test",
     "name": "it64",
     "testId": 64,
@@ -2449,7 +2372,7 @@
     "lineNumber": 159
   },
   {
-    "__docId__": 104,
+    "__docId__": 99,
     "kind": "test",
     "name": "describe65",
     "testId": 65,
@@ -2462,7 +2385,7 @@
     "lineNumber": 164
   },
   {
-    "__docId__": 105,
+    "__docId__": 100,
     "kind": "test",
     "name": "it66",
     "testId": 66,
@@ -2475,7 +2398,7 @@
     "lineNumber": 165
   },
   {
-    "__docId__": 106,
+    "__docId__": 101,
     "kind": "test",
     "name": "it67",
     "testId": 67,
@@ -2488,7 +2411,7 @@
     "lineNumber": 169
   },
   {
-    "__docId__": 107,
+    "__docId__": 102,
     "kind": "test",
     "name": "it68",
     "testId": 68,
@@ -2501,7 +2424,7 @@
     "lineNumber": 173
   },
   {
-    "__docId__": 108,
+    "__docId__": 103,
     "kind": "test",
     "name": "it69",
     "testId": 69,
@@ -2514,7 +2437,7 @@
     "lineNumber": 177
   },
   {
-    "__docId__": 109,
+    "__docId__": 104,
     "kind": "test",
     "name": "it70",
     "testId": 70,
@@ -2527,7 +2450,7 @@
     "lineNumber": 181
   },
   {
-    "__docId__": 110,
+    "__docId__": 105,
     "kind": "test",
     "name": "describe71",
     "testId": 71,
@@ -2540,7 +2463,7 @@
     "lineNumber": 186
   },
   {
-    "__docId__": 111,
+    "__docId__": 106,
     "kind": "test",
     "name": "it72",
     "testId": 72,
@@ -2553,7 +2476,7 @@
     "lineNumber": 187
   },
   {
-    "__docId__": 112,
+    "__docId__": 107,
     "kind": "test",
     "name": "it73",
     "testId": 73,
@@ -2566,7 +2489,7 @@
     "lineNumber": 191
   },
   {
-    "__docId__": 113,
+    "__docId__": 108,
     "kind": "test",
     "name": "it74",
     "testId": 74,
@@ -2579,7 +2502,7 @@
     "lineNumber": 195
   },
   {
-    "__docId__": 114,
+    "__docId__": 109,
     "kind": "test",
     "name": "it75",
     "testId": 75,
@@ -2592,7 +2515,7 @@
     "lineNumber": 199
   },
   {
-    "__docId__": 115,
+    "__docId__": 110,
     "kind": "test",
     "name": "describe76",
     "testId": 76,
@@ -2605,7 +2528,7 @@
     "lineNumber": 204
   },
   {
-    "__docId__": 116,
+    "__docId__": 111,
     "kind": "test",
     "name": "it77",
     "testId": 77,
@@ -2618,7 +2541,7 @@
     "lineNumber": 205
   },
   {
-    "__docId__": 117,
+    "__docId__": 112,
     "kind": "test",
     "name": "it78",
     "testId": 78,
@@ -2631,7 +2554,7 @@
     "lineNumber": 209
   },
   {
-    "__docId__": 118,
+    "__docId__": 113,
     "kind": "test",
     "name": "it79",
     "testId": 79,
@@ -2644,7 +2567,7 @@
     "lineNumber": 213
   },
   {
-    "__docId__": 119,
+    "__docId__": 114,
     "kind": "testFile",
     "name": "__tests__/index.test.js",
     "content": "test('Says hello!', () => {\n  expect('Hello, world!').toEqual('Hello, world!');\n});\n",
@@ -2655,7 +2578,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 120,
+    "__docId__": 115,
     "kind": "test",
     "name": "test80",
     "testId": 80,
@@ -2668,10 +2591,10 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 121,
+    "__docId__": 116,
     "kind": "testFile",
     "name": "__tests__/palette.test.js",
-    "content": "import * as _ from '../src/palette';\n\ndescribe('Test palette functions', () => {\n  describe('Picks value at specified path from an Object or Array', () => {\n    it('picks values by keys only', () => {\n      expect(_.pickFrom(['a', 'b', 'c'], { a: { b: { c: 1 } } })).toBe(1);\n    });\n\n    it('picks values by keys and index', () => {\n      expect(_.pickFrom(['a', 'b', 0, 'c'], { a: { b: [{ c: 1 }] } })).toBe(1);\n    });\n\n    it('picks values from an Array', () => {\n      expect(_.pickFrom([0], [1, 2, 3])).toBe(1);\n    });\n\n    it('picks values by wild card symbol from an array', () => {\n      expect(_.pickFrom(['*', 1], [[0, 1], [1, 2], [2, 3]])).toEqual([1, 2, 3]);\n    });\n\n    it('picks values by wild card symbol from an object', () => {\n      expect(_.pickFrom(['*', 'a'], [{ a: 1 }, { a: 2 }, { a: 3 }])).toEqual([1, 2, 3]);\n    });\n  });\n\n  describe('Keeps only keys from an Object that match regex', () => {\n    const mockObj = { a1: 1, a2: 2, b1: 1, b2: 2 };\n\n    it('uses string for matching', () => {\n      expect(_.pickByRegex('a', mockObj)).toEqual({ a1: 1, a2: 2 });\n    });\n\n    it('uses regex for matching', () => {\n      expect(_.pickByRegex(/a1/, mockObj)).toEqual({ a1: 1 });\n    });\n\n    it('uses number for matching', () => {\n      expect(_.pickByRegex(1, mockObj)).toEqual({ a1: 1, b1: 1 });\n    });\n\n    it('empty Object on falsey value', () => {\n      expect(_.pickByRegex(undefined, mockObj)).toEqual({});\n    });\n\n    it('empty Object when nothing matches', () => {\n      expect(_.pickByRegex(/c/, mockObj)).toEqual({});\n    });\n  });\n\n  describe('Merges list of Objects by adding values of the same key', () => {\n    it('merges list of Objects', () => {\n      expect(_.mergeWithAdd([{ a: 1 }, { a: 2 }, { a: 3 }])).toEqual({ a: 6 });\n    });\n\n    it('merges values of an Object that are of Object type', () => {\n      expect(_.mergeWithAdd({ a: { x: 1 }, b: { x: 2 }, c: [1, 2, 3] })).toEqual({ x: 3 });\n    });\n\n    it('empty Object when none of the values in provied Object are of Object type', () => {\n      expect(_.mergeWithAdd({ a: [1, 2], b: undefined, c: 'hello' })).toEqual({});\n    });\n  });\n\n  describe('Merges list of Objects by subtracting values of the same key', () => {\n    it('merges list of Objects', () => {\n      expect(_.mergeWithSubtract([{ a: 1 }, { a: 2 }, { a: 3 }])).toEqual({ a: 2 });\n    });\n\n    it('merges values of an Object that are of Object type', () => {\n      expect(_.mergeWithSubtract({ a: { x: 1 }, b: { x: 2 }, c: [1, 2, 3] })).toEqual({ x: 1 });\n    });\n\n    it('empty Object when none of the values in provied Object are of Object type', () => {\n      expect(_.mergeWithSubtract({ a: [1, 2], b: undefined, c: 'hello' })).toEqual({});\n    });\n  });\n\n  describe('Applies differential logic (i.e x[i] = x[i] - x[i-1]) on an Object or Array', () => {\n    it('subtracts values of an Object', () => {\n      expect(_.differential({ a: 1, b: 2, c: 3 })).toEqual({ b: 1, c: 1 });\n    });\n\n    it('subtracts values of an Array', () => {\n      expect(_.differential([1, 2, 3])).toEqual([1, 1]);\n    });\n\n    it('empty Array when only one item in Array', () => {\n      expect(_.differential([1])).toEqual([]);\n    });\n  });\n\n  describe('Sums up all values in an Array or Object', () => {\n    it('sums values in an Array', () => {\n      expect(_.sumAll([1, 2, 3])).toBe(6);\n    });\n\n    it('sums values in an Object', () => {\n      expect(_.sumAll({ a: 1, b: 2, c: 3 })).toBe(6);\n    });\n\n    it('ignores junky values when summing', () => {\n      expect(_.sumAll([1, 2, 3, undefined, 'abc'])).toBe(6);\n    });\n  });\n\n  describe('Defaults all values in an Array or Object', () => {\n    it('defaults values in an Array', () => {\n      expect(_.defaultAll('N/A', [1, NaN, '3'])).toEqual([1, 'N/A', 3]);\n    });\n\n    it('defaults values in an Object', () => {\n      expect(_.defaultAll(0, { a: 1, b: Infinity, c: 3 })).toEqual({ a: 1, b: 0, c: 3 });\n    });\n\n    it('defaults a simple number', () => {\n      expect(_.defaultAll(100, Infinity)).toBe(100);\n    });\n  });\n\n  describe('Calculates used memory for any input', () => {\n    it('calculates used memory for Array', () => {\n      expect(_.getUsedMemory([0.1, 0.2, 0.3])).toEqual([90, 80, 70]);\n    });\n\n    it('calculates used memory for Object', () => {\n      expect(_.getUsedMemory({ a: 0.1, b: 0.2, c: 0.3 })).toEqual({ a: 90, b: 80, c: 70 });\n    });\n  });\n\n  describe('Calculates average of values in an Array or Object', () => {\n    it('calculates average of items in a list', () => {\n      expect(_.getAvg([1, 2, 3])).toBe(2);\n    });\n\n    it('calculates average of items in an Object', () => {\n      expect(_.getAvg({ a: 1, b: 2, c: 3 })).toBe(2);\n    });\n\n    it('calculates average of an empty Object', () => {\n      expect(_.getAvg({})).toBe(0);\n    });\n\n    it('average of a number (or stringy number) is the number itself', () => {\n      expect(_.getAvg(2)).toBe(2);\n    });\n\n    it('average of a junky value is zero', () => {\n      expect(_.getAvg(false)).toBe(0);\n    });\n  });\n\n  describe('Maps an Array or Object', () => {\n    it('maps an array with single action', () => {\n      expect(_.map(['sumAll'], [[20, 30], [40, 50]])).toEqual([50, 90]);\n    });\n\n    it('maps an array with multiple actions', () => {\n      expect(_.map(['sumAll', 'getRate(100)'], [[20, 30], [40, 50]])).toEqual([0.5, 0.9]);\n    });\n\n    it('maps an array with multiple actions on each item using runAll', () => {\n      expect(\n        _.map(\n          [\n            {\n              name: 'runAll',\n              params: [[['sumAll', 'getRate(100)'], ['getAvg']]]\n            }\n          ],\n          [[20, 30], [40, 50]]\n        )\n      ).toEqual([[0.5, 25], [0.9, 45]]);\n    });\n  });\n\n  describe('Sorts an Array or Object in ascending order', () => {\n    it('sorts an array of numbers', () => {\n      expect(_.sortAscending(null, [3, 2, 1])).toEqual([1, 2, 3]);\n    });\n\n    it('sorts an array of strings', () => {\n      expect(_.sortAscending(null, ['efg', 'uvx', 'jkl'])).toEqual(['efg', 'jkl', 'uvx']);\n    });\n\n    it('sorts an array of arrays', () => {\n      expect(_.sortAscending(1, [[1, 345], [2, 45], [3, 121]])).toEqual([\n        [2, 45],\n        [3, 121],\n        [1, 345]\n      ]);\n    });\n\n    it('sorts an object w.r.t keys', () => {\n      expect(_.sortAscending(0, { jkl: 345, efg: 121, uvx: 45 })).toEqual([\n        ['efg', 121],\n        ['jkl', 345],\n        ['uvx', 45]\n      ]);\n    });\n\n    it('sorts an object w.r.t values', () => {\n      expect(_.sortAscending(1, { jkl: 345, efg: 121, uvx: 45 })).toEqual([\n        ['uvx', 45],\n        ['efg', 121],\n        ['jkl', 345]\n      ]);\n    });\n  });\n\n  describe('Sorts an Array or Object in descending order', () => {\n    it('sorts an array of numbers', () => {\n      expect(_.sortDescending(null, [3, 2, 1])).toEqual([3, 2, 1]);\n    });\n\n    it('sorts an array of strings', () => {\n      expect(_.sortDescending(null, ['efg', 'uvx', 'jkl'])).toEqual(['uvx', 'jkl', 'efg']);\n    });\n\n    it('sorts an array of arrays', () => {\n      expect(_.sortDescending(1, [[1, 345], [2, 45], [3, 121]])).toEqual([\n        [1, 345],\n        [3, 121],\n        [2, 45]\n      ]);\n    });\n\n    it('sorts an object w.r.t keys', () => {\n      expect(_.sortDescending(0, { jkl: 345, efg: 121, uvx: 45 })).toEqual([\n        ['uvx', 45],\n        ['jkl', 345],\n        ['efg', 121]\n      ]);\n    });\n\n    it('sorts an object w.r.t values', () => {\n      expect(_.sortDescending(1, { jkl: 345, efg: 121, uvx: 45 })).toEqual([\n        ['jkl', 345],\n        ['efg', 121],\n        ['uvx', 45]\n      ]);\n    });\n  });\n\n  describe('Cleans data by passing each value in data through the provided predicates', () => {\n    it('removes null or undefined values from an array', () => {\n      expect(_.cleanData(['isNothing'], [null, 1, 2, undefined, 3])).toEqual([1, 2, 3]);\n    });\n\n    it('removes values according to LTE predicate from an array', () => {\n      expect(\n        _.cleanData(['isNothing', 'isLessThanEqualTo(0)'], [-2, -1, undefined, 1, 2, 3])\n      ).toEqual([1, 2, 3]);\n    });\n\n    it('removes values according predicates from an object', () => {\n      expect(\n        _.cleanData(['isNothing', 'isLessThanEqualTo(0)'], {\n          '': 82634,\n          abc: 1,\n          efg: 2,\n          jkl: undefined,\n          stu: -2,\n          xyz: 3\n        })\n      ).toEqual({\n        abc: 1,\n        efg: 2,\n        xyz: 3\n      });\n    });\n  });\n\n  describe('Takes top X items and combines others', () => {\n    it('from a list of numbers, takes top X and combines others according to the provided xformer', () => {\n      expect(_.takeTopAndCombineOthers(2, ['getAvg', 'getRate(2)'], [2, 3, 1, 2, 3])).toEqual([\n        2,\n        3,\n        1\n      ]);\n    });\n\n    it('from a list of pairs, takes top X and combines others by adding', () => {\n      expect(\n        _.takeTopPairsAndOthers(2, [['abs', 2], ['fat', 3], ['net', 1], ['rip', 2], ['dom', 3]])\n      ).toEqual([['abs', 2], ['fat', 3], ['Others', 6]]);\n    });\n  });\n});\n",
+    "content": "import * as _ from '../src/palette';\n\ndescribe('Test palette functions', () => {\n  describe('Picks value at specified path from an Object or Array', () => {\n    it('picks values by keys only', () => {\n      expect(_.pickFrom(['a', 'b', 'c'], { a: { b: { c: 1 } } })).toBe(1);\n    });\n\n    it('picks values by keys and index', () => {\n      expect(_.pickFrom(['a', 'b', 0, 'c'], { a: { b: [{ c: 1 }] } })).toBe(1);\n    });\n\n    it('picks values from an Array', () => {\n      expect(_.pickFrom([0], [1, 2, 3])).toBe(1);\n    });\n\n    it('picks values by wild card symbol from an array', () => {\n      expect(_.pickFrom(['*', 1], [[0, 1], [1, 2], [2, 3]])).toEqual([1, 2, 3]);\n    });\n\n    it('picks values by wild card symbol from an object', () => {\n      expect(_.pickFrom(['*', 'a'], [{ a: 1 }, { a: 2 }, { a: 3 }])).toEqual([1, 2, 3]);\n    });\n  });\n\n  describe('Keeps only keys from an Object that match regex', () => {\n    const mockObj = { a1: 1, a2: 2, b1: 1, b2: 2 };\n\n    it('uses string for matching', () => {\n      expect(_.pickByRegex('a', mockObj)).toEqual({ a1: 1, a2: 2 });\n    });\n\n    it('uses regex for matching', () => {\n      expect(_.pickByRegex(/a1/, mockObj)).toEqual({ a1: 1 });\n    });\n\n    it('uses number for matching', () => {\n      expect(_.pickByRegex(1, mockObj)).toEqual({ a1: 1, b1: 1 });\n    });\n\n    it('empty Object on falsey value', () => {\n      expect(_.pickByRegex(undefined, mockObj)).toEqual({});\n    });\n\n    it('empty Object when nothing matches', () => {\n      expect(_.pickByRegex(/c/, mockObj)).toEqual({});\n    });\n  });\n\n  describe('Merges list of Objects by adding values of the same key', () => {\n    it('merges list of Objects', () => {\n      expect(_.mergeWithAdd([{ a: 1 }, { a: 2 }, { a: 3 }])).toEqual({ a: 6 });\n    });\n\n    it('merges values of an Object that are of Object type', () => {\n      expect(_.mergeWithAdd({ a: { x: 1 }, b: { x: 2 }, c: [1, 2, 3] })).toEqual({ x: 3 });\n    });\n\n    it('empty Object when none of the values in provied Object are of Object type', () => {\n      expect(_.mergeWithAdd({ a: [1, 2], b: undefined, c: 'hello' })).toEqual({});\n    });\n  });\n\n  describe('Merges list of Objects by subtracting values of the same key', () => {\n    it('merges list of Objects', () => {\n      expect(_.mergeWithSubtract([{ a: 1 }, { a: 2 }, { a: 3 }])).toEqual({ a: 2 });\n    });\n\n    it('merges values of an Object that are of Object type', () => {\n      expect(_.mergeWithSubtract({ a: { x: 1 }, b: { x: 2 }, c: [1, 2, 3] })).toEqual({ x: 1 });\n    });\n\n    it('empty Object when none of the values in provied Object are of Object type', () => {\n      expect(_.mergeWithSubtract({ a: [1, 2], b: undefined, c: 'hello' })).toEqual({});\n    });\n  });\n\n  describe('Applies differential logic (i.e x[i] = x[i] - x[i-1]) on an Object or Array', () => {\n    it('subtracts values of an Object', () => {\n      expect(_.differential({ a: 1, b: 2, c: 3 })).toEqual({ b: 1, c: 1 });\n    });\n\n    it('subtracts values of an Array', () => {\n      expect(_.differential([1, 2, 3])).toEqual([1, 1]);\n    });\n\n    it('empty Array when only one item in Array', () => {\n      expect(_.differential([1])).toEqual([]);\n    });\n  });\n\n  describe('Sums up all values in an Array or Object', () => {\n    it('sums values in an Array', () => {\n      expect(_.sumAll([1, 2, 3])).toBe(6);\n    });\n\n    it('sums values in an Object', () => {\n      expect(_.sumAll({ a: 1, b: 2, c: 3 })).toBe(6);\n    });\n\n    it('ignores junky values when summing', () => {\n      expect(_.sumAll([1, 2, 3, undefined, 'abc'])).toBe(6);\n    });\n  });\n\n  describe('Defaults all values in an Array or Object', () => {\n    it('defaults values in an Array', () => {\n      expect(_.defaultAll('N/A', [1, NaN, '3'])).toEqual([1, 'N/A', 3]);\n    });\n\n    it('defaults values in an Object', () => {\n      expect(_.defaultAll(0, { a: 1, b: Infinity, c: 3 })).toEqual({ a: 1, b: 0, c: 3 });\n    });\n\n    it('defaults a simple number', () => {\n      expect(_.defaultAll(100, Infinity)).toBe(100);\n    });\n  });\n\n  describe('Calculates used memory for any input', () => {\n    it('calculates used memory for Array', () => {\n      expect(_.getUsedMemory([0.1, 0.2, 0.3])).toEqual([90, 80, 70]);\n    });\n\n    it('calculates used memory for Object', () => {\n      expect(_.getUsedMemory({ a: 0.1, b: 0.2, c: 0.3 })).toEqual({ a: 90, b: 80, c: 70 });\n    });\n  });\n\n  describe('Calculates average of values in an Array or Object', () => {\n    it('calculates average of items in a list', () => {\n      expect(_.getAvg([1, 2, 3])).toBe(2);\n    });\n\n    it('calculates average of items in an Object', () => {\n      expect(_.getAvg({ a: 1, b: 2, c: 3 })).toBe(2);\n    });\n\n    it('calculates average of an empty Object', () => {\n      expect(_.getAvg({})).toBe(0);\n    });\n\n    it('average of a number (or stringy number) is the number itself', () => {\n      expect(_.getAvg(2)).toBe(2);\n    });\n\n    it('average of a junky value is zero', () => {\n      expect(_.getAvg(false)).toBe(0);\n    });\n  });\n\n  describe('Maps an Array or Object', () => {\n    it('maps an array with single action', () => {\n      expect(_.map(['sumAll'], [[20, 30], [40, 50]])).toEqual([50, 90]);\n    });\n\n    it('maps an array with multiple actions', () => {\n      expect(_.map(['sumAll', 'getRate(100)'], [[20, 30], [40, 50]])).toEqual([0.5, 0.9]);\n    });\n\n    it('maps an array with multiple actions on each item using runAll', () => {\n      expect(\n        _.map(\n          [\n            {\n              name: 'runAll',\n              params: [[['sumAll', 'getRate(100)'], ['getAvg']]]\n            }\n          ],\n          [[20, 30], [40, 50]]\n        )\n      ).toEqual([[0.5, 25], [0.9, 45]]);\n    });\n  });\n\n  describe('Sorts an Array or Object in ascending order', () => {\n    it('sorts an array of numbers', () => {\n      expect(_.sortAscending(null, [3, 2, 1])).toEqual([1, 2, 3]);\n    });\n\n    it('sorts an array of strings', () => {\n      expect(_.sortAscending(null, ['efg', 'uvx', 'jkl'])).toEqual(['efg', 'jkl', 'uvx']);\n    });\n\n    it('sorts an array of arrays', () => {\n      expect(_.sortAscending(1, [[1, 345], [2, 45], [3, 121]])).toEqual([\n        [2, 45],\n        [3, 121],\n        [1, 345]\n      ]);\n    });\n\n    it('sorts an object w.r.t keys', () => {\n      expect(_.sortAscending(0, { jkl: 345, efg: 121, uvx: 45 })).toEqual([\n        ['efg', 121],\n        ['jkl', 345],\n        ['uvx', 45]\n      ]);\n    });\n\n    it('sorts an object w.r.t values', () => {\n      expect(_.sortAscending(1, { jkl: 345, efg: 121, uvx: 45 })).toEqual([\n        ['uvx', 45],\n        ['efg', 121],\n        ['jkl', 345]\n      ]);\n    });\n  });\n\n  describe('Sorts an Array or Object in descending order', () => {\n    it('sorts an array of numbers', () => {\n      expect(_.sortDescending(null, [3, 2, 1])).toEqual([3, 2, 1]);\n    });\n\n    it('sorts an array of strings', () => {\n      expect(_.sortDescending(null, ['efg', 'uvx', 'jkl'])).toEqual(['uvx', 'jkl', 'efg']);\n    });\n\n    it('sorts an array of arrays', () => {\n      expect(_.sortDescending(1, [[1, 345], [2, 45], [3, 121]])).toEqual([\n        [1, 345],\n        [3, 121],\n        [2, 45]\n      ]);\n    });\n\n    it('sorts an object w.r.t keys', () => {\n      expect(_.sortDescending(0, { jkl: 345, efg: 121, uvx: 45 })).toEqual([\n        ['uvx', 45],\n        ['jkl', 345],\n        ['efg', 121]\n      ]);\n    });\n\n    it('sorts an object w.r.t values', () => {\n      expect(_.sortDescending(1, { jkl: 345, efg: 121, uvx: 45 })).toEqual([\n        ['jkl', 345],\n        ['efg', 121],\n        ['uvx', 45]\n      ]);\n    });\n  });\n\n  describe('Cleans data by passing each value in data through the provided predicates', () => {\n    it('removes null or undefined values from an array', () => {\n      expect(_.cleanData(['isNothing'], [null, 1, 2, undefined, 3])).toEqual([1, 2, 3]);\n    });\n\n    it('removes values according to LTE predicate from an array', () => {\n      expect(\n        _.cleanData(['isNothing', 'isLessThanEqualTo(0)'], [-2, -1, undefined, 1, 2, 3])\n      ).toEqual([1, 2, 3]);\n    });\n\n    it('removes values according predicates from an object', () => {\n      expect(\n        _.cleanData(['isNothing', 'isLessThanEqualTo(0)'], {\n          '': 82634,\n          abc: 1,\n          efg: 2,\n          jkl: undefined,\n          stu: -2,\n          xyz: 3\n        })\n      ).toEqual({\n        abc: 1,\n        efg: 2,\n        xyz: 3\n      });\n    });\n  });\n\n  describe('Takes top X items and combines others', () => {\n    it('from a list of numbers, takes top X and combines others according to the provided xformer', () => {\n      expect(_.takeTopAndCombineOthers(2, ['getAvg', 'getRate(2)'], [2, 3, 1, 2, 3])).toEqual([\n        2,\n        3,\n        1\n      ]);\n    });\n\n    it('from a list of pairs, takes top X and combines others by adding', () => {\n      expect(\n        _.takeTopPairsAndAddOthers(2, [['abs', 2], ['fat', 3], ['net', 1], ['rip', 2], ['dom', 3]])\n      ).toEqual([['abs', 2], ['fat', 3], ['Others', 6]]);\n    });\n  });\n});\n",
     "static": true,
     "longname": "/home/atom/Documents/Emumba/xformer/__tests__/palette.test.js",
     "access": null,
@@ -2679,7 +2602,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 122,
+    "__docId__": 117,
     "kind": "test",
     "name": "describe81",
     "testId": 81,
@@ -2692,7 +2615,7 @@
     "lineNumber": 3
   },
   {
-    "__docId__": 123,
+    "__docId__": 118,
     "kind": "test",
     "name": "describe82",
     "testId": 82,
@@ -2705,7 +2628,7 @@
     "lineNumber": 4
   },
   {
-    "__docId__": 124,
+    "__docId__": 119,
     "kind": "test",
     "name": "it83",
     "testId": 83,
@@ -2718,7 +2641,7 @@
     "lineNumber": 5
   },
   {
-    "__docId__": 125,
+    "__docId__": 120,
     "kind": "test",
     "name": "it84",
     "testId": 84,
@@ -2731,7 +2654,7 @@
     "lineNumber": 9
   },
   {
-    "__docId__": 126,
+    "__docId__": 121,
     "kind": "test",
     "name": "it85",
     "testId": 85,
@@ -2744,7 +2667,7 @@
     "lineNumber": 13
   },
   {
-    "__docId__": 127,
+    "__docId__": 122,
     "kind": "test",
     "name": "it86",
     "testId": 86,
@@ -2757,7 +2680,7 @@
     "lineNumber": 17
   },
   {
-    "__docId__": 128,
+    "__docId__": 123,
     "kind": "test",
     "name": "it87",
     "testId": 87,
@@ -2770,7 +2693,7 @@
     "lineNumber": 21
   },
   {
-    "__docId__": 129,
+    "__docId__": 124,
     "kind": "test",
     "name": "describe88",
     "testId": 88,
@@ -2783,7 +2706,7 @@
     "lineNumber": 26
   },
   {
-    "__docId__": 130,
+    "__docId__": 125,
     "kind": "test",
     "name": "it89",
     "testId": 89,
@@ -2796,7 +2719,7 @@
     "lineNumber": 29
   },
   {
-    "__docId__": 131,
+    "__docId__": 126,
     "kind": "test",
     "name": "it90",
     "testId": 90,
@@ -2809,7 +2732,7 @@
     "lineNumber": 33
   },
   {
-    "__docId__": 132,
+    "__docId__": 127,
     "kind": "test",
     "name": "it91",
     "testId": 91,
@@ -2822,7 +2745,7 @@
     "lineNumber": 37
   },
   {
-    "__docId__": 133,
+    "__docId__": 128,
     "kind": "test",
     "name": "it92",
     "testId": 92,
@@ -2835,7 +2758,7 @@
     "lineNumber": 41
   },
   {
-    "__docId__": 134,
+    "__docId__": 129,
     "kind": "test",
     "name": "it93",
     "testId": 93,
@@ -2848,7 +2771,7 @@
     "lineNumber": 45
   },
   {
-    "__docId__": 135,
+    "__docId__": 130,
     "kind": "test",
     "name": "describe94",
     "testId": 94,
@@ -2861,7 +2784,7 @@
     "lineNumber": 50
   },
   {
-    "__docId__": 136,
+    "__docId__": 131,
     "kind": "test",
     "name": "it95",
     "testId": 95,
@@ -2874,7 +2797,7 @@
     "lineNumber": 51
   },
   {
-    "__docId__": 137,
+    "__docId__": 132,
     "kind": "test",
     "name": "it96",
     "testId": 96,
@@ -2887,7 +2810,7 @@
     "lineNumber": 55
   },
   {
-    "__docId__": 138,
+    "__docId__": 133,
     "kind": "test",
     "name": "it97",
     "testId": 97,
@@ -2900,7 +2823,7 @@
     "lineNumber": 59
   },
   {
-    "__docId__": 139,
+    "__docId__": 134,
     "kind": "test",
     "name": "describe98",
     "testId": 98,
@@ -2913,7 +2836,7 @@
     "lineNumber": 64
   },
   {
-    "__docId__": 140,
+    "__docId__": 135,
     "kind": "test",
     "name": "it99",
     "testId": 99,
@@ -2926,7 +2849,7 @@
     "lineNumber": 65
   },
   {
-    "__docId__": 141,
+    "__docId__": 136,
     "kind": "test",
     "name": "it100",
     "testId": 100,
@@ -2939,7 +2862,7 @@
     "lineNumber": 69
   },
   {
-    "__docId__": 142,
+    "__docId__": 137,
     "kind": "test",
     "name": "it101",
     "testId": 101,
@@ -2952,7 +2875,7 @@
     "lineNumber": 73
   },
   {
-    "__docId__": 143,
+    "__docId__": 138,
     "kind": "test",
     "name": "describe102",
     "testId": 102,
@@ -2965,7 +2888,7 @@
     "lineNumber": 78
   },
   {
-    "__docId__": 144,
+    "__docId__": 139,
     "kind": "test",
     "name": "it103",
     "testId": 103,
@@ -2978,7 +2901,7 @@
     "lineNumber": 79
   },
   {
-    "__docId__": 145,
+    "__docId__": 140,
     "kind": "test",
     "name": "it104",
     "testId": 104,
@@ -2991,7 +2914,7 @@
     "lineNumber": 83
   },
   {
-    "__docId__": 146,
+    "__docId__": 141,
     "kind": "test",
     "name": "it105",
     "testId": 105,
@@ -3004,7 +2927,7 @@
     "lineNumber": 87
   },
   {
-    "__docId__": 147,
+    "__docId__": 142,
     "kind": "test",
     "name": "describe106",
     "testId": 106,
@@ -3017,7 +2940,7 @@
     "lineNumber": 92
   },
   {
-    "__docId__": 148,
+    "__docId__": 143,
     "kind": "test",
     "name": "it107",
     "testId": 107,
@@ -3030,7 +2953,7 @@
     "lineNumber": 93
   },
   {
-    "__docId__": 149,
+    "__docId__": 144,
     "kind": "test",
     "name": "it108",
     "testId": 108,
@@ -3043,7 +2966,7 @@
     "lineNumber": 97
   },
   {
-    "__docId__": 150,
+    "__docId__": 145,
     "kind": "test",
     "name": "it109",
     "testId": 109,
@@ -3056,7 +2979,7 @@
     "lineNumber": 101
   },
   {
-    "__docId__": 151,
+    "__docId__": 146,
     "kind": "test",
     "name": "describe110",
     "testId": 110,
@@ -3069,7 +2992,7 @@
     "lineNumber": 106
   },
   {
-    "__docId__": 152,
+    "__docId__": 147,
     "kind": "test",
     "name": "it111",
     "testId": 111,
@@ -3082,7 +3005,7 @@
     "lineNumber": 107
   },
   {
-    "__docId__": 153,
+    "__docId__": 148,
     "kind": "test",
     "name": "it112",
     "testId": 112,
@@ -3095,7 +3018,7 @@
     "lineNumber": 111
   },
   {
-    "__docId__": 154,
+    "__docId__": 149,
     "kind": "test",
     "name": "it113",
     "testId": 113,
@@ -3108,7 +3031,7 @@
     "lineNumber": 115
   },
   {
-    "__docId__": 155,
+    "__docId__": 150,
     "kind": "test",
     "name": "describe114",
     "testId": 114,
@@ -3121,7 +3044,7 @@
     "lineNumber": 120
   },
   {
-    "__docId__": 156,
+    "__docId__": 151,
     "kind": "test",
     "name": "it115",
     "testId": 115,
@@ -3134,7 +3057,7 @@
     "lineNumber": 121
   },
   {
-    "__docId__": 157,
+    "__docId__": 152,
     "kind": "test",
     "name": "it116",
     "testId": 116,
@@ -3147,7 +3070,7 @@
     "lineNumber": 125
   },
   {
-    "__docId__": 158,
+    "__docId__": 153,
     "kind": "test",
     "name": "describe117",
     "testId": 117,
@@ -3160,7 +3083,7 @@
     "lineNumber": 130
   },
   {
-    "__docId__": 159,
+    "__docId__": 154,
     "kind": "test",
     "name": "it118",
     "testId": 118,
@@ -3173,7 +3096,7 @@
     "lineNumber": 131
   },
   {
-    "__docId__": 160,
+    "__docId__": 155,
     "kind": "test",
     "name": "it119",
     "testId": 119,
@@ -3186,7 +3109,7 @@
     "lineNumber": 135
   },
   {
-    "__docId__": 161,
+    "__docId__": 156,
     "kind": "test",
     "name": "it120",
     "testId": 120,
@@ -3199,7 +3122,7 @@
     "lineNumber": 139
   },
   {
-    "__docId__": 162,
+    "__docId__": 157,
     "kind": "test",
     "name": "it121",
     "testId": 121,
@@ -3212,7 +3135,7 @@
     "lineNumber": 143
   },
   {
-    "__docId__": 163,
+    "__docId__": 158,
     "kind": "test",
     "name": "it122",
     "testId": 122,
@@ -3225,7 +3148,7 @@
     "lineNumber": 147
   },
   {
-    "__docId__": 164,
+    "__docId__": 159,
     "kind": "test",
     "name": "describe123",
     "testId": 123,
@@ -3238,7 +3161,7 @@
     "lineNumber": 152
   },
   {
-    "__docId__": 165,
+    "__docId__": 160,
     "kind": "test",
     "name": "it124",
     "testId": 124,
@@ -3251,7 +3174,7 @@
     "lineNumber": 153
   },
   {
-    "__docId__": 166,
+    "__docId__": 161,
     "kind": "test",
     "name": "it125",
     "testId": 125,
@@ -3264,7 +3187,7 @@
     "lineNumber": 157
   },
   {
-    "__docId__": 167,
+    "__docId__": 162,
     "kind": "test",
     "name": "it126",
     "testId": 126,
@@ -3277,7 +3200,7 @@
     "lineNumber": 161
   },
   {
-    "__docId__": 168,
+    "__docId__": 163,
     "kind": "test",
     "name": "describe127",
     "testId": 127,
@@ -3290,7 +3213,7 @@
     "lineNumber": 176
   },
   {
-    "__docId__": 169,
+    "__docId__": 164,
     "kind": "test",
     "name": "it128",
     "testId": 128,
@@ -3303,7 +3226,7 @@
     "lineNumber": 177
   },
   {
-    "__docId__": 170,
+    "__docId__": 165,
     "kind": "test",
     "name": "it129",
     "testId": 129,
@@ -3316,7 +3239,7 @@
     "lineNumber": 181
   },
   {
-    "__docId__": 171,
+    "__docId__": 166,
     "kind": "test",
     "name": "it130",
     "testId": 130,
@@ -3329,7 +3252,7 @@
     "lineNumber": 185
   },
   {
-    "__docId__": 172,
+    "__docId__": 167,
     "kind": "test",
     "name": "it131",
     "testId": 131,
@@ -3342,7 +3265,7 @@
     "lineNumber": 193
   },
   {
-    "__docId__": 173,
+    "__docId__": 168,
     "kind": "test",
     "name": "it132",
     "testId": 132,
@@ -3355,7 +3278,7 @@
     "lineNumber": 201
   },
   {
-    "__docId__": 174,
+    "__docId__": 169,
     "kind": "test",
     "name": "describe133",
     "testId": 133,
@@ -3368,7 +3291,7 @@
     "lineNumber": 210
   },
   {
-    "__docId__": 175,
+    "__docId__": 170,
     "kind": "test",
     "name": "it134",
     "testId": 134,
@@ -3381,7 +3304,7 @@
     "lineNumber": 211
   },
   {
-    "__docId__": 176,
+    "__docId__": 171,
     "kind": "test",
     "name": "it135",
     "testId": 135,
@@ -3394,7 +3317,7 @@
     "lineNumber": 215
   },
   {
-    "__docId__": 177,
+    "__docId__": 172,
     "kind": "test",
     "name": "it136",
     "testId": 136,
@@ -3407,7 +3330,7 @@
     "lineNumber": 219
   },
   {
-    "__docId__": 178,
+    "__docId__": 173,
     "kind": "test",
     "name": "it137",
     "testId": 137,
@@ -3420,7 +3343,7 @@
     "lineNumber": 227
   },
   {
-    "__docId__": 179,
+    "__docId__": 174,
     "kind": "test",
     "name": "it138",
     "testId": 138,
@@ -3433,7 +3356,7 @@
     "lineNumber": 235
   },
   {
-    "__docId__": 180,
+    "__docId__": 175,
     "kind": "test",
     "name": "describe139",
     "testId": 139,
@@ -3446,7 +3369,7 @@
     "lineNumber": 244
   },
   {
-    "__docId__": 181,
+    "__docId__": 176,
     "kind": "test",
     "name": "it140",
     "testId": 140,
@@ -3459,7 +3382,7 @@
     "lineNumber": 245
   },
   {
-    "__docId__": 182,
+    "__docId__": 177,
     "kind": "test",
     "name": "it141",
     "testId": 141,
@@ -3472,7 +3395,7 @@
     "lineNumber": 249
   },
   {
-    "__docId__": 183,
+    "__docId__": 178,
     "kind": "test",
     "name": "it142",
     "testId": 142,
@@ -3485,7 +3408,7 @@
     "lineNumber": 255
   },
   {
-    "__docId__": 184,
+    "__docId__": 179,
     "kind": "test",
     "name": "describe143",
     "testId": 143,
@@ -3498,7 +3421,7 @@
     "lineNumber": 273
   },
   {
-    "__docId__": 185,
+    "__docId__": 180,
     "kind": "test",
     "name": "it144",
     "testId": 144,
@@ -3511,7 +3434,7 @@
     "lineNumber": 274
   },
   {
-    "__docId__": 186,
+    "__docId__": 181,
     "kind": "test",
     "name": "it145",
     "testId": 145,

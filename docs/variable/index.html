@@ -29,8 +29,8 @@
 <nav class="navigation" data-ice="nav"><div>
   <ul>
     
-  <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/main.js~Xform.html">Xform</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-xform">xform</a></span></span></li>
+  <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getContext">getContext</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-setContext">setContext</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-cleanData">cleanData</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-defaultAll">defaultAll</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-differential">differential</a></span></span></li>
@@ -53,7 +53,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-sortDescending">sortDescending</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-sumAll">sumAll</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-takeTopAndCombineOthers">takeTopAndCombineOthers</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-takeTopPairsAndOthers">takeTopPairsAndOthers</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-takeTopPairsAndAddOthers">takeTopPairsAndAddOthers</a></span></span></li>
 </ul>
 </div>
 </nav>
@@ -251,13 +251,14 @@ each value in an OR fashion.</p>
           
           
           
-          <span class="code" data-ice="name"><span><a href="variable/index.html#static-variable-isEqualTo">isEqualTo</a></span></span><span class="code" data-ice="signature">: <span>*</span></span>
+          <span class="code" data-ice="name"><span><a href="variable/index.html#static-variable-isEqualTo">isEqualTo</a></span></span><span class="code" data-ice="signature">(value: <span>any</span>): <span>boolean</span>: <span>*</span></span>
         </p>
       </div>
       <div>
         
         
-        
+        <div data-ice="description"><p>Returns true if the 2 provided values are deeply equal.</p>
+</div>
       </div>
     </td>
     <td>
@@ -279,13 +280,14 @@ each value in an OR fashion.</p>
           
           
           
-          <span class="code" data-ice="name"><span><a href="variable/index.html#static-variable-isGreaterThanEqualTo">isGreaterThanEqualTo</a></span></span><span class="code" data-ice="signature">: <span>*</span></span>
+          <span class="code" data-ice="name"><span><a href="variable/index.html#static-variable-isGreaterThanEqualTo">isGreaterThanEqualTo</a></span></span><span class="code" data-ice="signature">(value: <span>any</span>): <span>boolean</span>: <span>*</span></span>
         </p>
       </div>
       <div>
         
         
-        
+        <div data-ice="description"><p>Returns true if the second value is greater than the first value.</p>
+</div>
       </div>
     </td>
     <td>
@@ -307,13 +309,14 @@ each value in an OR fashion.</p>
           
           
           
-          <span class="code" data-ice="name"><span><a href="variable/index.html#static-variable-isLessThanEqualTo">isLessThanEqualTo</a></span></span><span class="code" data-ice="signature">: <span>*</span></span>
+          <span class="code" data-ice="name"><span><a href="variable/index.html#static-variable-isLessThanEqualTo">isLessThanEqualTo</a></span></span><span class="code" data-ice="signature">(value: <span>any</span>): <span>boolean</span>: <span>*</span></span>
         </p>
       </div>
       <div>
         
         
-        
+        <div data-ice="description"><p>Returns true if the second value is less than the first value.</p>
+</div>
       </div>
     </td>
     <td>
@@ -335,13 +338,14 @@ each value in an OR fashion.</p>
           
           
           
-          <span class="code" data-ice="name"><span><a href="variable/index.html#static-variable-isNothing">isNothing</a></span></span><span class="code" data-ice="signature">: <span>*</span></span>
+          <span class="code" data-ice="name"><span><a href="variable/index.html#static-variable-isNothing">isNothing</a></span></span><span class="code" data-ice="signature">(value: <span>any</span>): <span>boolean</span>: <span>*</span></span>
         </p>
       </div>
       <div>
         
         
-        
+        <div data-ice="description"><p>Returns true if the value under test is empty or nil.</p>
+</div>
       </div>
     </td>
     <td>
@@ -392,13 +396,14 @@ each value in an OR fashion.</p>
           
           
           
-          <span class="code" data-ice="name"><span><a href="variable/index.html#static-variable-map">map</a></span></span><span class="code" data-ice="signature">(pipe: <span>Array</span>, data: <span>Array</span> | <span>Object</span>): <span>Array</span> | <span>Object</span>: <span>*</span></span>
+          <span class="code" data-ice="name"><span><a href="variable/index.html#static-variable-map">map</a></span></span><span class="code" data-ice="signature">(action: <span>Array</span>, data: <span>Array</span> | <span>Object</span>): <span>Array</span> | <span>Object</span>: <span>*</span></span>
         </p>
       </div>
       <div>
         
         
-        
+        <div data-ice="description"><p>Takes an action and data as input and returns the result of performing that action on each value in the data.</p>
+</div>
       </div>
     </td>
     <td>
@@ -710,7 +715,7 @@ each value in an OR fashion.</p>
           
           
           
-          <span class="code" data-ice="name"><span><a href="variable/index.html#static-variable-takeTopPairsAndOthers">takeTopPairsAndOthers</a></span></span><span class="code" data-ice="signature">(count: <span>number</span>, xformer: <span>string</span> | <span>Object</span> | <span>Array</span>, data: <span>Array</span>): <span>Array</span>: <span>*</span></span>
+          <span class="code" data-ice="name"><span><a href="variable/index.html#static-variable-takeTopPairsAndAddOthers">takeTopPairsAndAddOthers</a></span></span><span class="code" data-ice="signature">(count: <span>number</span>, xformer: <span>string</span> | <span>Object</span> | <span>Array</span>, data: <span>Array</span>): <span>Array</span>: <span>*</span></span>
         </p>
       </div>
       <div>
@@ -719,34 +724,6 @@ each value in an OR fashion.</p>
         <div data-ice="description"><p>Takes top <code>x</code> pairs from a list of pairs and combines remaining pairs by adding values
 on index <code>1</code> of each pair; a pair should be of form <code>[x: any, y: number]</code>.</p>
 </div>
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="variable/index.html#static-variable-xform">xform</a></span></span><span class="code" data-ice="signature">: <span><a href="class/src/main.js~Xform.html">Xform</a></span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        
       </div>
     </td>
     <td>
@@ -771,11 +748,11 @@ on index <code>1</code> of each pair; a pair should be of form <code>[x: any, y:
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/palette.js.html#lineNumber349">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/palette.js.html#lineNumber350">source</a></span></span>
     </span>
   </h3>
 
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {cleanData} from &apos;<span><a href="file/src/palette.js.html#lineNumber349">@muhammadkasim/xformer/src/palette.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {cleanData} from &apos;<span><a href="file/src/palette.js.html#lineNumber350">@muhammadkasim/xformer/src/palette.js</a></span>&apos;</code></pre></div>
   
   
   <div data-ice="description"><p>Removes values from an array or object by applying the provided predicate functions on
@@ -1149,25 +1126,38 @@ is converted to number.</p>
     
     
     
-    <span class="code" data-ice="name">isEqualTo</span><span class="code" data-ice="signature">: <span>*</span></span>
+    <span class="code" data-ice="name">isEqualTo</span><span class="code" data-ice="signature">(value: <span>any</span>): <span>boolean</span>: <span>*</span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/palette.js.html#lineNumber401">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/palette.js.html#lineNumber425">source</a></span></span>
     </span>
   </h3>
 
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {isEqualTo} from &apos;<span><a href="file/src/palette.js.html#lineNumber401">@muhammadkasim/xformer/src/palette.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {isEqualTo} from &apos;<span><a href="file/src/palette.js.html#lineNumber425">@muhammadkasim/xformer/src/palette.js</a></span>&apos;</code></pre></div>
   
   
-  
+  <div data-ice="description"><p>Returns true if the 2 provided values are deeply equal.</p>
+</div>
 
   
 
   <div data-ice="properties">
 </div>
 
-  
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span>boolean</span></td>
+          
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
 
   
 
@@ -1177,7 +1167,15 @@ is converted to number.</p>
 
   
 
-  
+  <div data-ice="example">
+    <h4>Example:</h4>
+    
+  <div class="example-doc" data-ice="exampleDoc">
+      
+      <pre class="prettyprint source-code"><code data-ice="exampleCode">       isEqualTo(&apos;Batman&apos;, &apos;Bruce Wayne&apos;) //=&gt; false
+       isEqualTo([1], [1]) //=&gt; true</code></pre>
+    </div>
+</div>
 
   
 
@@ -1192,25 +1190,38 @@ is converted to number.</p>
     
     
     
-    <span class="code" data-ice="name">isGreaterThanEqualTo</span><span class="code" data-ice="signature">: <span>*</span></span>
+    <span class="code" data-ice="name">isGreaterThanEqualTo</span><span class="code" data-ice="signature">(value: <span>any</span>): <span>boolean</span>: <span>*</span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/palette.js.html#lineNumber403">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/palette.js.html#lineNumber447">source</a></span></span>
     </span>
   </h3>
 
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {isGreaterThanEqualTo} from &apos;<span><a href="file/src/palette.js.html#lineNumber403">@muhammadkasim/xformer/src/palette.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {isGreaterThanEqualTo} from &apos;<span><a href="file/src/palette.js.html#lineNumber447">@muhammadkasim/xformer/src/palette.js</a></span>&apos;</code></pre></div>
   
   
-  
+  <div data-ice="description"><p>Returns true if the second value is greater than the first value.</p>
+</div>
 
   
 
   <div data-ice="properties">
 </div>
 
-  
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span>boolean</span></td>
+          
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
 
   
 
@@ -1220,7 +1231,15 @@ is converted to number.</p>
 
   
 
-  
+  <div data-ice="example">
+    <h4>Example:</h4>
+    
+  <div class="example-doc" data-ice="exampleDoc">
+      
+      <pre class="prettyprint source-code"><code data-ice="exampleCode">       isGreaterThanEqualTo(0, -2) //=&gt; false
+       isGreaterThanEqualTo(-4, -2) //=&gt; true</code></pre>
+    </div>
+</div>
 
   
 
@@ -1235,25 +1254,38 @@ is converted to number.</p>
     
     
     
-    <span class="code" data-ice="name">isLessThanEqualTo</span><span class="code" data-ice="signature">: <span>*</span></span>
+    <span class="code" data-ice="name">isLessThanEqualTo</span><span class="code" data-ice="signature">(value: <span>any</span>): <span>boolean</span>: <span>*</span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/palette.js.html#lineNumber402">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/palette.js.html#lineNumber436">source</a></span></span>
     </span>
   </h3>
 
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {isLessThanEqualTo} from &apos;<span><a href="file/src/palette.js.html#lineNumber402">@muhammadkasim/xformer/src/palette.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {isLessThanEqualTo} from &apos;<span><a href="file/src/palette.js.html#lineNumber436">@muhammadkasim/xformer/src/palette.js</a></span>&apos;</code></pre></div>
   
   
-  
+  <div data-ice="description"><p>Returns true if the second value is less than the first value.</p>
+</div>
 
   
 
   <div data-ice="properties">
 </div>
 
-  
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span>boolean</span></td>
+          
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
 
   
 
@@ -1263,7 +1295,15 @@ is converted to number.</p>
 
   
 
-  
+  <div data-ice="example">
+    <h4>Example:</h4>
+    
+  <div class="example-doc" data-ice="exampleDoc">
+      
+      <pre class="prettyprint source-code"><code data-ice="exampleCode">       isLessThanEqualTo(0, -2) //=&gt; true
+       isLessThanEqualTo(-4, -2) //=&gt; false</code></pre>
+    </div>
+</div>
 
   
 
@@ -1278,25 +1318,38 @@ is converted to number.</p>
     
     
     
-    <span class="code" data-ice="name">isNothing</span><span class="code" data-ice="signature">: <span>*</span></span>
+    <span class="code" data-ice="name">isNothing</span><span class="code" data-ice="signature">(value: <span>any</span>): <span>boolean</span>: <span>*</span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/palette.js.html#lineNumber400">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/palette.js.html#lineNumber414">source</a></span></span>
     </span>
   </h3>
 
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {isNothing} from &apos;<span><a href="file/src/palette.js.html#lineNumber400">@muhammadkasim/xformer/src/palette.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {isNothing} from &apos;<span><a href="file/src/palette.js.html#lineNumber414">@muhammadkasim/xformer/src/palette.js</a></span>&apos;</code></pre></div>
   
   
-  
+  <div data-ice="description"><p>Returns true if the value under test is empty or nil.</p>
+</div>
 
   
 
   <div data-ice="properties">
 </div>
 
-  
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span>boolean</span></td>
+          
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
 
   
 
@@ -1306,7 +1359,19 @@ is converted to number.</p>
 
   
 
-  
+  <div data-ice="example">
+    <h4>Example:</h4>
+    
+  <div class="example-doc" data-ice="exampleDoc">
+      
+      <pre class="prettyprint source-code"><code data-ice="exampleCode">       isNothing(undefined) //=&gt; true
+       isNothing(null) //=&gt; true
+       isNothing([]) //=&gt; true
+       isNothing({}) //=&gt; true
+       isNothing(&apos;&apos;) //=&gt; true
+       isNothing(&apos;Hello, world!&apos;) //=&gt; false</code></pre>
+    </div>
+</div>
 
   
 
@@ -1384,18 +1449,19 @@ is converted to number.</p>
     
     
     
-    <span class="code" data-ice="name">map</span><span class="code" data-ice="signature">(pipe: <span>Array</span>, data: <span>Array</span> | <span>Object</span>): <span>Array</span> | <span>Object</span>: <span>*</span></span>
+    <span class="code" data-ice="name">map</span><span class="code" data-ice="signature">(action: <span>Array</span>, data: <span>Array</span> | <span>Object</span>): <span>Array</span> | <span>Object</span>: <span>*</span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/palette.js.html#lineNumber267">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/palette.js.html#lineNumber269">source</a></span></span>
     </span>
   </h3>
 
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {map} from &apos;<span><a href="file/src/palette.js.html#lineNumber267">@muhammadkasim/xformer/src/palette.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {map} from &apos;<span><a href="file/src/palette.js.html#lineNumber269">@muhammadkasim/xformer/src/palette.js</a></span>&apos;</code></pre></div>
   
   
-  
+  <div data-ice="description"><p>Takes an action and data as input and returns the result of performing that action on each value in the data.</p>
+</div>
 
   
 
@@ -1839,11 +1905,11 @@ An action can be described in form of a string or JSON.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/palette.js.html#lineNumber319">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/palette.js.html#lineNumber320">source</a></span></span>
     </span>
   </h3>
 
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {sortAscending} from &apos;<span><a href="file/src/palette.js.html#lineNumber319">@muhammadkasim/xformer/src/palette.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {sortAscending} from &apos;<span><a href="file/src/palette.js.html#lineNumber320">@muhammadkasim/xformer/src/palette.js</a></span>&apos;</code></pre></div>
   
   
   <div data-ice="description"><p>Sorts an array or object in ascending order. When data is an array of objects or arrays, key
@@ -1908,11 +1974,11 @@ of <code>[key, value]</code> pairs. When data is simply an array of numbers, key
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/palette.js.html#lineNumber335">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/palette.js.html#lineNumber336">source</a></span></span>
     </span>
   </h3>
 
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {sortDescending} from &apos;<span><a href="file/src/palette.js.html#lineNumber335">@muhammadkasim/xformer/src/palette.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {sortDescending} from &apos;<span><a href="file/src/palette.js.html#lineNumber336">@muhammadkasim/xformer/src/palette.js</a></span>&apos;</code></pre></div>
   
   
   <div data-ice="description"><p>Sorts an array or object in descending order. When data is an array of objects or arrays, key
@@ -2042,15 +2108,15 @@ are treated as zero.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/palette.js.html#lineNumber374">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/palette.js.html#lineNumber375">source</a></span></span>
     </span>
   </h3>
 
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {takeTopAndCombineOthers} from &apos;<span><a href="file/src/palette.js.html#lineNumber374">@muhammadkasim/xformer/src/palette.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {takeTopAndCombineOthers} from &apos;<span><a href="file/src/palette.js.html#lineNumber375">@muhammadkasim/xformer/src/palette.js</a></span>&apos;</code></pre></div>
   
   
   <div data-ice="description"><p>Takes top <code>x</code> items from a list and combines remaining by applying provided xformer.
-Returns <code>[topX, others]</code>.</p>
+Returns <code>[...topX, others]</code>.</p>
 </div>
 
   
@@ -2096,22 +2162,22 @@ Returns <code>[topX, others]</code>.</p>
   
 </div>
 <div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="static-variable-takeTopPairsAndOthers">
+  <h3 data-ice="anchor" id="static-variable-takeTopPairsAndAddOthers">
     <span class="access" data-ice="access">public</span>
     
     
     
     
     
-    <span class="code" data-ice="name">takeTopPairsAndOthers</span><span class="code" data-ice="signature">(count: <span>number</span>, xformer: <span>string</span> | <span>Object</span> | <span>Array</span>, data: <span>Array</span>): <span>Array</span>: <span>*</span></span>
+    <span class="code" data-ice="name">takeTopPairsAndAddOthers</span><span class="code" data-ice="signature">(count: <span>number</span>, xformer: <span>string</span> | <span>Object</span> | <span>Array</span>, data: <span>Array</span>): <span>Array</span>: <span>*</span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/palette.js.html#lineNumber393">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/palette.js.html#lineNumber394">source</a></span></span>
     </span>
   </h3>
 
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {takeTopPairsAndOthers} from &apos;<span><a href="file/src/palette.js.html#lineNumber393">@muhammadkasim/xformer/src/palette.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {takeTopPairsAndAddOthers} from &apos;<span><a href="file/src/palette.js.html#lineNumber394">@muhammadkasim/xformer/src/palette.js</a></span>&apos;</code></pre></div>
   
   
   <div data-ice="description"><p>Takes top <code>x</code> pairs from a list of pairs and combines remaining pairs by adding values
@@ -2150,53 +2216,10 @@ on index <code>1</code> of each pair; a pair should be of form <code>[x: any, y:
     
   <div class="example-doc" data-ice="exampleDoc">
       
-      <pre class="prettyprint source-code"><code data-ice="exampleCode">       takeTopPairsAndOthers(2, [[&apos;abs&apos;, 2], [&apos;fat&apos;, 3], [&apos;net&apos;, 1], [&apos;rip&apos;, 2], [&apos;dom&apos;, 3]])
+      <pre class="prettyprint source-code"><code data-ice="exampleCode">       takeTopPairsAndAddOthers(2, [[&apos;abs&apos;, 2], [&apos;fat&apos;, 3], [&apos;net&apos;, 1], [&apos;rip&apos;, 2], [&apos;dom&apos;, 3]])
        //=&gt; [[&apos;abs&apos;, 2], [&apos;fat&apos;, 3], [&apos;Others&apos;, 6]]</code></pre>
     </div>
 </div>
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="static-variable-xform">
-    <span class="access" data-ice="access">public</span>
-    
-    
-    
-    
-    
-    <span class="code" data-ice="name">xform</span><span class="code" data-ice="signature">: <span><a href="class/src/main.js~Xform.html">Xform</a></span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/main.js.html#lineNumber94">source</a></span></span>
-    </span>
-  </h3>
-
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import xform from &apos;<span><a href="file/src/main.js.html#lineNumber94">@muhammadkasim/xformer/src/main.js</a></span>&apos;</code></pre></div>
-  
-  
-  
-
-  
-
-  <div data-ice="properties">
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
 
   
 

@@ -258,15 +258,16 @@ export const getRate = R.curry((denominator, data) => {
 });
 
 /**
- * @param  {Array} pipe
+ * Takes an action and data as input and returns the result of performing that action on each value in the data.
+ *
+ * @param  {Array} action
  * @param  {Array|Object} data
  * @returns {Array|Object}
  * @example
  *       map(['sumAll', 'getRate(100)'], [[2, 4], [4, 6]])
  */
-export const map = R.curry((pipe, data) => {
-  const _pipe = R.apply(R.pipe, D.decodePipe(pipe));
-  return R.map(_pipe, data);
+export const map = R.curry((action, data) => {
+  return R.map(D.decodeAction(action), data);
 });
 
 /**
@@ -360,7 +361,7 @@ export const cleanData = R.curry((predicates, data) => {
 
 /**
  * Takes top `x` items from a list and combines remaining by applying provided xformer.
- * Returns `[topX, others]`.
+ * Returns `[...topX, others]`.
  *
  * @param  {number} count
  * @param  {string|Object|Array} xformer
@@ -387,17 +388,60 @@ export const takeTopAndCombineOthers = R.curry((x, xformer, data) => {
  * @param  {Array} data
  * @returns {Array}
  * @example
- *        takeTopPairsAndOthers(2, [['abs', 2], ['fat', 3], ['net', 1], ['rip', 2], ['dom', 3]])
+ *        takeTopPairsAndAddOthers(2, [['abs', 2], ['fat', 3], ['net', 1], ['rip', 2], ['dom', 3]])
  *        //=> [['abs', 2], ['fat', 3], ['Others', 6]]
  */
-export const takeTopPairsAndOthers = takeTopAndCombineOthers(
+export const takeTopPairsAndAddOthers = takeTopAndCombineOthers(
   R.__,
   ['pickFrom(["*", 1])', 'sumAll', 'makePair("Others")'],
   R.__
 );
 
 // PREDICATES
+/**
+ * Returns true if the value under test is empty or nil.
+ *
+ * @param  {any} value
+ * @returns {boolean}
+ * @example
+ *        isNothing(undefined) //=> true
+ *        isNothing(null) //=> true
+ *        isNothing([]) //=> true
+ *        isNothing({}) //=> true
+ *        isNothing('') //=> true
+ *        isNothing('Hello, world!') //=> false
+ */
 export const isNothing = _.isNothing;
+
+/**
+ * Returns true if the 2 provided values are deeply equal.
+ *
+ * @param  {any} value
+ * @returns {boolean}
+ * @example
+ *        isEqualTo('Batman', 'Bruce Wayne') //=> false
+ *        isEqualTo([1], [1]) //=> true
+ */
 export const isEqualTo = R.equals;
+
+/**
+ * Returns true if the second value is less than the first value.
+ *
+ * @param  {any} value
+ * @returns {boolean}
+ * @example
+ *        isLessThanEqualTo(0, -2) //=> true
+ *        isLessThanEqualTo(-4, -2) //=> false
+ */
 export const isLessThanEqualTo = R.flip(R.lte);
+
+/**
+ * Returns true if the second value is greater than the first value.
+ *
+ * @param  {any} value
+ * @returns {boolean}
+ * @example
+ *        isGreaterThanEqualTo(0, -2) //=> false
+ *        isGreaterThanEqualTo(-4, -2) //=> true
+ */
 export const isGreaterThanEqualTo = R.flip(R.gte);

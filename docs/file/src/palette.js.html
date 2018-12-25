@@ -29,8 +29,8 @@
 <nav class="navigation" data-ice="nav"><div>
   <ul>
     
-  <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/main.js~Xform.html">Xform</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-xform">xform</a></span></span></li>
+  <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getContext">getContext</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-setContext">setContext</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-cleanData">cleanData</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-defaultAll">defaultAll</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-differential">differential</a></span></span></li>
@@ -53,7 +53,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-sortDescending">sortDescending</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-sumAll">sumAll</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-takeTopAndCombineOthers">takeTopAndCombineOthers</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-takeTopPairsAndOthers">takeTopPairsAndOthers</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-takeTopPairsAndAddOthers">takeTopPairsAndAddOthers</a></span></span></li>
 </ul>
 </div>
 </nav>
@@ -319,15 +319,16 @@ export const getRate = R.curry((denominator, data) =&gt; {
 });
 
 /**
- * @param  {Array} pipe
+ * Takes an action and data as input and returns the result of performing that action on each value in the data.
+ *
+ * @param  {Array} action
  * @param  {Array|Object} data
  * @returns {Array|Object}
  * @example
  *       map([&apos;sumAll&apos;, &apos;getRate(100)&apos;], [[2, 4], [4, 6]])
  */
-export const map = R.curry((pipe, data) =&gt; {
-  const _pipe = R.apply(R.pipe, D.decodePipe(pipe));
-  return R.map(_pipe, data);
+export const map = R.curry((action, data) =&gt; {
+  return R.map(D.decodeAction(action), data);
 });
 
 /**
@@ -421,7 +422,7 @@ export const cleanData = R.curry((predicates, data) =&gt; {
 
 /**
  * Takes top `x` items from a list and combines remaining by applying provided xformer.
- * Returns `[topX, others]`.
+ * Returns `[...topX, others]`.
  *
  * @param  {number} count
  * @param  {string|Object|Array} xformer
@@ -448,19 +449,62 @@ export const takeTopAndCombineOthers = R.curry((x, xformer, data) =&gt; {
  * @param  {Array} data
  * @returns {Array}
  * @example
- *        takeTopPairsAndOthers(2, [[&apos;abs&apos;, 2], [&apos;fat&apos;, 3], [&apos;net&apos;, 1], [&apos;rip&apos;, 2], [&apos;dom&apos;, 3]])
+ *        takeTopPairsAndAddOthers(2, [[&apos;abs&apos;, 2], [&apos;fat&apos;, 3], [&apos;net&apos;, 1], [&apos;rip&apos;, 2], [&apos;dom&apos;, 3]])
  *        //=&gt; [[&apos;abs&apos;, 2], [&apos;fat&apos;, 3], [&apos;Others&apos;, 6]]
  */
-export const takeTopPairsAndOthers = takeTopAndCombineOthers(
+export const takeTopPairsAndAddOthers = takeTopAndCombineOthers(
   R.__,
   [&apos;pickFrom([&quot;*&quot;, 1])&apos;, &apos;sumAll&apos;, &apos;makePair(&quot;Others&quot;)&apos;],
   R.__
 );
 
 // PREDICATES
+/**
+ * Returns true if the value under test is empty or nil.
+ *
+ * @param  {any} value
+ * @returns {boolean}
+ * @example
+ *        isNothing(undefined) //=&gt; true
+ *        isNothing(null) //=&gt; true
+ *        isNothing([]) //=&gt; true
+ *        isNothing({}) //=&gt; true
+ *        isNothing(&apos;&apos;) //=&gt; true
+ *        isNothing(&apos;Hello, world!&apos;) //=&gt; false
+ */
 export const isNothing = _.isNothing;
+
+/**
+ * Returns true if the 2 provided values are deeply equal.
+ *
+ * @param  {any} value
+ * @returns {boolean}
+ * @example
+ *        isEqualTo(&apos;Batman&apos;, &apos;Bruce Wayne&apos;) //=&gt; false
+ *        isEqualTo([1], [1]) //=&gt; true
+ */
 export const isEqualTo = R.equals;
+
+/**
+ * Returns true if the second value is less than the first value.
+ *
+ * @param  {any} value
+ * @returns {boolean}
+ * @example
+ *        isLessThanEqualTo(0, -2) //=&gt; true
+ *        isLessThanEqualTo(-4, -2) //=&gt; false
+ */
 export const isLessThanEqualTo = R.flip(R.lte);
+
+/**
+ * Returns true if the second value is greater than the first value.
+ *
+ * @param  {any} value
+ * @returns {boolean}
+ * @example
+ *        isGreaterThanEqualTo(0, -2) //=&gt; false
+ *        isGreaterThanEqualTo(-4, -2) //=&gt; true
+ */
 export const isGreaterThanEqualTo = R.flip(R.gte);
 </code></pre>
 

@@ -29,8 +29,8 @@
 <nav class="navigation" data-ice="nav"><div>
   <ul>
     
-  <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/main.js~Xform.html">Xform</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-xform">xform</a></span></span></li>
+  <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getContext">getContext</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-setContext">setContext</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-cleanData">cleanData</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-defaultAll">defaultAll</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-differential">differential</a></span></span></li>
@@ -53,7 +53,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-sortDescending">sortDescending</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-sumAll">sumAll</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-takeTopAndCombineOthers">takeTopAndCombineOthers</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-takeTopPairsAndOthers">takeTopPairsAndOthers</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-takeTopPairsAndAddOthers">takeTopPairsAndAddOthers</a></span></span></li>
 </ul>
 </div>
 </nav>
@@ -80,10 +80,10 @@
     <td>
       <div>
         <p>
-          <span data-ice="kind-icon" class="kind-class">C</span>
+          <span data-ice="kind-icon" class="kind-function">F</span>
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/main.js~Xform.html">Xform</a></span></span>
+          <span class="code" data-ice="name"><span><a href="function/index.html#static-function-getContext">getContext</a></span></span><span class="code" data-ice="signature">()</span>
         </p>
       </div>
       <div>
@@ -108,10 +108,10 @@
     <td>
       <div>
         <p>
-          <span data-ice="kind-icon" class="kind-variable">V</span>
+          <span data-ice="kind-icon" class="kind-function">F</span>
           
           
-          <span class="code" data-ice="name"><span><a href="variable/index.html#static-variable-xform">xform</a></span></span><span class="code" data-ice="signature">: <span><a href="class/src/main.js~Xform.html">Xform</a></span></span>
+          <span class="code" data-ice="name"><span><a href="function/index.html#static-function-setContext">setContext</a></span></span><span class="code" data-ice="signature">(ctx: {})</span>
         </p>
       </div>
       <div>
@@ -313,13 +313,14 @@ each value in an OR fashion.</p>
           <span data-ice="kind-icon" class="kind-variable">V</span>
           
           
-          <span class="code" data-ice="name"><span><a href="variable/index.html#static-variable-isEqualTo">isEqualTo</a></span></span><span class="code" data-ice="signature">: <span>*</span></span>
+          <span class="code" data-ice="name"><span><a href="variable/index.html#static-variable-isEqualTo">isEqualTo</a></span></span><span class="code" data-ice="signature">(value: <span>any</span>): <span>boolean</span>: <span>*</span></span>
         </p>
       </div>
       <div>
         
         
-        
+        <div data-ice="description"><p>Returns true if the 2 provided values are deeply equal.</p>
+</div>
       </div>
     </td>
     <td>
@@ -341,13 +342,14 @@ each value in an OR fashion.</p>
           <span data-ice="kind-icon" class="kind-variable">V</span>
           
           
-          <span class="code" data-ice="name"><span><a href="variable/index.html#static-variable-isGreaterThanEqualTo">isGreaterThanEqualTo</a></span></span><span class="code" data-ice="signature">: <span>*</span></span>
+          <span class="code" data-ice="name"><span><a href="variable/index.html#static-variable-isGreaterThanEqualTo">isGreaterThanEqualTo</a></span></span><span class="code" data-ice="signature">(value: <span>any</span>): <span>boolean</span>: <span>*</span></span>
         </p>
       </div>
       <div>
         
         
-        
+        <div data-ice="description"><p>Returns true if the second value is greater than the first value.</p>
+</div>
       </div>
     </td>
     <td>
@@ -369,13 +371,14 @@ each value in an OR fashion.</p>
           <span data-ice="kind-icon" class="kind-variable">V</span>
           
           
-          <span class="code" data-ice="name"><span><a href="variable/index.html#static-variable-isLessThanEqualTo">isLessThanEqualTo</a></span></span><span class="code" data-ice="signature">: <span>*</span></span>
+          <span class="code" data-ice="name"><span><a href="variable/index.html#static-variable-isLessThanEqualTo">isLessThanEqualTo</a></span></span><span class="code" data-ice="signature">(value: <span>any</span>): <span>boolean</span>: <span>*</span></span>
         </p>
       </div>
       <div>
         
         
-        
+        <div data-ice="description"><p>Returns true if the second value is less than the first value.</p>
+</div>
       </div>
     </td>
     <td>
@@ -397,13 +400,14 @@ each value in an OR fashion.</p>
           <span data-ice="kind-icon" class="kind-variable">V</span>
           
           
-          <span class="code" data-ice="name"><span><a href="variable/index.html#static-variable-isNothing">isNothing</a></span></span><span class="code" data-ice="signature">: <span>*</span></span>
+          <span class="code" data-ice="name"><span><a href="variable/index.html#static-variable-isNothing">isNothing</a></span></span><span class="code" data-ice="signature">(value: <span>any</span>): <span>boolean</span>: <span>*</span></span>
         </p>
       </div>
       <div>
         
         
-        
+        <div data-ice="description"><p>Returns true if the value under test is empty or nil.</p>
+</div>
       </div>
     </td>
     <td>
@@ -454,13 +458,14 @@ each value in an OR fashion.</p>
           <span data-ice="kind-icon" class="kind-variable">V</span>
           
           
-          <span class="code" data-ice="name"><span><a href="variable/index.html#static-variable-map">map</a></span></span><span class="code" data-ice="signature">(pipe: <span>Array</span>, data: <span>Array</span> | <span>Object</span>): <span>Array</span> | <span>Object</span>: <span>*</span></span>
+          <span class="code" data-ice="name"><span><a href="variable/index.html#static-variable-map">map</a></span></span><span class="code" data-ice="signature">(action: <span>Array</span>, data: <span>Array</span> | <span>Object</span>): <span>Array</span> | <span>Object</span>: <span>*</span></span>
         </p>
       </div>
       <div>
         
         
-        
+        <div data-ice="description"><p>Takes an action and data as input and returns the result of performing that action on each value in the data.</p>
+</div>
       </div>
     </td>
     <td>
@@ -772,7 +777,7 @@ each value in an OR fashion.</p>
           <span data-ice="kind-icon" class="kind-variable">V</span>
           
           
-          <span class="code" data-ice="name"><span><a href="variable/index.html#static-variable-takeTopPairsAndOthers">takeTopPairsAndOthers</a></span></span><span class="code" data-ice="signature">(count: <span>number</span>, xformer: <span>string</span> | <span>Object</span> | <span>Array</span>, data: <span>Array</span>): <span>Array</span>: <span>*</span></span>
+          <span class="code" data-ice="name"><span><a href="variable/index.html#static-variable-takeTopPairsAndAddOthers">takeTopPairsAndAddOthers</a></span></span><span class="code" data-ice="signature">(count: <span>number</span>, xformer: <span>string</span> | <span>Object</span> | <span>Array</span>, data: <span>Array</span>): <span>Array</span>: <span>*</span></span>
         </p>
       </div>
       <div>

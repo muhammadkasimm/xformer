@@ -29,8 +29,8 @@
 <nav class="navigation" data-ice="nav"><div>
   <ul>
     
-  <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/main.js~Xform.html">Xform</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-xform">xform</a></span></span></li>
+  <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getContext">getContext</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-setContext">setContext</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-cleanData">cleanData</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-defaultAll">defaultAll</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-differential">differential</a></span></span></li>
@@ -53,7 +53,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-sortDescending">sortDescending</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-sumAll">sumAll</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-takeTopAndCombineOthers">takeTopAndCombineOthers</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-takeTopPairsAndOthers">takeTopPairsAndOthers</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-takeTopPairsAndAddOthers">takeTopPairsAndAddOthers</a></span></span></li>
 </ul>
 </div>
 </nav>
@@ -62,97 +62,28 @@
 <pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import merge from &apos;ramda/src/merge&apos;;
 import { execute, executePipe } from &apos;./executor&apos;;
 
-class Xform {
-  constructor() {
-    this.$ = {};
-  }
+let context = {};
+export const getContext = () =&gt; context;
+export const setContext = (ctx = {}) =&gt; {
+  context = merge(getContext(), ctx);
+};
 
-  /**
-   * Helps initilaize or update external dependencies needed to run queries.
-   *
-   * @func
-   * @returns {Object} $ // (external dependencies)
-   * @example
-   *      X.setExternals({ interval: 30 });
-   */
-  getExternals() {
-    return this.$;
-  }
+function Xform() {
+  setContext({});
 
-  /**
-   * Helps initilaize or update external dependencies needed to run queries.
-   *
-   * @func
-   * @param  {Object} ext
-   * @returns {undefined}
-   * @example
-   *      X.setExternals({ interval: 30 });
-   */
-  setExternals(ext = {}) {
-    this.$ = merge(this.getExternals(), ext);
-  }
-
-  /**
-   * Takes a query and data as input and executes all pipelines within the query, with each pipeline receiving the
-   * provided data. A query can be a list of pipes or a JSON structure. A pipe is an array of action
-   * descriptions. An action can be described as a string or JSON.
-   *
-   * Read docs for the available action palette.
-   *
-   * @func
-   * @param  {Array|Object} query
-   * @param  {any} data
-   * @param  {Object} ext = {}
-   * @returns {Object}
-   * @example
-   *      E.execute({ avg_by_30: [&apos;getAvg&apos;, &apos;getRate(30)&apos;] }, [1, 2 , 3]);
-   *
-   *      //=&gt;
-   *      {
-   *        avg_by_30: {
-   *          buffer: [
-   *            { title: &apos;Original Data&apos;, data: [1, 2, 3] },
-   *            { title: &apos;getAvg&apos;, data: 2 },
-   *            { title: &apos;getRate(30)&apos;, data: 0.067 }
-   *          ],
-   *          result: 0.067
-   *        }
-   *      }
-   */
-  execute(query, data, ext = {}) {
-    this.setExternals(ext);
-    return execute.call(this, query, data);
-  }
-
-  /**
-   * Takes a pipe and data as input and executes all actions from left to right. A pipe is an array of action
-   * descriptions. An action can be described as a string or JSON.
-   *
-   * @func
-   * @param  {Array&lt;string|Object&gt;} pipe
-   * @param  {any} data
-   * @param  {Object} ext = {}
-   * @returns {Object}
-   * @example
-   *      E.executePipe([&apos;getAvg&apos;, &apos;getRate(30)&apos;], [1, 2 , 3]);
-   *
-   *      //=&gt;
-   *      {
-   *        buffer: [
-   *          { title: &apos;Original Data&apos;, data: [1, 2, 3] },
-   *          { title: &apos;getAvg&apos;, data: 2 },
-   *          { title: &apos;getRate(30)&apos;, data: 0.067 }
-   *        ],
-   *        result: 0.067
-   *      }
-   */
-  executePipe(pipe, data, ext = {}) {
-    this.setExternals(ext);
-    return executePipe.call(this, pipe, data);
-  }
+  return {
+    execute: (query, data, ctx = {}) =&gt; {
+      setContext(ctx);
+      return execute(query, data);
+    },
+    executePipe: (pipe, data, ctx = {}) =&gt; {
+      setContext(ctx);
+      return executePipe(pipe, data);
+    }
+  };
 }
 
-export default new Xform();
+export default Xform();
 </code></pre>
 
 </div>
