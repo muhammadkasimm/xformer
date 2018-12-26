@@ -3,7 +3,7 @@
     "__docId__": 0,
     "kind": "file",
     "name": "src/main.js",
-    "content": "import merge from 'ramda/src/merge';\nimport { execute, executePipe } from './executor';\n\nlet context = {};\nexport const getContext = () => context;\nexport const setContext = (ctx = {}) => {\n  context = merge(getContext(), ctx);\n};\n\nfunction Xform() {\n  setContext({});\n\n  return {\n    execute: (query, data, ctx = {}) => {\n      setContext(ctx);\n      return execute(query, data);\n    },\n    executePipe: (pipe, data, ctx = {}) => {\n      setContext(ctx);\n      return executePipe(pipe, data);\n    }\n  };\n}\n\nexport default Xform();\n",
+    "content": "import merge from 'ramda/src/merge';\nimport { execute, executePipe } from './executor';\n\nlet context = {};\nexport const getContext = () => context;\nexport const setContext = (ctx = {}) => {\n  context = merge(getContext(), ctx);\n};\n\nfunction Xform() {\n  setContext({});\n\n  return {\n    execute: (query, data, ctx = {}, dispatch) => {\n      setContext(ctx);\n      return execute(query, data, dispatch);\n    },\n    executePipe: (pipe, data, ctx = {}) => {\n      setContext(ctx);\n      return executePipe(pipe, data);\n    }\n  };\n}\n\nexport default Xform();\n",
     "static": true,
     "longname": "/home/atom/Documents/Emumba/xformer/src/main.js",
     "access": "public",

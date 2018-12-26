@@ -1,6 +1,8 @@
 import * as R from 'ramda';
 import * as D from './decoder';
 import * as _ from './helpers';
+import { executeQuery } from './actions';
+import { PALETTE_INFO, ALIAS_REGEX } from './constants';
 
 /**
  * @param  {Function | Array<Function>} fn
@@ -30,7 +32,14 @@ function updateAccumulator(fn, info, acc) {
   const executedData = executeAction(fn, acc.result);
 
   return R.pipe(
-    R.over(R.lensProp('buffer'), R.append({ title: info.name, data: executedData })),
+    R.over(
+      R.lensProp('buffer'),
+      R.append({
+        title: info.name,
+        data: executedData,
+        info: PALETTE_INFO[_.getFirstMatch(ALIAS_REGEX, info.name)]
+      })
+    ),
     R.set(R.lensProp('result'), executedData)
   )(acc);
 }
@@ -79,6 +88,8 @@ export function executePipe(pipe, data) {
  * Takes a query and data as input and executes all pipelines within the query, with each pipeline receiving the
  * provided data.
  */
-export function execute(query, data) {
-  return R.map(R.curry(executePipe)(R.__, data), query);
+export function execute(query, data, dispatch) {
+  const result = R.map(R.curry(executePipe)(R.__, data), query);
+  if (dispatch) dispatch(executeQuery(result));
+  return result;
 }

@@ -1,3 +1,8 @@
+export const ALIAS_REGEX = /^[a-zA-z0-9_]*/;
+export const OPENING_PARAN_REGEX = /^[\(]?/;
+export const CLOSING_PARAN_REGEX = /[\)]?$/;
+export const SEPARATOR_REGEX = /[,][ ]?/;
+
 export const PALETTE_INFO = {
   makePair: 'Takes a key-value pair and returns a pair of form [key, value].',
   pickFrom:

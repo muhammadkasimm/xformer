@@ -7,11 +7,7 @@ import * as R from 'ramda';
 import * as P from './palette';
 import * as _ from './helpers';
 import { getContext } from './main';
-
-const ALIAS_REGEX = /^[a-zA-z0-9_]*/;
-const OPENING_PARAN_REGEX = /^[\(]?/;
-const CLOSING_PARAN_REGEX = /[\)]?$/;
-const SEPARATOR_REGEX = /[,][ ]?/;
+import { ALIAS_REGEX, OPENING_PARAN_REGEX, CLOSING_PARAN_REGEX } from './constants';
 
 export function evaluate(str) {
   const context = getContext();

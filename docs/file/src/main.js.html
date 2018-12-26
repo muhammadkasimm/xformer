@@ -72,9 +72,9 @@ function Xform() {
   setContext({});
 
   return {
-    execute: (query, data, ctx = {}) =&gt; {
+    execute: (query, data, ctx = {}, dispatch) =&gt; {
       setContext(ctx);
-      return execute(query, data);
+      return execute(query, data, dispatch);
     },
     executePipe: (pipe, data, ctx = {}) =&gt; {
       setContext(ctx);
