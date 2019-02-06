@@ -123,12 +123,12 @@ const mergeWithOp = R.curry((xformer, data) =&gt;
     _.typeMatches(&apos;array&apos;),
     R.pipe(
       R.reject(_.isNothing),
-      R.reduce(R.mergeWith(xformer), {})
+      R.reduce(R.mergeDeepWith(xformer), {})
     ),
     R.pipe(
       R.pickBy(_.typeMatches(&apos;object&apos;)),
       R.values,
-      R.reduce(R.mergeWith(xformer), {})
+      R.reduce(R.mergeDeepWith(xformer), {})
     )
   )(data)
 );

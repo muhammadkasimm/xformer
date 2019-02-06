@@ -61,12 +61,12 @@ const mergeWithOp = R.curry((xformer, data) =>
     _.typeMatches('array'),
     R.pipe(
       R.reject(_.isNothing),
-      R.reduce(R.mergeWith(xformer), {})
+      R.reduce(R.mergeDeepWith(xformer), {})
     ),
     R.pipe(
       R.pickBy(_.typeMatches('object')),
       R.values,
-      R.reduce(R.mergeWith(xformer), {})
+      R.reduce(R.mergeDeepWith(xformer), {})
     )
   )(data)
 );
