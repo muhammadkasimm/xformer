@@ -35,6 +35,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-defaultAll">defaultAll</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-differential">differential</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-getAvg">getAvg</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-getMax">getMax</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-getRate">getRate</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-getUsedMemory">getUsedMemory</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-isEqualTo">isEqualTo</a></span></span></li>
@@ -344,6 +345,15 @@ describe(&apos;Test palette functions&apos;, () =&gt; {
       expect(
         _.takeTopPairsAndAddOthers(2, [[&apos;abs&apos;, 2], [&apos;fat&apos;, 3], [&apos;net&apos;, 1], [&apos;rip&apos;, 2], [&apos;dom&apos;, 3]])
       ).toEqual([[&apos;abs&apos;, 2], [&apos;fat&apos;, 3], [&apos;Others&apos;, 6]]);
+    });
+  });
+  describe(&apos;Get Max value from array or object&apos;, () =&gt; {
+    it(&apos;from a list of numbers, returns a max value&apos;, () =&gt; {
+      expect(_.getMax([2, 3, 5, 2, 3])).toEqual(5);
+    });
+
+    it(&apos;from an object returns a max value&apos;, () =&gt; {
+      expect(_.getMax({ a: 2, b: 3, c: 5, d: 2, e: 3 })).toEqual(5);
     });
   });
 });

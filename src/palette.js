@@ -61,12 +61,12 @@ const mergeWithOp = R.curry((xformer, data) =>
     _.typeMatches('array'),
     R.pipe(
       R.reject(_.isNothing),
-      R.reduce(R.mergeWith(xformer), {})
+      R.reduce(R.mergeDeepWith(xformer), {})
     ),
     R.pipe(
       R.pickBy(_.typeMatches('object')),
       R.values,
-      R.reduce(R.mergeWith(xformer), {})
+      R.reduce(R.mergeDeepWith(xformer), {})
     )
   )(data)
 );
@@ -445,3 +445,24 @@ export const isLessThanEqualTo = R.flip(R.lte);
  *        isGreaterThanEqualTo(-4, -2) //=> true
  */
 export const isGreaterThanEqualTo = R.flip(R.gte);
+
+/**
+ * Find Max value.
+ *
+ * @param  {any} value
+ * @returns {number}
+ * @example
+ *        getMax([1,2,3,4]) //=> 4
+ *        getMax({a:1,b:2,c:3}) //=> 3
+ */
+export const getMax = R.cond([
+  [_.typeMatches('array'), R.apply(Math.max)],
+  [
+    _.typeMatches('object'),
+    R.pipe(
+      R.values,
+      R.apply(Math.max)
+    )
+  ],
+  [R.T, R.identity]
+]);

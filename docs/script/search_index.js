@@ -30,6 +30,12 @@ window.esdocSearchIndex = [
     "function"
   ],
   [
+    "@muhammadkasim/xformer/src/palette.js~getmax",
+    "variable/index.html#static-variable-getMax",
+    "<span>getMax</span> <span class=\"search-result-import-path\">@muhammadkasim/xformer/src/palette.js</span>",
+    "variable"
+  ],
+  [
     "@muhammadkasim/xformer/src/palette.js~getrate",
     "variable/index.html#static-variable-getRate",
     "<span>getRate</span> <span class=\"search-result-import-path\">@muhammadkasim/xformer/src/palette.js</span>",
@@ -399,6 +405,24 @@ window.esdocSearchIndex = [
     "",
     "test-file/__tests__/palette.test.js.html#lineNumber111",
     "Test palette functions Defaults all values in an Array or Object defaults values in an Object",
+    "test"
+  ],
+  [
+    "",
+    "test-file/__tests__/palette.test.js.html#lineNumber288",
+    "Test palette functions Get Max value from array or object",
+    "test"
+  ],
+  [
+    "",
+    "test-file/__tests__/palette.test.js.html#lineNumber289",
+    "Test palette functions Get Max value from array or object from a list of numbers, returns a max value",
+    "test"
+  ],
+  [
+    "",
+    "test-file/__tests__/palette.test.js.html#lineNumber293",
+    "Test palette functions Get Max value from array or object from an object returns a max value",
     "test"
   ],
   [

@@ -35,6 +35,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-defaultAll">defaultAll</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-differential">differential</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-getAvg">getAvg</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-getMax">getMax</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-getRate">getRate</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-getUsedMemory">getUsedMemory</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-isEqualTo">isEqualTo</a></span></span></li>
@@ -122,12 +123,12 @@ const mergeWithOp = R.curry((xformer, data) =&gt;
     _.typeMatches(&apos;array&apos;),
     R.pipe(
       R.reject(_.isNothing),
-      R.reduce(R.mergeWith(xformer), {})
+      R.reduce(R.mergeDeepWith(xformer), {})
     ),
     R.pipe(
       R.pickBy(_.typeMatches(&apos;object&apos;)),
       R.values,
-      R.reduce(R.mergeWith(xformer), {})
+      R.reduce(R.mergeDeepWith(xformer), {})
     )
   )(data)
 );
@@ -506,6 +507,27 @@ export const isLessThanEqualTo = R.flip(R.lte);
  *        isGreaterThanEqualTo(-4, -2) //=&gt; true
  */
 export const isGreaterThanEqualTo = R.flip(R.gte);
+
+/**
+ * Find Max value.
+ *
+ * @param  {any} value
+ * @returns {number}
+ * @example
+ *        getMax([1,2,3,4]) //=&gt; 4
+ *        getMax({a:1,b:2,c:3}) //=&gt; 3
+ */
+export const getMax = R.cond([
+  [_.typeMatches(&apos;array&apos;), R.apply(Math.max)],
+  [
+    _.typeMatches(&apos;object&apos;),
+    R.pipe(
+      R.values,
+      R.apply(Math.max)
+    )
+  ],
+  [R.T, R.identity]
+]);
 </code></pre>
 
 </div>
