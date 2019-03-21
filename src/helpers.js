@@ -53,18 +53,25 @@ export const typeMatches = R.curry((typeToBe, input) =>
 /**
  * @param  {number} left
  * @param  {number} right
- * @returns {Object}
+ * @returns {number}
  */
 export const sum = R.curry((left, right) => R.add(defaultToZero(left), defaultToZero(right)));
 
 /**
  * @param  {number} left
  * @param  {number} right
- * @returns {Object}
+ * @returns {number}
  */
 export const subtract = R.curry((left, right) =>
   Math.abs(R.subtract(defaultToZero(left), defaultToZero(right)))
 );
+
+/**
+ * @param  {number} left
+ * @param  {number} right
+ * @returns {number}
+ */
+export const keepLatest = R.curry((left, right) => defaultToZero(right));
 
 /**
  * @param  {Array<number>} data
@@ -157,3 +164,54 @@ export const divideBy = R.curry((denominator, numerator) => {
     R.divide(defaultToZero(numerator))
   )(denominator);
 });
+
+/**
+ * @param  {string|number} prop
+ * @param  {boolean} isPrevWildcard
+ * @param  {Array|Object} data
+ * @returns {any}
+ */
+export const pickProp = R.curry((prop, isPrevWildcard, data) => {
+  return R.pipe(
+    R.ifElse(
+      R.always(R.equals('*', prop)),
+      R.when(typeMatches('object'), R.values), //pickByWildcard
+      R.ifElse(
+        R.always(isPrevWildcard),
+        R.pluck(prop),
+        R.ifElse(
+          R.pipe(
+            R.prop(prop),
+            isSomething
+          ),
+          R.prop(prop),
+          R.pluck(prop)
+        )
+      )
+    ),
+    R.when(typeMatches('array'), R.reject(R.isNil))
+  )(data);
+});
+
+/**
+ * @param  {number} idx
+ * @param  {Array<string|number>} path
+ * @param  {Array|Object} data
+ * @returns  {any}
+ */
+function _pickFrom(idx, path, data) {
+  if (R.gte(idx, R.length(path))) {
+    return data;
+  }
+
+  const isPrevWildcard = R.equals('*', path[R.dec(idx)]);
+  return _pickFrom(R.inc(idx), path, pickProp(R.nth(idx, path), isPrevWildcard, data));
+}
+
+/**
+ * @param  {number} idx
+ * @param  {Array<string|number>} path
+ * @param  {Array|Object} data
+ * @returns  {any}
+ */
+export const pickFrom = R.curry(_pickFrom)(0);

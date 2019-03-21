@@ -1,6 +1,8 @@
 import * as R from 'ramda';
 import * as D from './decoder';
 import * as _ from './helpers';
+import { executeQuery } from './actions';
+import { PALETTE_INFO, ALIAS_REGEX } from './constants';
 
 /**
  * @param  {Function | Array<Function>} fn
@@ -12,8 +14,8 @@ import * as _ from './helpers';
  */
 function executeAction(fn, data) {
   return R.cond([
-    [_.typeMatches('function'), func => func.call(this, data)],
-    [_.typeMatches('array'), R.map(func => func.call(this, data))]
+    [_.typeMatches('function'), R.applyTo(data)],
+    [_.typeMatches('array'), R.map(R.applyTo(data))]
   ])(fn);
 }
 
@@ -27,10 +29,17 @@ function executeAction(fn, data) {
  * according to the action(s).
  */
 function updateAccumulator(fn, info, acc) {
-  const executedData = executeAction.call(this, fn, acc.result);
+  const executedData = executeAction(fn, acc.result);
 
   return R.pipe(
-    R.over(R.lensProp('buffer'), R.append({ title: info.name, data: executedData })),
+    R.over(
+      R.lensProp('buffer'),
+      R.append({
+        title: info.name,
+        data: executedData,
+        info: PALETTE_INFO[_.getFirstMatch(ALIAS_REGEX, info.name)]
+      })
+    ),
     R.set(R.lensProp('result'), executedData)
   )(acc);
 }
@@ -48,12 +57,12 @@ function updateAccumulator(fn, info, acc) {
  */
 export function executePipe(pipe, data) {
   return R.pipe(
-    D.decodePipe.bind(this),
+    D.decodePipe,
     _.reduceIndexed(
       (acc, fn, idx) => {
         const info = { idx: idx, name: D.getActionName(R.nth(idx, pipe), idx) };
         try {
-          return updateAccumulator.call(this, fn, info, acc);
+          return updateAccumulator(fn, info, acc);
         } catch (error) {
           console.error(error.stack);
           console.error('Failed to perform action:', {
@@ -79,6 +88,8 @@ export function executePipe(pipe, data) {
  * Takes a query and data as input and executes all pipelines within the query, with each pipeline receiving the
  * provided data.
  */
-export function execute(query, data) {
-  return R.map(R.curry(executePipe.bind(this))(R.__, data), query);
+export function execute(query, data, dispatch) {
+  const result = R.map(R.curry(executePipe)(R.__, data), query);
+  if (dispatch) dispatch(executeQuery(result));
+  return result;
 }

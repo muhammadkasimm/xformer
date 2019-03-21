@@ -13,6 +13,14 @@ describe('Test palette functions', () => {
     it('picks values from an Array', () => {
       expect(_.pickFrom([0], [1, 2, 3])).toBe(1);
     });
+
+    it('picks values by wild card symbol from an array', () => {
+      expect(_.pickFrom(['*', 1], [[0, 1], [1, 2], [2, 3]])).toEqual([1, 2, 3]);
+    });
+
+    it('picks values by wild card symbol from an object', () => {
+      expect(_.pickFrom(['*', 'a'], [{ a: 1 }, { a: 2 }, { a: 3 }])).toEqual([1, 2, 3]);
+    });
   });
 
   describe('Keeps only keys from an Object that match regex', () => {
@@ -95,6 +103,20 @@ describe('Test palette functions', () => {
     });
   });
 
+  describe('Defaults all values in an Array or Object', () => {
+    it('defaults values in an Array', () => {
+      expect(_.defaultAll('N/A', [1, NaN, '3'])).toEqual([1, 'N/A', 3]);
+    });
+
+    it('defaults values in an Object', () => {
+      expect(_.defaultAll(0, { a: 1, b: Infinity, c: 3 })).toEqual({ a: 1, b: 0, c: 3 });
+    });
+
+    it('defaults a simple number', () => {
+      expect(_.defaultAll(100, Infinity)).toBe(100);
+    });
+  });
+
   describe('Calculates used memory for any input', () => {
     it('calculates used memory for Array', () => {
       expect(_.getUsedMemory([0.1, 0.2, 0.3])).toEqual([90, 80, 70]);
@@ -124,6 +146,152 @@ describe('Test palette functions', () => {
 
     it('average of a junky value is zero', () => {
       expect(_.getAvg(false)).toBe(0);
+    });
+  });
+
+  describe('Maps an Array or Object', () => {
+    it('maps an array with single action', () => {
+      expect(_.map(['sumAll'], [[20, 30], [40, 50]])).toEqual([50, 90]);
+    });
+
+    it('maps an array with multiple actions', () => {
+      expect(_.map(['sumAll', 'getRate(100)'], [[20, 30], [40, 50]])).toEqual([0.5, 0.9]);
+    });
+
+    it('maps an array with multiple actions on each item using runAll', () => {
+      expect(
+        _.map(
+          [
+            {
+              name: 'runAll',
+              params: [[['sumAll', 'getRate(100)'], ['getAvg']]]
+            }
+          ],
+          [[20, 30], [40, 50]]
+        )
+      ).toEqual([[0.5, 25], [0.9, 45]]);
+    });
+  });
+
+  describe('Sorts an Array or Object in ascending order', () => {
+    it('sorts an array of numbers', () => {
+      expect(_.sortAscending(null, [3, 2, 1])).toEqual([1, 2, 3]);
+    });
+
+    it('sorts an array of strings', () => {
+      expect(_.sortAscending(null, ['efg', 'uvx', 'jkl'])).toEqual(['efg', 'jkl', 'uvx']);
+    });
+
+    it('sorts an array of arrays', () => {
+      expect(_.sortAscending(1, [[1, 345], [2, 45], [3, 121]])).toEqual([
+        [2, 45],
+        [3, 121],
+        [1, 345]
+      ]);
+    });
+
+    it('sorts an object w.r.t keys', () => {
+      expect(_.sortAscending(0, { jkl: 345, efg: 121, uvx: 45 })).toEqual([
+        ['efg', 121],
+        ['jkl', 345],
+        ['uvx', 45]
+      ]);
+    });
+
+    it('sorts an object w.r.t values', () => {
+      expect(_.sortAscending(1, { jkl: 345, efg: 121, uvx: 45 })).toEqual([
+        ['uvx', 45],
+        ['efg', 121],
+        ['jkl', 345]
+      ]);
+    });
+  });
+
+  describe('Sorts an Array or Object in descending order', () => {
+    it('sorts an array of numbers', () => {
+      expect(_.sortDescending(null, [3, 2, 1])).toEqual([3, 2, 1]);
+    });
+
+    it('sorts an array of strings', () => {
+      expect(_.sortDescending(null, ['efg', 'uvx', 'jkl'])).toEqual(['uvx', 'jkl', 'efg']);
+    });
+
+    it('sorts an array of arrays', () => {
+      expect(_.sortDescending(1, [[1, 345], [2, 45], [3, 121]])).toEqual([
+        [1, 345],
+        [3, 121],
+        [2, 45]
+      ]);
+    });
+
+    it('sorts an object w.r.t keys', () => {
+      expect(_.sortDescending(0, { jkl: 345, efg: 121, uvx: 45 })).toEqual([
+        ['uvx', 45],
+        ['jkl', 345],
+        ['efg', 121]
+      ]);
+    });
+
+    it('sorts an object w.r.t values', () => {
+      expect(_.sortDescending(1, { jkl: 345, efg: 121, uvx: 45 })).toEqual([
+        ['jkl', 345],
+        ['efg', 121],
+        ['uvx', 45]
+      ]);
+    });
+  });
+
+  describe('Cleans data by passing each value in data through the provided predicates', () => {
+    it('removes null or undefined values from an array', () => {
+      expect(_.cleanData(['isNothing'], [null, 1, 2, undefined, 3])).toEqual([1, 2, 3]);
+    });
+
+    it('removes values according to LTE predicate from an array', () => {
+      expect(
+        _.cleanData(['isNothing', 'isLessThanEqualTo(0)'], [-2, -1, undefined, 1, 2, 3])
+      ).toEqual([1, 2, 3]);
+    });
+
+    it('removes values according predicates from an object', () => {
+      expect(
+        _.cleanData(['isNothing', 'isLessThanEqualTo(0)'], {
+          '': 82634,
+          abc: 1,
+          efg: 2,
+          jkl: undefined,
+          stu: -2,
+          xyz: 3
+        })
+      ).toEqual({
+        abc: 1,
+        efg: 2,
+        xyz: 3
+      });
+    });
+  });
+
+  describe('Takes top X items and combines others', () => {
+    it('from a list of numbers, takes top X and combines others according to the provided xformer', () => {
+      expect(_.takeTopAndCombineOthers(2, ['getAvg', 'getRate(2)'], [2, 3, 1, 2, 3])).toEqual([
+        2,
+        3,
+        1
+      ]);
+    });
+
+    it('from a list of pairs, takes top X and combines others by adding', () => {
+      expect(
+        _.takeTopPairsAndAddOthers(2, [['abs', 2], ['fat', 3], ['net', 1], ['rip', 2], ['dom', 3]])
+      ).toEqual([['abs', 2], ['fat', 3], ['Others', 6]]);
+    });
+  });
+  describe('Get Max value from array or object', () => {
+    it('from a list of numbers, returns a max value', () => {
+      expect(_.getMax([2, 3, 5, 2, 3])).toEqual(5);
+    });
+
+    it('from an object returns a max value', () => {
+      expect(_.getMax({ a: 2, b: 3, c: 5, d: 2, e: 3 })).toEqual(5);
     });
   });
 });

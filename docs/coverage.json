@@ -1,0 +1,22 @@
+{
+  "coverage": "86.66%",
+  "expectCount": 30,
+  "actualCount": 26,
+  "files": {
+    "src/main.js": {
+      "expectCount": 4,
+      "actualCount": 0,
+      "undocumentLines": [
+        4,
+        5,
+        6,
+        10
+      ]
+    },
+    "src/palette.js": {
+      "expectCount": 26,
+      "actualCount": 26,
+      "undocumentLines": []
+    }
+  }
+}

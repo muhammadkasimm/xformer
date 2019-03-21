@@ -1,7 +1,7 @@
 {
   "source": "./src",
   "destination": "./docs",
-  "includes": ["\\.js$"],
+  "includes": ["\\palette.js|main.js$"],
   "excludes": ["\\.config\\.js$"],
   "plugins": [
     {
@@ -19,8 +19,8 @@
           "description": "xFormer makes data transformations easy on your cognition and hassle-free.",
           "repository": "https://gitlab.com/muhammadkasim/xformer",
           "site": "https://www.npmjs.com/package/@muhammadkasim/xformer",
-          "author": "http://www.emumba.com/",
-          "image": "https://cdn-images-1.medium.com/max/1200/1*w1GC6zZbgdAXDKq01bmFWA.png"
+          "author": "Muhammad Kasim",
+          "image": "./logo.png"
         },
         "test": {
           "source": "./__tests__",

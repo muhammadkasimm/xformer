@@ -1,28 +1,25 @@
 import merge from 'ramda/src/merge';
 import { execute, executePipe } from './executor';
 
-class Xform {
-  constructor() {
-    this.$ = {};
-  }
+let context = {};
+export const getContext = () => context;
+export const setContext = (ctx = {}) => {
+  context = merge(getContext(), ctx);
+};
 
-  getExternals() {
-    return this.$;
-  }
+function Xform() {
+  setContext({});
 
-  setExternals(ext = {}) {
-    this.$ = merge(this.getExternals(), ext);
-  }
-
-  execute(query, data, ext = {}) {
-    this.setExternals(ext);
-    return execute.call(this, query, data);
-  }
-
-  executePipe(pipe, data, ext = {}) {
-    this.setExternals(ext);
-    return executePipe.call(this, pipe, data);
-  }
+  return {
+    execute: (query, data, ctx = {}, dispatch) => {
+      setContext(ctx);
+      return execute(query, data, dispatch);
+    },
+    executePipe: (pipe, data, ctx = {}) => {
+      setContext(ctx);
+      return executePipe(pipe, data);
+    }
+  };
 }
 
-export default new Xform();
+export default Xform();

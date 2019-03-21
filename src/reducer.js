@@ -1,0 +1,18 @@
+import * as TYPES from './actions';
+
+const defaultState = {
+  buffer: []
+};
+
+export default function reducer(state = defaultState, action = {}) {
+  switch (action.type) {
+    case TYPES.EXECUTE_QUERY:
+      return { ...state, ...action.payload };
+
+    case TYPES.PICK_BUFFER:
+      return { ...state, buffer: action.payload };
+
+    default:
+      return state;
+  }
+}
