@@ -399,21 +399,6 @@ export const takeTopPairsAndAddOthers = takeTopAndCombineOthers(
 
 // PREDICATES
 /**
- * Returns true if the value under test is empty or nil.
- *
- * @param  {any} value
- * @returns {boolean}
- * @example
- *        isNothing(undefined) //=> true
- *        isNothing(null) //=> true
- *        isNothing([]) //=> true
- *        isNothing({}) //=> true
- *        isNothing('') //=> true
- *        isNothing('Hello, world!') //=> false
- */
-export const isNothing = _.isNothing;
-
-/**
  * Returns true if the 2 provided values are deeply equal.
  *
  * @param  {any} value

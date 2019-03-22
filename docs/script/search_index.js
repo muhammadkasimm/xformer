@@ -66,12 +66,6 @@ window.esdocSearchIndex = [
     "variable"
   ],
   [
-    "@muhammadkasim/xformer/src/palette.js~isnothing",
-    "variable/index.html#static-variable-isNothing",
-    "<span>isNothing</span> <span class=\"search-result-import-path\">@muhammadkasim/xformer/src/palette.js</span>",
-    "variable"
-  ],
-  [
     "@muhammadkasim/xformer/src/palette.js~makepair",
     "variable/index.html#static-variable-makePair",
     "<span>makePair</span> <span class=\"search-result-import-path\">@muhammadkasim/xformer/src/palette.js</span>",
