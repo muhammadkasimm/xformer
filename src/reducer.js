@@ -1,7 +1,7 @@
 import * as TYPES from './actions';
 
 const defaultState = {
-  buffer: []
+  __buffer__: []
 };
 
 export default function reducer(state = defaultState, action = {}) {
@@ -10,7 +10,7 @@ export default function reducer(state = defaultState, action = {}) {
       return { ...state, ...action.payload };
 
     case TYPES.PICK_BUFFER:
-      return { ...state, buffer: action.payload };
+      return { ...state, __buffer__: action.payload };
 
     default:
       return state;
