@@ -32,6 +32,7 @@
   <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getContext">getContext</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-setContext">setContext</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-cleanData">cleanData</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-cleanDataByKeys">cleanDataByKeys</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-defaultAll">defaultAll</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-differential">differential</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-getAvg">getAvg</a></span></span></li>
@@ -55,6 +56,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-sumAll">sumAll</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-takeTopAndCombineOthers">takeTopAndCombineOthers</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-takeTopPairsAndAddOthers">takeTopPairsAndAddOthers</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-testRegex">testRegex</a></span></span></li>
 </ul>
 </div>
 </nav>
@@ -329,6 +331,25 @@ describe(&apos;Test palette functions&apos;, () =&gt; {
         efg: 2,
         xyz: 3
       });
+    });
+  });
+
+  describe(&apos;Cleans data based upon keys or indexes from object and list.&apos;, () =&gt; {
+    it(&apos;removes empty named keys.&apos;, () =&gt; {
+      expect(_.cleanDataByKeys([&apos;isNothing&apos;], { a: 1, b: 2, &apos;&apos;: 3 })).toEqual({ a: 1, b: 2 });
+    });
+    it(&apos;removes specified keys.&apos;, () =&gt; {
+      expect(
+        _.cleanDataByKeys([&apos;testRegex(/tcp/i)&apos;], { tcp: 1, udp: 2, icmp: 3, foo: 2, bar: 3 })
+      ).toEqual({ bar: 3, foo: 2, icmp: 3, udp: 2 });
+    });
+    it(&apos;removes specified indexes.&apos;, () =&gt; {
+      expect(
+        _.cleanDataByKeys(
+          [&apos;isLessThanEqualTo(2)&apos;, &apos;isGreaterThanEqualTo(6)&apos;],
+          [12, 3, 4, 5, 6, 7, 8, 9]
+        )
+      ).toEqual([5, 6, 7]);
     });
   });
 

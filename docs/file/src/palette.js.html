@@ -32,6 +32,7 @@
   <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getContext">getContext</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-setContext">setContext</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-cleanData">cleanData</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-cleanDataByKeys">cleanDataByKeys</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-defaultAll">defaultAll</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-differential">differential</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-getAvg">getAvg</a></span></span></li>
@@ -55,6 +56,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-sumAll">sumAll</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-takeTopAndCombineOthers">takeTopAndCombineOthers</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-takeTopPairsAndAddOthers">takeTopPairsAndAddOthers</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-testRegex">testRegex</a></span></span></li>
 </ul>
 </div>
 </nav>
@@ -95,6 +97,16 @@ export const isNothing = _.isNothing;
  *        isEqualTo([1], [1]) //=&gt; true
  */
 export const isEqualTo = R.equals;
+/**
+ * Returns booleon based upon provided regex.
+ *
+ * @param  {any} value
+ * @returns {boolean}
+ * @example
+ *        testRegex(&apos;Batman&apos;, &apos;Bruce Wayne&apos;) //=&gt; false
+ *        testRegex(/Batman/i, &apos;batman Wayne&apos;) //=&gt; true
+ */
+export const testRegex = R.curry((text, value) =&gt; R.test(new RegExp(text), value));
 
 /**
  * Returns true if the second value is less than the first value.
@@ -464,6 +476,36 @@ export const cleanData = R.curry((predicates, data) =&gt; {
       _.typeMatches(&apos;object&apos;),
       R.pickBy((v, k) =&gt;
         R.and(_.isSomething(k), R.complement(R.anyPass(D.decodePipe(predicates)))(v))
+      )
+    ]
+  ])(data);
+});
+
+/**
+ * Removes key from an object by applying the provided predicate functions on
+ *
+ * @param  {Array} predicates
+ * @param  {Object} data
+ * @returns {Object}
+ * @example
+ *        cleanDataByKeys([&apos;isNothing&apos;], {&apos;a&apos;:1,&apos;b&apos;:2,&apos;&apos;:3})
+ *        //=&gt; {a:1,b:2}
+ */
+export const cleanDataByKeys = R.curry((predicates, data) =&gt; {
+  return R.cond([
+    [
+      _.typeMatches(&apos;array&apos;),
+      R.pipe(
+        R.pickBy((v, k) =&gt;
+          R.and(_.isSomething(k), R.complement(R.anyPass(D.decodePipe(predicates)))(k))
+        ),
+        R.values
+      )
+    ],
+    [
+      _.typeMatches(&apos;object&apos;),
+      R.pickBy((v, k) =&gt;
+        R.and(_.isSomething(k), R.complement(R.anyPass(D.decodePipe(predicates)))(k))
       )
     ]
   ])(data);
