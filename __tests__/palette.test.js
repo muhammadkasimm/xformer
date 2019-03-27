@@ -270,6 +270,25 @@ describe('Test palette functions', () => {
     });
   });
 
+  describe('Cleans data based upon keys or indexes from object and list.', () => {
+    it('removes empty named keys.', () => {
+      expect(_.cleanDataByKeys(['isNothing'], { a: 1, b: 2, '': 3 })).toEqual({ a: 1, b: 2 });
+    });
+    it('removes specified keys.', () => {
+      expect(
+        _.cleanDataByKeys(['testRegex(/tcp/i)'], { tcp: 1, udp: 2, icmp: 3, foo: 2, bar: 3 })
+      ).toEqual({ bar: 3, foo: 2, icmp: 3, udp: 2 });
+    });
+    it('removes specified indexes.', () => {
+      expect(
+        _.cleanDataByKeys(
+          ['isLessThanEqualTo(2)', 'isGreaterThanEqualTo(6)'],
+          [12, 3, 4, 5, 6, 7, 8, 9]
+        )
+      ).toEqual([5, 6, 7]);
+    });
+  });
+
   describe('Takes top X items and combines others', () => {
     it('from a list of numbers, takes top X and combines others according to the provided xformer', () => {
       expect(_.takeTopAndCombineOthers(2, ['getAvg', 'getRate(2)'], [2, 3, 1, 2, 3])).toEqual([
