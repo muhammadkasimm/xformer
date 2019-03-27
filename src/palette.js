@@ -9,6 +9,54 @@ import * as D from './decoder';
 import * as _ from './helpers';
 
 /**
+ * Returns true if the value under test is empty or nil.
+ *
+ * @param  {any} value
+ * @returns {boolean}
+ * @example
+ *        isNothing(undefined) //=> true
+ *        isNothing(null) //=> true
+ *        isNothing([]) //=> true
+ *        isNothing({}) //=> true
+ *        isNothing('') //=> true
+ *        isNothing('Hello, world!') //=> false
+ */
+export const isNothing = _.isNothing;
+
+/**
+ * Returns true if the 2 provided values are deeply equal.
+ *
+ * @param  {any} value
+ * @returns {boolean}
+ * @example
+ *        isEqualTo('Batman', 'Bruce Wayne') //=> false
+ *        isEqualTo([1], [1]) //=> true
+ */
+export const isEqualTo = R.equals;
+
+/**
+ * Returns true if the second value is less than the first value.
+ *
+ * @param  {any} value
+ * @returns {boolean}
+ * @example
+ *        isLessThanEqualTo(0, -2) //=> true
+ *        isLessThanEqualTo(-4, -2) //=> false
+ */
+export const isLessThanEqualTo = R.flip(R.lte);
+
+/**
+ * Returns true if the second value is greater than the first value.
+ *
+ * @param  {any} value
+ * @returns {boolean}
+ * @example
+ *        isGreaterThanEqualTo(0, -2) //=> false
+ *        isGreaterThanEqualTo(-4, -2) //=> true
+ */
+export const isGreaterThanEqualTo = R.flip(R.gte);
+
+/**
  * Returns `[x, y]`.
  *
  *
@@ -45,7 +93,7 @@ export const pickFrom = R.curry(_.pickFrom);
  */
 export const pickByRegex = R.curry((text, data) =>
   R.ifElse(
-    R.always(_.isNothing(text)),
+    R.always(isNothing(text)),
     R.always({}),
     R.pickBy((v, k) => R.test(new RegExp(text), k))
   )(data)
@@ -60,7 +108,7 @@ const mergeWithOp = R.curry((xformer, data) =>
   R.ifElse(
     _.typeMatches('array'),
     R.pipe(
-      R.reject(_.isNothing),
+      R.reject(isNothing),
       R.reduce(R.mergeDeepWith(xformer), {})
     ),
     R.pipe(
@@ -397,63 +445,14 @@ export const takeTopPairsAndAddOthers = takeTopAndCombineOthers(
   R.__
 );
 
-// PREDICATES
-/**
- * Returns true if the value under test is empty or nil.
- *
- * @param  {any} value
- * @returns {boolean}
- * @example
- *        isNothing(undefined) //=> true
- *        isNothing(null) //=> true
- *        isNothing([]) //=> true
- *        isNothing({}) //=> true
- *        isNothing('') //=> true
- *        isNothing('Hello, world!') //=> false
- */
-export const isNothing = _.isNothing;
-
-/**
- * Returns true if the 2 provided values are deeply equal.
- *
- * @param  {any} value
- * @returns {boolean}
- * @example
- *        isEqualTo('Batman', 'Bruce Wayne') //=> false
- *        isEqualTo([1], [1]) //=> true
- */
-export const isEqualTo = R.equals;
-
-/**
- * Returns true if the second value is less than the first value.
- *
- * @param  {any} value
- * @returns {boolean}
- * @example
- *        isLessThanEqualTo(0, -2) //=> true
- *        isLessThanEqualTo(-4, -2) //=> false
- */
-export const isLessThanEqualTo = R.flip(R.lte);
-
-/**
- * Returns true if the second value is greater than the first value.
- *
- * @param  {any} value
- * @returns {boolean}
- * @example
- *        isGreaterThanEqualTo(0, -2) //=> false
- *        isGreaterThanEqualTo(-4, -2) //=> true
- */
-export const isGreaterThanEqualTo = R.flip(R.gte);
-
 /**
  * Find Max value.
  *
  * @param  {any} value
  * @returns {number}
  * @example
- *        getMax([1,2,3,4]) //=> 4
- *        getMax({a:1,b:2,c:3}) //=> 3
+ *        getMax([1, 2, 3, 4]) //=> 4
+ *        getMax({ a: 1, b: 2, c: 3 }) //=> 3
  */
 export const getMax = R.cond([
   [_.typeMatches('array'), R.apply(Math.max)],

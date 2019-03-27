@@ -9,6 +9,10 @@ import * as _ from './helpers';
 import { getContext } from './main';
 import { ALIAS_REGEX, OPENING_PARAN_REGEX, CLOSING_PARAN_REGEX } from './constants';
 
+const isPaletteAction = R.propSatisfies(R.has(R.__, P), 0);
+
+const isHelperAction = R.propSatisfies(R.has(R.__, _), 0);
+
 export function evaluate(str) {
   const context = getContext();
   return R.pipe(
@@ -31,10 +35,7 @@ export function evaluate(str) {
     R.when(
       R.both(
         _.typeMatches('object'),
-        R.pipe(
-          R.prop('name'),
-          R.has(R.__, P)
-        )
+        R.propSatisfies(R.anyPass([R.has(R.__, P), R.has(R.__, _)]), 'name')
       ),
       decodeObjectAction
     )
@@ -62,14 +63,17 @@ export function decodeStringyAction(action) {
         R.map(evaluate)
       )
     ]),
-    R.ifElse(
-      R.pipe(
-        R.prop(0),
-        R.has(R.__, P)
-      ),
-      R.ifElse(R.propSatisfies(_.isSomething, 1), ([a, p]) => P[a](...p), ([a, p]) => P[a]),
-      R.identity
-    )
+    R.cond([
+      [
+        isPaletteAction,
+        R.ifElse(R.propSatisfies(_.isSomething, 1), ([a, p]) => P[a](...p), ([a, p]) => P[a])
+      ],
+      [
+        isHelperAction,
+        R.ifElse(R.propSatisfies(_.isSomething, 1), ([a, p]) => _[a](...p), ([a, p]) => _[a])
+      ],
+      [R.T, R.identity]
+    ])
   )(action);
 }
 
@@ -90,6 +94,10 @@ export function decodeObjectAction(action) {
     let _params = [];
     if (_.isSomething(params)) _params = _.typeMatches('array', params) ? params : [params];
     return P[name](...R.map(evaluate, _params));
+  } else if (R.has(name, _)) {
+    let _params = [];
+    if (_.isSomething(params)) _params = _.typeMatches('array', params) ? params : [params];
+    return _[name](...R.map(evaluate, _params));
   } else {
     return R.identity;
   }

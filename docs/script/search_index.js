@@ -163,37 +163,37 @@ window.esdocSearchIndex = [
   ],
   [
     "",
-    "test-file/__tests__/decoder.test.js.html#lineNumber19",
+    "test-file/__tests__/decoder.test.js.html#lineNumber23",
     "Decodes actions correctly Decodes object actions correctly",
     "test"
   ],
   [
     "",
-    "test-file/__tests__/decoder.test.js.html#lineNumber51",
+    "test-file/__tests__/decoder.test.js.html#lineNumber55",
     "Decodes actions correctly Decodes object actions correctly decodes nested object actions",
     "test"
   ],
   [
     "",
-    "test-file/__tests__/decoder.test.js.html#lineNumber41",
+    "test-file/__tests__/decoder.test.js.html#lineNumber45",
     "Decodes actions correctly Decodes object actions correctly decodes object action with a string action as param",
     "test"
   ],
   [
     "",
-    "test-file/__tests__/decoder.test.js.html#lineNumber32",
+    "test-file/__tests__/decoder.test.js.html#lineNumber36",
     "Decodes actions correctly Decodes object actions correctly decodes object action with another object action as param",
     "test"
   ],
   [
     "",
-    "test-file/__tests__/decoder.test.js.html#lineNumber20",
+    "test-file/__tests__/decoder.test.js.html#lineNumber24",
     "Decodes actions correctly Decodes object actions correctly decodes simple object action with data only",
     "test"
   ],
   [
     "",
-    "test-file/__tests__/decoder.test.js.html#lineNumber24",
+    "test-file/__tests__/decoder.test.js.html#lineNumber28",
     "Decodes actions correctly Decodes object actions correctly decodes stringy action with extra params",
     "test"
   ],
@@ -205,19 +205,25 @@ window.esdocSearchIndex = [
   ],
   [
     "",
+    "test-file/__tests__/decoder.test.js.html#lineNumber10",
+    "Decodes actions correctly Decodes stringy actions correctly decodes helper action",
+    "test"
+  ],
+  [
+    "",
     "test-file/__tests__/decoder.test.js.html#lineNumber6",
     "Decodes actions correctly Decodes stringy actions correctly decodes stringy action",
     "test"
   ],
   [
     "",
-    "test-file/__tests__/decoder.test.js.html#lineNumber14",
+    "test-file/__tests__/decoder.test.js.html#lineNumber18",
     "Decodes actions correctly Decodes stringy actions correctly decodes stringy action with another action as param",
     "test"
   ],
   [
     "",
-    "test-file/__tests__/decoder.test.js.html#lineNumber10",
+    "test-file/__tests__/decoder.test.js.html#lineNumber14",
     "Decodes actions correctly Decodes stringy actions correctly decodes stringy action with extra params",
     "test"
   ],

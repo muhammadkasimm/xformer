@@ -71,6 +71,54 @@ import * as D from &apos;./decoder&apos;;
 import * as _ from &apos;./helpers&apos;;
 
 /**
+ * Returns true if the value under test is empty or nil.
+ *
+ * @param  {any} value
+ * @returns {boolean}
+ * @example
+ *        isNothing(undefined) //=&gt; true
+ *        isNothing(null) //=&gt; true
+ *        isNothing([]) //=&gt; true
+ *        isNothing({}) //=&gt; true
+ *        isNothing(&apos;&apos;) //=&gt; true
+ *        isNothing(&apos;Hello, world!&apos;) //=&gt; false
+ */
+export const isNothing = _.isNothing;
+
+/**
+ * Returns true if the 2 provided values are deeply equal.
+ *
+ * @param  {any} value
+ * @returns {boolean}
+ * @example
+ *        isEqualTo(&apos;Batman&apos;, &apos;Bruce Wayne&apos;) //=&gt; false
+ *        isEqualTo([1], [1]) //=&gt; true
+ */
+export const isEqualTo = R.equals;
+
+/**
+ * Returns true if the second value is less than the first value.
+ *
+ * @param  {any} value
+ * @returns {boolean}
+ * @example
+ *        isLessThanEqualTo(0, -2) //=&gt; true
+ *        isLessThanEqualTo(-4, -2) //=&gt; false
+ */
+export const isLessThanEqualTo = R.flip(R.lte);
+
+/**
+ * Returns true if the second value is greater than the first value.
+ *
+ * @param  {any} value
+ * @returns {boolean}
+ * @example
+ *        isGreaterThanEqualTo(0, -2) //=&gt; false
+ *        isGreaterThanEqualTo(-4, -2) //=&gt; true
+ */
+export const isGreaterThanEqualTo = R.flip(R.gte);
+
+/**
  * Returns `[x, y]`.
  *
  *
@@ -107,7 +155,7 @@ export const pickFrom = R.curry(_.pickFrom);
  */
 export const pickByRegex = R.curry((text, data) =&gt;
   R.ifElse(
-    R.always(_.isNothing(text)),
+    R.always(isNothing(text)),
     R.always({}),
     R.pickBy((v, k) =&gt; R.test(new RegExp(text), k))
   )(data)
@@ -122,7 +170,7 @@ const mergeWithOp = R.curry((xformer, data) =&gt;
   R.ifElse(
     _.typeMatches(&apos;array&apos;),
     R.pipe(
-      R.reject(_.isNothing),
+      R.reject(isNothing),
       R.reduce(R.mergeDeepWith(xformer), {})
     ),
     R.pipe(
@@ -459,63 +507,14 @@ export const takeTopPairsAndAddOthers = takeTopAndCombineOthers(
   R.__
 );
 
-// PREDICATES
-/**
- * Returns true if the value under test is empty or nil.
- *
- * @param  {any} value
- * @returns {boolean}
- * @example
- *        isNothing(undefined) //=&gt; true
- *        isNothing(null) //=&gt; true
- *        isNothing([]) //=&gt; true
- *        isNothing({}) //=&gt; true
- *        isNothing(&apos;&apos;) //=&gt; true
- *        isNothing(&apos;Hello, world!&apos;) //=&gt; false
- */
-export const isNothing = _.isNothing;
-
-/**
- * Returns true if the 2 provided values are deeply equal.
- *
- * @param  {any} value
- * @returns {boolean}
- * @example
- *        isEqualTo(&apos;Batman&apos;, &apos;Bruce Wayne&apos;) //=&gt; false
- *        isEqualTo([1], [1]) //=&gt; true
- */
-export const isEqualTo = R.equals;
-
-/**
- * Returns true if the second value is less than the first value.
- *
- * @param  {any} value
- * @returns {boolean}
- * @example
- *        isLessThanEqualTo(0, -2) //=&gt; true
- *        isLessThanEqualTo(-4, -2) //=&gt; false
- */
-export const isLessThanEqualTo = R.flip(R.lte);
-
-/**
- * Returns true if the second value is greater than the first value.
- *
- * @param  {any} value
- * @returns {boolean}
- * @example
- *        isGreaterThanEqualTo(0, -2) //=&gt; false
- *        isGreaterThanEqualTo(-4, -2) //=&gt; true
- */
-export const isGreaterThanEqualTo = R.flip(R.gte);
-
 /**
  * Find Max value.
  *
  * @param  {any} value
  * @returns {number}
  * @example
- *        getMax([1,2,3,4]) //=&gt; 4
- *        getMax({a:1,b:2,c:3}) //=&gt; 3
+ *        getMax([1, 2, 3, 4]) //=&gt; 4
+ *        getMax({ a: 1, b: 2, c: 3 }) //=&gt; 3
  */
 export const getMax = R.cond([
   [_.typeMatches(&apos;array&apos;), R.apply(Math.max)],

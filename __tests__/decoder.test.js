@@ -7,6 +7,10 @@ describe('Decodes actions correctly', () => {
       expect(D.decodeStringyAction('getAvg([1, 2, 3])')).toBe(2);
     });
 
+    it('decodes helper action', () => {
+      expect(D.decodeStringyAction('bePositive(-1)')).toBe(1);
+    });
+
     it('decodes stringy action with extra params', () => {
       expect(D.decodeStringyAction('getRate(2, [1, 2, 3])')).toEqual([0.5, 1, 1.5]);
     });
