@@ -418,7 +418,7 @@ export const cleanData = R.curry((predicates, data) => {
 });
 
 /**
- * Removes key from an object by applying the provided predicate functions on
+ * Removes values from an array or object by applying provided predicate on keys or indices.
  *
  * @param  {Array} predicates
  * @param  {Object} data
