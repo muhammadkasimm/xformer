@@ -6,6 +6,12 @@ window.esdocSearchIndex = [
     "variable"
   ],
   [
+    "@muhammadkasim/xformer/src/palette.js~cleandatabykeys",
+    "variable/index.html#static-variable-cleanDataByKeys",
+    "<span>cleanDataByKeys</span> <span class=\"search-result-import-path\">@muhammadkasim/xformer/src/palette.js</span>",
+    "variable"
+  ],
+  [
     "@muhammadkasim/xformer/src/palette.js~defaultall",
     "variable/index.html#static-variable-defaultAll",
     "<span>defaultAll</span> <span class=\"search-result-import-path\">@muhammadkasim/xformer/src/palette.js</span>",
@@ -153,6 +159,12 @@ window.esdocSearchIndex = [
     "@muhammadkasim/xformer/src/palette.js~taketoppairsandaddothers",
     "variable/index.html#static-variable-takeTopPairsAndAddOthers",
     "<span>takeTopPairsAndAddOthers</span> <span class=\"search-result-import-path\">@muhammadkasim/xformer/src/palette.js</span>",
+    "variable"
+  ],
+  [
+    "@muhammadkasim/xformer/src/palette.js~testregex",
+    "variable/index.html#static-variable-testRegex",
+    "<span>testRegex</span> <span class=\"search-result-import-path\">@muhammadkasim/xformer/src/palette.js</span>",
     "variable"
   ],
   [
@@ -367,6 +379,30 @@ window.esdocSearchIndex = [
   ],
   [
     "",
+    "test-file/__tests__/palette.test.js.html#lineNumber273",
+    "Test palette functions Cleans data based upon keys or indexes from object and list.",
+    "test"
+  ],
+  [
+    "",
+    "test-file/__tests__/palette.test.js.html#lineNumber274",
+    "Test palette functions Cleans data based upon keys or indexes from object and list. removes empty named keys.",
+    "test"
+  ],
+  [
+    "",
+    "test-file/__tests__/palette.test.js.html#lineNumber282",
+    "Test palette functions Cleans data based upon keys or indexes from object and list. removes specified indexes.",
+    "test"
+  ],
+  [
+    "",
+    "test-file/__tests__/palette.test.js.html#lineNumber277",
+    "Test palette functions Cleans data based upon keys or indexes from object and list. removes specified keys.",
+    "test"
+  ],
+  [
+    "",
     "test-file/__tests__/palette.test.js.html#lineNumber244",
     "Test palette functions Cleans data by passing each value in data through the provided predicates",
     "test"
@@ -415,19 +451,19 @@ window.esdocSearchIndex = [
   ],
   [
     "",
-    "test-file/__tests__/palette.test.js.html#lineNumber288",
+    "test-file/__tests__/palette.test.js.html#lineNumber307",
     "Test palette functions Get Max value from array or object",
     "test"
   ],
   [
     "",
-    "test-file/__tests__/palette.test.js.html#lineNumber289",
+    "test-file/__tests__/palette.test.js.html#lineNumber308",
     "Test palette functions Get Max value from array or object from a list of numbers, returns a max value",
     "test"
   ],
   [
     "",
-    "test-file/__tests__/palette.test.js.html#lineNumber293",
+    "test-file/__tests__/palette.test.js.html#lineNumber312",
     "Test palette functions Get Max value from array or object from an object returns a max value",
     "test"
   ],
@@ -673,19 +709,19 @@ window.esdocSearchIndex = [
   ],
   [
     "",
-    "test-file/__tests__/palette.test.js.html#lineNumber273",
+    "test-file/__tests__/palette.test.js.html#lineNumber292",
     "Test palette functions Takes top X items and combines others",
     "test"
   ],
   [
     "",
-    "test-file/__tests__/palette.test.js.html#lineNumber274",
+    "test-file/__tests__/palette.test.js.html#lineNumber293",
     "Test palette functions Takes top X items and combines others from a list of numbers, takes top X and combines others according to the provided xformer",
     "test"
   ],
   [
     "",
-    "test-file/__tests__/palette.test.js.html#lineNumber282",
+    "test-file/__tests__/palette.test.js.html#lineNumber301",
     "Test palette functions Takes top X items and combines others from a list of pairs, takes top X and combines others by adding",
     "test"
   ],

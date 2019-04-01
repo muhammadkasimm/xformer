@@ -33,6 +33,16 @@ export const isNothing = _.isNothing;
  *        isEqualTo([1], [1]) //=> true
  */
 export const isEqualTo = R.equals;
+/**
+ * Returns booleon based upon provided regex.
+ *
+ * @param  {any} value
+ * @returns {boolean}
+ * @example
+ *        testRegex('Batman', 'Bruce Wayne') //=> false
+ *        testRegex(/Batman/i, 'batman Wayne') //=> true
+ */
+export const testRegex = R.curry((text, value) => R.test(new RegExp(text), value));
 
 /**
  * Returns true if the second value is less than the first value.
@@ -402,6 +412,36 @@ export const cleanData = R.curry((predicates, data) => {
       _.typeMatches('object'),
       R.pickBy((v, k) =>
         R.and(_.isSomething(k), R.complement(R.anyPass(D.decodePipe(predicates)))(v))
+      )
+    ]
+  ])(data);
+});
+
+/**
+ * Removes values from an array or object by applying provided predicate on keys or indices.
+ *
+ * @param  {Array} predicates
+ * @param  {Object} data
+ * @returns {Object}
+ * @example
+ *        cleanDataByKeys(['isNothing'], {'a':1,'b':2,'':3})
+ *        //=> {a:1,b:2}
+ */
+export const cleanDataByKeys = R.curry((predicates, data) => {
+  return R.cond([
+    [
+      _.typeMatches('array'),
+      R.pipe(
+        R.pickBy((v, k) =>
+          R.and(_.isSomething(k), R.complement(R.anyPass(D.decodePipe(predicates)))(k))
+        ),
+        R.values
+      )
+    ],
+    [
+      _.typeMatches('object'),
+      R.pickBy((v, k) =>
+        R.and(_.isSomething(k), R.complement(R.anyPass(D.decodePipe(predicates)))(k))
       )
     ]
   ])(data);
