@@ -11,7 +11,7 @@ function Xform() {
   setContext({});
 
   return {
-    execute: (query, data, ctx = {}, dispatch) => {
+    execute: (query, data, ctx = {}, dispatch = undefined) => {
       setContext(ctx);
       return execute(query, data, dispatch);
     },

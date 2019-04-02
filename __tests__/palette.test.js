@@ -47,8 +47,8 @@ describe('Test palette functions', () => {
     });
   });
 
-  describe('Merges list of Objects by adding values of the same key', () => {
-    it('merges list of Objects', () => {
+  describe('Merges list of objects by adding values of the same key', () => {
+    it('merges list of objects', () => {
       expect(_.mergeWithAdd([{ a: 1 }, { a: 2 }, { a: 3 }])).toEqual({ a: 6 });
     });
 
@@ -61,17 +61,45 @@ describe('Test palette functions', () => {
     });
   });
 
-  describe('Merges list of Objects by subtracting values of the same key', () => {
-    it('merges list of Objects', () => {
-      expect(_.mergeWithSubtract([{ a: 1 }, { a: 2 }, { a: 3 }])).toEqual({ a: 2 });
+  describe('Merges list of objects by subtracting values of the same key', () => {
+    it('merges list of objects', () => {
+      expect(_.mergeWithSubtract([{ a: 1 }, { a: 2 }, { a: 3 }])).toEqual({ a: -4 });
     });
 
     it('merges values of an Object that are of Object type', () => {
-      expect(_.mergeWithSubtract({ a: { x: 1 }, b: { x: 2 }, c: [1, 2, 3] })).toEqual({ x: 1 });
+      expect(_.mergeWithSubtract({ a: { x: 1 }, b: { x: 2 }, c: [1, 2, 3] })).toEqual({ x: -1 });
     });
 
     it('empty Object when none of the values in provied Object are of Object type', () => {
       expect(_.mergeWithSubtract({ a: [1, 2], b: undefined, c: 'hello' })).toEqual({});
+    });
+  });
+
+  describe('Merges list of objects by applying max on values of the same key', () => {
+    it('merges list of objects', () => {
+      expect(_.mergeWithMax([{ a: 1 }, { a: 2 }, { a: 3 }])).toEqual({ a: 3 });
+    });
+
+    it('merges values of an Object that are of Object type', () => {
+      expect(_.mergeWithMax({ a: { x: 1 }, b: { x: 2 }, c: [1, 2, 3] })).toEqual({ x: 2 });
+    });
+
+    it('empty Object when none of the values in provied Object are of Object type', () => {
+      expect(_.mergeWithMax({ a: [1, 2], b: undefined, c: 'hello' })).toEqual({});
+    });
+  });
+
+  describe('Merges list of objects by applying min on values of the same key', () => {
+    it('merges list of objects', () => {
+      expect(_.mergeWithMin([{ a: 1 }, { a: 2 }, { a: 3 }])).toEqual({ a: 1 });
+    });
+
+    it('merges values of an Object that are of Object type', () => {
+      expect(_.mergeWithMin({ a: { x: 1 }, b: { x: 2 }, c: [1, 2, 3] })).toEqual({ x: 1 });
+    });
+
+    it('empty Object when none of the values in provied Object are of Object type', () => {
+      expect(_.mergeWithMin({ a: [1, 2], b: undefined, c: 'hello' })).toEqual({});
     });
   });
 
@@ -252,7 +280,7 @@ describe('Test palette functions', () => {
       ).toEqual([1, 2, 3]);
     });
 
-    it('removes values according predicates from an object', () => {
+    it('removes values according to the provided predicates from an object', () => {
       expect(
         _.cleanData(['isNothing', 'isLessThanEqualTo(0)'], {
           '': 82634,
