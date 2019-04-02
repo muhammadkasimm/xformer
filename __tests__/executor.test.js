@@ -103,7 +103,7 @@ describe('Parses xFormer queries', () => {
       }
     );
 
-    expect(parsed['1'].result).toEqual({ abc: 1, xyz: 1 });
+    expect(parsed['1'].result).toEqual({ abc: -1, xyz: -1 });
   });
 
   it('parses stringy action with external dependencies', () => {

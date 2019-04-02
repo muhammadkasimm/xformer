@@ -6,7 +6,19 @@
 import * as R from 'ramda';
 import * as E from './executor';
 import * as D from './decoder';
-import * as _ from './helpers';
+import * as H from './helpers';
+
+/**
+ * A special placeholder value used to specify "gaps" within functions, allowing partial application of any combination of arguments.
+ *
+ * @example
+ *        fn(1, 2, 3)
+ *        fn(_, 2, 3)(1)
+ *        fn(1, _, 3)(2)
+ *        fn(_, 2, _)(1, 3)
+ *        fn(_, 2, _)(1)(3)
+ */
+export const _ = R.__;
 
 /**
  * Returns true if the value under test is empty or nil.
@@ -17,22 +29,23 @@ import * as _ from './helpers';
  *        isNothing(undefined) //=> true
  *        isNothing(null) //=> true
  *        isNothing([]) //=> true
- *        isNothing({}) //=> true
  *        isNothing('') //=> true
+ *        isNothing({}) //=> true
  *        isNothing('Hello, world!') //=> false
  */
-export const isNothing = _.isNothing;
+export const isNothing = H.isNothing;
 
 /**
  * Returns true if the 2 provided values are deeply equal.
  *
- * @param  {any} value
+ * @param  {any} l
+ * @param  {any} r
  * @returns {boolean}
  * @example
  *        isEqualTo('Batman', 'Bruce Wayne') //=> false
  *        isEqualTo([1], [1]) //=> true
  */
-export const isEqualTo = R.equals;
+export const isEqualTo = R.memoizeWith((x, y) => R.toString([x, y]), R.equals);
 /**
  * Returns booleon based upon provided regex.
  *
@@ -67,6 +80,87 @@ export const isLessThanEqualTo = R.flip(R.lte);
 export const isGreaterThanEqualTo = R.flip(R.gte);
 
 /**
+ * @param  {number} left
+ * @param  {number} right
+ * @returns {number}
+ * @example
+ *         add(2, 2) //=> 4
+ *         add(2, '2') //=> 4
+ *         add(2, null) //=> 2
+ *         add(undefined, null) //=> 0
+ */
+export const add = H.add;
+
+/**
+ * @param  {number} left
+ * @param  {number} right
+ * @returns {number}
+ * @example
+ *         subtract(4, 2) //=> 2
+ *         subtract(4, '2') //=> 2
+ *         subtract(4, null) //=> 4
+ *         subtract(undefined, null) //=> 0
+ */
+export const subtract = H.subtract;
+
+/**
+ * @param  {number} left
+ * @param  {number} right
+ * @returns {number}
+ * @example
+ *         multiply(4, 2) //=> 8
+ *         multiply(4, '2') //=> 8
+ *         multiply(4, null) //=> 0
+ *         multiply(undefined, null) //=> 0
+ */
+export const multiply = H.multiply;
+
+/**
+ * @param  {number} left
+ * @param  {number} right
+ * @returns {number}
+ * @example
+ *         divide(4, 2) //=> 2
+ *         divide(4, '2') //=> 2
+ *         divide(4, null) //=> 4
+ *         divide(undefined, null) //=> 0
+ */
+export const divide = H.divide;
+
+/**
+ * @param  {number} left
+ * @param  {number} right
+ * @returns {number}
+ * @example
+ *         max(4, 2) //=> 4
+ *         max(4, '2') //=> 4
+ *         max(4, null) //=> 4
+ *         max(undefined, null) //=> 0
+ */
+export const max = H.max;
+
+/**
+ * @param  {number} left
+ * @param  {number} right
+ * @returns {number}
+ * @example
+ *         min(4, 2) //=> 2
+ *         min(4, '2') //=> 2
+ *         min(4, null) //=> 0
+ *         min(undefined, null) //=> 0
+ */
+export const min = H.min;
+
+/**
+ * @param  {number} v
+ * @returns {number}
+ * @example
+ *         absolute(2) //=> 2
+ *         absolute(-2) //=> 2
+ */
+export const absolute = R.curry(v => Math.abs(v));
+
+/**
  * Returns `[x, y]`.
  *
  *
@@ -89,7 +183,7 @@ export const makePair = R.curry((x, y) => [x, y]);
  *      pickFrom(['a','b','c'], {'a': {'b': {'c': 20}}}) //=> 20
  *      pickFrom(['a','*','x'], {'a': {'b': {'x': 20}, 'c': {'x': 40}}}) //=> [20, 40]
  */
-export const pickFrom = R.curry(_.pickFrom);
+export const pickFrom = R.memoizeWith((x, y) => R.toString([x, y]), R.curry(H.pickFrom));
 
 /**
  * Filters key-value pairs from a JSON object when key matches the specified regular expression (or string).
@@ -101,12 +195,15 @@ export const pickFrom = R.curry(_.pickFrom);
  * @example
  *      pickByRegex('abc', {'abcd': {'b': {'c': 20}}, 'efg': {'h': {'i': 20}}) //=> {'b': {'c': 20}}
  */
-export const pickByRegex = R.curry((text, data) =>
-  R.ifElse(
-    R.always(isNothing(text)),
-    R.always({}),
-    R.pickBy((v, k) => R.test(new RegExp(text), k))
-  )(data)
+export const pickByRegex = R.memoizeWith(
+  (x, y) => R.toString([x, y]),
+  R.curry((text, data) =>
+    R.ifElse(
+      R.always(isNothing(text)),
+      R.always({}),
+      R.pickBy((v, k) => R.test(new RegExp(text), k))
+    )(data)
+  )
 );
 
 /**
@@ -114,19 +211,22 @@ export const pickByRegex = R.curry((text, data) =>
  * @param  {Object|Array<Object>}  data
  * @returns {Object}
  */
-const mergeWithOp = R.curry((xformer, data) =>
-  R.ifElse(
-    _.typeMatches('array'),
-    R.pipe(
-      R.reject(isNothing),
-      R.reduce(R.mergeDeepWith(xformer), {})
-    ),
-    R.pipe(
-      R.pickBy(_.typeMatches('object')),
-      R.values,
-      R.reduce(R.mergeDeepWith(xformer), {})
-    )
-  )(data)
+export const mergeWithOp = R.memoizeWith(
+  (x, y) => R.toString([x, y]),
+  R.curry((xformer, data) =>
+    R.ifElse(
+      H.typeMatches('array'),
+      R.pipe(
+        R.reject(isNothing),
+        R.reduce(R.mergeDeepWith(D.decodeAction(xformer)), {})
+      ),
+      R.pipe(
+        R.pickBy(H.typeMatches('object')),
+        R.values,
+        R.reduce(R.mergeDeepWith(D.decodeAction(xformer)), {})
+      )
+    )(data)
+  )
 );
 
 /**
@@ -138,7 +238,7 @@ const mergeWithOp = R.curry((xformer, data) =>
  * @example
  *      mergeWithAdd([{ a: 1, b: 5 }, { a: 2 }, { a: 3 }]) //=> { a: 6, b: 5 }
  */
-export const mergeWithAdd = mergeWithOp(_.sum);
+export const mergeWithAdd = mergeWithOp('add');
 
 /**
  * Merges a list of JSON objects into a single JSON object by subtracting values having the same key; treats a non-number value as zero.
@@ -147,9 +247,32 @@ export const mergeWithAdd = mergeWithOp(_.sum);
  * @param  {Array<Object>} data
  * @returns {Object}
  * @example
- *      mergeWithAdd([{ a: 1, b: 5 }, { a: 2 }, { a: 3 }]) //=> { a: 2, b: 5 }
+ *      mergeWithSubtract([{ a: 1, b: 5 }, { a: 2 }, { a: 3 }]) //=> { a: 2, b: 5 }
  */
-export const mergeWithSubtract = mergeWithOp(_.subtract);
+export const mergeWithSubtract = mergeWithOp('subtract');
+
+/**
+ * Merges a list of JSON objects into a single JSON object by applying max to values having the same key; treats a non-number value as zero.
+ *
+ * @func
+ * @param  {Array<Object>} data
+ * @returns {Object}
+ * @example
+ *      mergeWithMax([{ a: 1, b: 5 }, { a: 2 }, { a: 3 }]) //=> { a: 3, b: 5 }
+ */
+export const mergeWithMax = mergeWithOp('max');
+
+/**
+ * Merges a list of JSON objects into a single JSON object by applying min to values having the same key; treats a non-number value as zero.
+ *
+ * @func
+ * @param  {Array<Object>} data
+ * @returns {Object}
+ * @example
+ *      mergeWithMin([{ a: 2, b: 5 }, { a: 1 }, { a: 3 }]) //=> { a: 1, b: 5 }
+ */
+export const mergeWithMin = mergeWithOp('min');
+
 /**
  * Merges a list of JSON objects into a single JSON object by subtracting values having the same key; treats a non-number value as zero.
  *
@@ -157,9 +280,9 @@ export const mergeWithSubtract = mergeWithOp(_.subtract);
  * @param  {Array<Object>} data
  * @returns {Object}
  * @example
- *      mergeWithAdd([{ a: 1, b: 5 }, { a: 2 }, { a: 3 }]) //=> { a: 2, b: 5 }
+ *      mergeAll([{ a: 1, b: 5 }, { a: 2 }, { a: 3 }]) //=> { a: 2, b: 5 }
  */
-export const mergeAll = mergeWithOp(_.keepLatest);
+export const mergeAll = mergeWithOp(H.keepLatest);
 
 /**
  * Applies iterative subtraction over consecutive values in a JSON object such that T[i] = T[i] - T[i-1]; first value is ignored in the result.
@@ -170,36 +293,39 @@ export const mergeAll = mergeWithOp(_.keepLatest);
  * @example
  *      differential({ a: 1, b: 2, c: 3 }) //=> { b: 1, c: 1 }
  */
-export const differential = R.curry(data => {
-  const calculator = R.pipe(
-    R.toPairs,
-    R.reject(x => _.isJunk(x[1])),
-    R.sortBy(R.prop(0)),
-    R.aperture(2),
-    R.map(([prev, next]) => [next[0], R.subtract(...R.pluck(1, [next, prev]))]),
-    R.map(
-      R.over(
-        R.lensIndex(1),
-        R.pipe(
-          _.defaultToZero,
-          _.bePositive
+export const differential = R.memoizeWith(
+  R.toString,
+  R.curry(data => {
+    const calculator = R.pipe(
+      R.toPairs,
+      R.reject(x => H.isJunk(x[1])),
+      R.sortBy(R.prop(0)),
+      R.aperture(2),
+      R.map(([prev, next]) => [next[0], R.subtract(...R.pluck(1, [next, prev]))]),
+      R.map(
+        R.over(
+          R.lensIndex(1),
+          R.pipe(
+            H.defaultToZero,
+            H.bePositive
+          )
         )
-      )
-    ),
-    R.fromPairs
-  );
+      ),
+      R.fromPairs
+    );
 
-  return R.cond([
-    [_.typeMatches('object'), calculator],
-    [
-      _.typeMatches('array'),
-      R.pipe(
-        calculator,
-        R.values
-      )
-    ]
-  ])(data);
-});
+    return R.cond([
+      [H.typeMatches('object'), calculator],
+      [
+        H.typeMatches('array'),
+        R.pipe(
+          calculator,
+          R.values
+        )
+      ]
+    ])(data);
+  })
+);
 
 /**
  * Recieves an array or object, adds all the values and return a single number. All non-number values
@@ -212,19 +338,22 @@ export const differential = R.curry(data => {
  *      sumAll([1, 2, 3]) //=> 6
  *      sumAll({a: 1, b: 2, c: 3}) //=> 6
  */
-export const sumAll = R.cond([
-  [
-    _.typeMatches('object'),
-    R.pipe(
-      R.values,
-      _.sumList
-    )
-  ],
-  [_.typeMatches('array'), _.sumList],
-  [_.typeMatches('number'), _.defaultToZero],
-  [_.typeMatches('string'), _.defaultToZero],
-  [R.T, R.always(0)]
-]);
+export const sumAll = R.memoizeWith(
+  R.toString,
+  R.cond([
+    [
+      H.typeMatches('object'),
+      R.pipe(
+        R.values,
+        H.sumList
+      )
+    ],
+    [H.typeMatches('array'), H.sumList],
+    [H.typeMatches('number'), H.defaultToZero],
+    [H.typeMatches('string'), H.defaultToZero],
+    [R.T, R.always(0)]
+  ])
+);
 
 /**
  * Recieves an array or object and replaces each junky value with the provided fallback value.
@@ -239,8 +368,8 @@ export const sumAll = R.cond([
  */
 export const defaultAll = R.curry((value, data) => {
   return R.cond([
-    [R.anyPass([_.typeMatches('array'), _.typeMatches('object')]), R.map(_.defaultTo(value))],
-    [R.T, _.defaultTo(value)]
+    [R.anyPass([H.typeMatches('array'), H.typeMatches('object')]), R.map(H.defaultTo(value))],
+    [R.T, H.defaultTo(value)]
   ])(data);
 });
 
@@ -254,31 +383,34 @@ export const defaultAll = R.curry((value, data) => {
  *      getUsedMemory([0.1, 0.2, 0.3]) //=> [90, 80, 70]
  */
 export const getUsedMemory = R.cond([
-  [_.typeMatches('array'), R.map(_.getUsedMemoryForSingle)],
-  [_.typeMatches('object'), R.map(_.getUsedMemoryForSingle)],
-  [R.T, _.getUsedMemoryForSingle]
+  [H.typeMatches('array'), R.map(H.getUsedMemoryForSingle)],
+  [H.typeMatches('object'), R.map(H.getUsedMemoryForSingle)],
+  [R.T, H.getUsedMemoryForSingle]
 ]);
 
 /**
  * Calculates average of values in a list or JSON object; ignores values that are not numbers.
  *
  * @func
- * @param  {any} input
+ * @param  {any} data
  * @returns {number}
  * @example
  *      getAvg([1, 2, 3]) //=> 2
  */
-export const getAvg = R.cond([
-  [_.typeMatches('array'), _.getAverageForList],
-  [
-    _.typeMatches('object'),
-    R.pipe(
-      R.values,
-      _.getAverageForList
-    )
-  ],
-  [R.T, _.defaultToZero]
-]);
+export const getAvg = R.memoizeWith(
+  R.toString,
+  R.cond([
+    [H.typeMatches('array'), H.getAverageForList],
+    [
+      H.typeMatches('object'),
+      R.pipe(
+        R.values,
+        H.getAverageForList
+      )
+    ],
+    [R.T, H.defaultToZero]
+  ])
+);
 
 /**
  * Execute a list of pipelines on provided data. A pipeline is an array of action descriptions.
@@ -298,22 +430,33 @@ export const getAvg = R.cond([
  *
  *      => [2, 22]
  */
-export const runAll = R.curry((pipes, data) => {
-  return R.juxt(D.decodePipe(pipes))(data);
-});
+export const runAll = R.memoizeWith(
+  (x, y) => R.toString([x, y]),
+  R.curry((pipes, data) => {
+    return R.juxt(D.decodePipe(pipes))(data);
+  })
+);
 
 /**
+ * Divides values in a list or JSON object by the provided denominator.
+ *
  * @param  {Array} pipes
  * @returns {Array}
  * @example
  *       getRate(10, {'a': 20, 'b': 30}) // => {'a': 2, 'b': 3}
  */
-export const getRate = R.curry((denominator, data) => {
-  return R.cond([
-    [R.anyPass([_.typeMatches('array'), _.typeMatches('object')]), R.map(_.divideBy(denominator))],
-    [R.T, _.divideBy(denominator)]
-  ])(data);
-});
+export const getRate = R.memoizeWith(
+  (x, y) => R.toString([x, y]),
+  R.curry((denominator, data) => {
+    return R.cond([
+      [
+        R.anyPass([H.typeMatches('array'), H.typeMatches('object')]),
+        R.map(H.divide(R.__, denominator))
+      ],
+      [R.T, H.divide(R.__, denominator)]
+    ])(data);
+  })
+);
 
 /**
  * Takes an action and data as input and returns the result of performing that action on each value in the data.
@@ -322,7 +465,7 @@ export const getRate = R.curry((denominator, data) => {
  * @param  {Array|Object} data
  * @returns {Array|Object}
  * @example
- *       map(['sumAll', 'getRate(100)'], [[2, 4], [4, 6]])
+ *       map(['sumAll', 'getRate(100)'], [[2, 4], [4, 6]]) //=> [0.06, 0.1]
  */
 export const map = R.curry((action, data) => {
   return R.map(D.decodeAction(action), data);
@@ -336,30 +479,37 @@ export const map = R.curry((action, data) => {
  *
  * @param  {string} type
  * @param  {string|number} key
- * @returns {data}
+ * @param  {any} data
+ * @returns {_data}
  * @example
  *       map(['sumAll', 'getRate(100)'], [[2, 4], [4, 6]])
  */
-const _sort = R.curry((type, key, data) => {
-  return R.cond([
-    [
-      _.typeMatches('array'),
-      R.cond([
-        [R.always(_.typeMatches('object', R.head(data))), R.sort(R[type](R.prop(key)))],
-        [R.always(_.typeMatches('array', R.head(data))), R.sort(R[type](R.prop(key)))],
-        [R.always(_.typeMatches('number', R.head(data))), R.sort(type === 'ascend' ? R.gt : R.lt)],
-        [R.always(_.typeMatches('string', R.head(data))), R.sort(type === 'ascend' ? R.gt : R.lt)]
-      ])
-    ],
-    [
-      _.typeMatches('object'),
-      R.pipe(
-        R.toPairs,
-        R.sort(R[type](R.prop(R.clamp(0, 1, _.defaultToZero(key)))))
-      )
-    ]
-  ])(data);
-});
+const _sort = R.memoizeWith(
+  (x, y, z) => R.toString([x, y, z]),
+  R.curry((type, key, data) => {
+    return R.cond([
+      [
+        H.typeMatches('array'),
+        R.cond([
+          [R.always(H.typeMatches('object', R.head(data))), R.sort(R[type](R.prop(key)))],
+          [R.always(H.typeMatches('array', R.head(data))), R.sort(R[type](R.prop(key)))],
+          [
+            R.always(H.typeMatches('number', R.head(data))),
+            R.sort(type === 'ascend' ? R.gt : R.lt)
+          ],
+          [R.always(H.typeMatches('string', R.head(data))), R.sort(type === 'ascend' ? R.gt : R.lt)]
+        ])
+      ],
+      [
+        H.typeMatches('object'),
+        R.pipe(
+          R.toPairs,
+          R.sort(R[type](R.prop(R.clamp(0, 1, H.defaultToZero(key)))))
+        )
+      ]
+    ])(data);
+  })
+);
 
 /**
  * Sorts an array or object in ascending order. When data is an array of objects or arrays, key
@@ -405,17 +555,20 @@ export const sortDescending = _sort('descend');
  *        cleanData(['isNothing'], [null, 1, 2, undefined, 3])
  *        //=> [1, 2, 3]
  */
-export const cleanData = R.curry((predicates, data) => {
-  return R.cond([
-    [_.typeMatches('array'), R.reject(R.anyPass(D.decodePipe(predicates)))],
-    [
-      _.typeMatches('object'),
-      R.pickBy((v, k) =>
-        R.and(_.isSomething(k), R.complement(R.anyPass(D.decodePipe(predicates)))(v))
-      )
-    ]
-  ])(data);
-});
+export const cleanData = R.memoizeWith(
+  (x, y) => R.toString([x, y]),
+  R.curry((predicates, data) => {
+    return R.cond([
+      [H.typeMatches('array'), R.reject(R.anyPass(D.decodePipe(predicates)))],
+      [
+        H.typeMatches('object'),
+        R.pickBy((v, k) =>
+          R.and(H.isSomething(k), R.complement(R.anyPass(D.decodePipe(predicates)))(v))
+        )
+      ]
+    ])(data);
+  })
+);
 
 /**
  * Removes values from an array or object by applying provided predicate on keys or indices.
@@ -427,25 +580,28 @@ export const cleanData = R.curry((predicates, data) => {
  *        cleanDataByKeys(['isNothing'], {'a':1,'b':2,'':3})
  *        //=> {a:1,b:2}
  */
-export const cleanDataByKeys = R.curry((predicates, data) => {
-  return R.cond([
-    [
-      _.typeMatches('array'),
-      R.pipe(
+export const cleanDataByKeys = R.memoizeWith(
+  (x, y) => R.toString([x, y]),
+  R.curry((predicates, data) => {
+    return R.cond([
+      [
+        H.typeMatches('array'),
+        R.pipe(
+          R.pickBy((v, k) =>
+            R.and(H.isSomething(k), R.complement(R.anyPass(D.decodePipe(predicates)))(k))
+          ),
+          R.values
+        )
+      ],
+      [
+        H.typeMatches('object'),
         R.pickBy((v, k) =>
-          R.and(_.isSomething(k), R.complement(R.anyPass(D.decodePipe(predicates)))(k))
-        ),
-        R.values
-      )
-    ],
-    [
-      _.typeMatches('object'),
-      R.pickBy((v, k) =>
-        R.and(_.isSomething(k), R.complement(R.anyPass(D.decodePipe(predicates)))(k))
-      )
-    ]
-  ])(data);
-});
+          R.and(H.isSomething(k), R.complement(R.anyPass(D.decodePipe(predicates)))(k))
+        )
+      ]
+    ])(data);
+  })
+);
 
 /**
  * Takes top `x` items from a list and combines remaining by applying provided xformer.
@@ -460,12 +616,15 @@ export const cleanDataByKeys = R.curry((predicates, data) => {
  *        //=> [2, 3, 6]
  *
  */
-export const takeTopAndCombineOthers = R.curry((x, xformer, data) => {
-  return R.pipe(
-    R.splitAt(x),
-    ([topX, others]) => [...topX, D.decodeAction(xformer)(others)]
-  )(data);
-});
+export const takeTopAndCombineOthers = R.memoizeWith(
+  (x, y, z) => R.toString([x, y, z]),
+  R.curry((x, xformer, data) => {
+    return R.pipe(
+      R.splitAt(x),
+      ([topX, others]) => [...topX, D.decodeAction(xformer)(others)]
+    )(data);
+  })
+);
 
 /**
  * Takes top `x` pairs from a list of pairs and combines remaining pairs by adding values
@@ -495,9 +654,9 @@ export const takeTopPairsAndAddOthers = takeTopAndCombineOthers(
  *        getMax({ a: 1, b: 2, c: 3 }) //=> 3
  */
 export const getMax = R.cond([
-  [_.typeMatches('array'), R.apply(Math.max)],
+  [H.typeMatches('array'), R.apply(Math.max)],
   [
-    _.typeMatches('object'),
+    H.typeMatches('object'),
     R.pipe(
       R.values,
       R.apply(Math.max)
