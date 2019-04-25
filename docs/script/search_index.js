@@ -78,6 +78,12 @@ window.esdocSearchIndex = [
     "variable"
   ],
   [
+    "@muhammadkasim/xformer/src/palette.js~identity",
+    "variable/index.html#static-variable-identity",
+    "<span>identity</span> <span class=\"search-result-import-path\">@muhammadkasim/xformer/src/palette.js</span>",
+    "variable"
+  ],
+  [
     "@muhammadkasim/xformer/src/palette.js~isequalto",
     "variable/index.html#static-variable-isEqualTo",
     "<span>isEqualTo</span> <span class=\"search-result-import-path\">@muhammadkasim/xformer/src/palette.js</span>",

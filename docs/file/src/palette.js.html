@@ -43,6 +43,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-getMax">getMax</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-getRate">getRate</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-getUsedMemory">getUsedMemory</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-identity">identity</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-isEqualTo">isEqualTo</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-isGreaterThanEqualTo">isGreaterThanEqualTo</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-isLessThanEqualTo">isLessThanEqualTo</a></span></span></li>
@@ -153,6 +154,11 @@ export const isLessThanEqualTo = R.flip(R.lte);
  *        isGreaterThanEqualTo(-4, -2) //=&gt; true
  */
 export const isGreaterThanEqualTo = R.flip(R.gte);
+
+/**
+ * A function that returns the same value it was passed.
+ */
+export const identity = R.identity;
 
 /**
  * @param  {number} left

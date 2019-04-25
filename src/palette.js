@@ -80,6 +80,11 @@ export const isLessThanEqualTo = R.flip(R.lte);
 export const isGreaterThanEqualTo = R.flip(R.gte);
 
 /**
+ * A function that returns the same value it was passed.
+ */
+export const identity = R.identity;
+
+/**
  * @param  {number} left
  * @param  {number} right
  * @returns {number}

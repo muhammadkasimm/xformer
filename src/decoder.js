@@ -76,17 +76,21 @@ export const decodeStringyAction = R.curry(action => {
 // with the parser.
 export const decodeObjectAction = R.curry(action => {
   const evaluateParams = R.map(evaluate);
+  const params = R.pipe(
+    R.propOr([], 'params'),
+    R.when(R.complement(H.typeMatches('array')), p => [p])
+  )(action);
 
   return R.cond([
     [
       R.propSatisfies(R.has(R.__, P), 'name'),
-      ({ name, params = [] }) => {
+      ({ name }) => {
         return H.isSomething(params) ? P[name](...evaluateParams(params)) : P[name];
       }
     ],
     [
       R.allPass([R.has('fn'), R.propSatisfies(H.typeMatches('function'), 'fn')]),
-      ({ name, fn, params = [] }) => (H.isSomething(params) ? fn(...evaluateParams(params)) : fn)
+      ({ name, fn }) => (H.isSomething(params) ? fn(...evaluateParams(params)) : fn)
     ],
     [R.T, R.identity]
   ])(action);
