@@ -332,6 +332,7 @@ describe('Test palette functions', () => {
       ).toEqual([['abs', 2], ['fat', 3], ['Others', 6]]);
     });
   });
+
   describe('Get Max value from array or object', () => {
     it('from a list of numbers, returns a max value', () => {
       expect(_.getMax([2, 3, 5, 2, 3])).toEqual(5);
@@ -339,6 +340,22 @@ describe('Test palette functions', () => {
 
     it('from an object returns a max value', () => {
       expect(_.getMax({ a: 2, b: 3, c: 5, d: 2, e: 3 })).toEqual(5);
+    });
+  });
+
+  describe('Check if any conditions match on data', () => {
+    it('checks against a single predicate', () => {
+      expect(_.anyPass([['sumAll', 'isEqualTo(0)']], { a: -1, b: 2, c: -1 })).toEqual(true);
+    });
+
+    it('checks against multiple predicates', () => {
+      expect(
+        _.anyPass([['sumAll', 'isEqualTo(0)'], 'any("isLessThan(0)")'], {
+          a: -1,
+          b: 2,
+          c: 2
+        })
+      ).toEqual(true);
     });
   });
 });

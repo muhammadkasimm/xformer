@@ -18,6 +18,30 @@ window.esdocSearchIndex = [
     "variable"
   ],
   [
+    "@muhammadkasim/xformer/src/palette.js~all",
+    "variable/index.html#static-variable-all",
+    "<span>all</span> <span class=\"search-result-import-path\">@muhammadkasim/xformer/src/palette.js</span>",
+    "variable"
+  ],
+  [
+    "@muhammadkasim/xformer/src/palette.js~allpass",
+    "variable/index.html#static-variable-allPass",
+    "<span>allPass</span> <span class=\"search-result-import-path\">@muhammadkasim/xformer/src/palette.js</span>",
+    "variable"
+  ],
+  [
+    "@muhammadkasim/xformer/src/palette.js~any",
+    "variable/index.html#static-variable-any",
+    "<span>any</span> <span class=\"search-result-import-path\">@muhammadkasim/xformer/src/palette.js</span>",
+    "variable"
+  ],
+  [
+    "@muhammadkasim/xformer/src/palette.js~anypass",
+    "variable/index.html#static-variable-anyPass",
+    "<span>anyPass</span> <span class=\"search-result-import-path\">@muhammadkasim/xformer/src/palette.js</span>",
+    "variable"
+  ],
+  [
     "@muhammadkasim/xformer/src/palette.js~cleandata",
     "variable/index.html#static-variable-cleanData",
     "<span>cleanData</span> <span class=\"search-result-import-path\">@muhammadkasim/xformer/src/palette.js</span>",
@@ -90,9 +114,21 @@ window.esdocSearchIndex = [
     "variable"
   ],
   [
+    "@muhammadkasim/xformer/src/palette.js~isgreaterthan",
+    "variable/index.html#static-variable-isGreaterThan",
+    "<span>isGreaterThan</span> <span class=\"search-result-import-path\">@muhammadkasim/xformer/src/palette.js</span>",
+    "variable"
+  ],
+  [
     "@muhammadkasim/xformer/src/palette.js~isgreaterthanequalto",
     "variable/index.html#static-variable-isGreaterThanEqualTo",
     "<span>isGreaterThanEqualTo</span> <span class=\"search-result-import-path\">@muhammadkasim/xformer/src/palette.js</span>",
+    "variable"
+  ],
+  [
+    "@muhammadkasim/xformer/src/palette.js~islessthan",
+    "variable/index.html#static-variable-isLessThan",
+    "<span>isLessThan</span> <span class=\"search-result-import-path\">@muhammadkasim/xformer/src/palette.js</span>",
     "variable"
   ],
   [
@@ -553,6 +589,24 @@ window.esdocSearchIndex = [
   ],
   [
     "",
+    "test-file/__tests__/palette.test.js.html#lineNumber346",
+    "Test palette functions Check if any conditions match on data",
+    "test"
+  ],
+  [
+    "",
+    "test-file/__tests__/palette.test.js.html#lineNumber347",
+    "Test palette functions Check if any conditions match on data checks against a single predicate",
+    "test"
+  ],
+  [
+    "",
+    "test-file/__tests__/palette.test.js.html#lineNumber351",
+    "Test palette functions Check if any conditions match on data checks against multiple predicates",
+    "test"
+  ],
+  [
+    "",
     "test-file/__tests__/palette.test.js.html#lineNumber301",
     "Test palette functions Cleans data based upon keys or indexes from object and list.",
     "test"
@@ -625,19 +679,19 @@ window.esdocSearchIndex = [
   ],
   [
     "",
-    "test-file/__tests__/palette.test.js.html#lineNumber335",
+    "test-file/__tests__/palette.test.js.html#lineNumber336",
     "Test palette functions Get Max value from array or object",
     "test"
   ],
   [
     "",
-    "test-file/__tests__/palette.test.js.html#lineNumber336",
+    "test-file/__tests__/palette.test.js.html#lineNumber337",
     "Test palette functions Get Max value from array or object from a list of numbers, returns a max value",
     "test"
   ],
   [
     "",
-    "test-file/__tests__/palette.test.js.html#lineNumber340",
+    "test-file/__tests__/palette.test.js.html#lineNumber341",
     "Test palette functions Get Max value from array or object from an object returns a max value",
     "test"
   ],
