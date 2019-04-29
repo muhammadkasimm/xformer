@@ -440,6 +440,22 @@ describe(&apos;Test palette functions&apos;, () =&gt; {
       ).toEqual(true);
     });
   });
+
+  describe(&apos;Runs multiple actions using runAll&apos;, () =&gt; {
+    it(&apos;runs stringy actions on list&apos;, () =&gt; {
+      expect(_.runAll([&apos;identity&apos;, &apos;any(&quot;isLessThan(0)&quot;)&apos;])([1, 2, 3, -1])).toEqual([
+        [1, 2, 3, -1],
+        true
+      ]);
+    });
+
+    it(&apos;runs stringy actions on object&apos;, () =&gt; {
+      expect(_.runAll([&apos;identity&apos;, &apos;any(&quot;isLessThan(0)&quot;)&apos;])({ a: 1, b: 2, c: 3, d: -1 })).toEqual([
+        { a: 1, b: 2, c: 3, d: -1 },
+        true
+      ]);
+    });
+  });
 });
 </code></pre>
 

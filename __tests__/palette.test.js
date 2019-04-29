@@ -358,4 +358,20 @@ describe('Test palette functions', () => {
       ).toEqual(true);
     });
   });
+
+  describe('Runs multiple actions using runAll', () => {
+    it('runs stringy actions on list', () => {
+      expect(_.runAll(['identity', 'any("isLessThan(0)")'])([1, 2, 3, -1])).toEqual([
+        [1, 2, 3, -1],
+        true
+      ]);
+    });
+
+    it('runs stringy actions on object', () => {
+      expect(_.runAll(['identity', 'any("isLessThan(0)")'])({ a: 1, b: 2, c: 3, d: -1 })).toEqual([
+        { a: 1, b: 2, c: 3, d: -1 },
+        true
+      ]);
+    });
+  });
 });

@@ -334,7 +334,7 @@ export const differential = R.memoizeWith(
           R.lensIndex(1),
           R.pipe(
             H.defaultToZero,
-            H.bePositive
+            R.max(0)
           )
         )
       ),

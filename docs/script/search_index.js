@@ -889,6 +889,24 @@ window.esdocSearchIndex = [
   ],
   [
     "",
+    "test-file/__tests__/palette.test.js.html#lineNumber362",
+    "Test palette functions Runs multiple actions using runAll",
+    "test"
+  ],
+  [
+    "",
+    "test-file/__tests__/palette.test.js.html#lineNumber363",
+    "Test palette functions Runs multiple actions using runAll runs stringy actions on list",
+    "test"
+  ],
+  [
+    "",
+    "test-file/__tests__/palette.test.js.html#lineNumber370",
+    "Test palette functions Runs multiple actions using runAll runs stringy actions on object",
+    "test"
+  ],
+  [
+    "",
     "test-file/__tests__/palette.test.js.html#lineNumber204",
     "Test palette functions Sorts an Array or Object in ascending order",
     "test"
