@@ -47,8 +47,8 @@ describe('Test palette functions', () => {
     });
   });
 
-  describe('Merges list of Objects by adding values of the same key', () => {
-    it('merges list of Objects', () => {
+  describe('Merges list of objects by adding values of the same key', () => {
+    it('merges list of objects', () => {
       expect(_.mergeWithAdd([{ a: 1 }, { a: 2 }, { a: 3 }])).toEqual({ a: 6 });
     });
 
@@ -61,17 +61,45 @@ describe('Test palette functions', () => {
     });
   });
 
-  describe('Merges list of Objects by subtracting values of the same key', () => {
-    it('merges list of Objects', () => {
-      expect(_.mergeWithSubtract([{ a: 1 }, { a: 2 }, { a: 3 }])).toEqual({ a: 2 });
+  describe('Merges list of objects by subtracting values of the same key', () => {
+    it('merges list of objects', () => {
+      expect(_.mergeWithSubtract([{ a: 1 }, { a: 2 }, { a: 3 }])).toEqual({ a: -4 });
     });
 
     it('merges values of an Object that are of Object type', () => {
-      expect(_.mergeWithSubtract({ a: { x: 1 }, b: { x: 2 }, c: [1, 2, 3] })).toEqual({ x: 1 });
+      expect(_.mergeWithSubtract({ a: { x: 1 }, b: { x: 2 }, c: [1, 2, 3] })).toEqual({ x: -1 });
     });
 
     it('empty Object when none of the values in provied Object are of Object type', () => {
       expect(_.mergeWithSubtract({ a: [1, 2], b: undefined, c: 'hello' })).toEqual({});
+    });
+  });
+
+  describe('Merges list of objects by applying max on values of the same key', () => {
+    it('merges list of objects', () => {
+      expect(_.mergeWithMax([{ a: 1 }, { a: 2 }, { a: 3 }])).toEqual({ a: 3 });
+    });
+
+    it('merges values of an Object that are of Object type', () => {
+      expect(_.mergeWithMax({ a: { x: 1 }, b: { x: 2 }, c: [1, 2, 3] })).toEqual({ x: 2 });
+    });
+
+    it('empty Object when none of the values in provied Object are of Object type', () => {
+      expect(_.mergeWithMax({ a: [1, 2], b: undefined, c: 'hello' })).toEqual({});
+    });
+  });
+
+  describe('Merges list of objects by applying min on values of the same key', () => {
+    it('merges list of objects', () => {
+      expect(_.mergeWithMin([{ a: 1 }, { a: 2 }, { a: 3 }])).toEqual({ a: 1 });
+    });
+
+    it('merges values of an Object that are of Object type', () => {
+      expect(_.mergeWithMin({ a: { x: 1 }, b: { x: 2 }, c: [1, 2, 3] })).toEqual({ x: 1 });
+    });
+
+    it('empty Object when none of the values in provied Object are of Object type', () => {
+      expect(_.mergeWithMin({ a: [1, 2], b: undefined, c: 'hello' })).toEqual({});
     });
   });
 
@@ -252,7 +280,7 @@ describe('Test palette functions', () => {
       ).toEqual([1, 2, 3]);
     });
 
-    it('removes values according predicates from an object', () => {
+    it('removes values according to the provided predicates from an object', () => {
       expect(
         _.cleanData(['isNothing', 'isLessThanEqualTo(0)'], {
           '': 82634,
@@ -267,6 +295,25 @@ describe('Test palette functions', () => {
         efg: 2,
         xyz: 3
       });
+    });
+  });
+
+  describe('Cleans data based upon keys or indexes from object and list.', () => {
+    it('removes empty named keys.', () => {
+      expect(_.cleanDataByKeys(['isNothing'], { a: 1, b: 2, '': 3 })).toEqual({ a: 1, b: 2 });
+    });
+    it('removes specified keys.', () => {
+      expect(
+        _.cleanDataByKeys(['testRegex(/tcp/i)'], { tcp: 1, udp: 2, icmp: 3, foo: 2, bar: 3 })
+      ).toEqual({ bar: 3, foo: 2, icmp: 3, udp: 2 });
+    });
+    it('removes specified indexes.', () => {
+      expect(
+        _.cleanDataByKeys(
+          ['isLessThanEqualTo(2)', 'isGreaterThanEqualTo(6)'],
+          [12, 3, 4, 5, 6, 7, 8, 9]
+        )
+      ).toEqual([5, 6, 7]);
     });
   });
 
@@ -285,6 +332,7 @@ describe('Test palette functions', () => {
       ).toEqual([['abs', 2], ['fat', 3], ['Others', 6]]);
     });
   });
+
   describe('Get Max value from array or object', () => {
     it('from a list of numbers, returns a max value', () => {
       expect(_.getMax([2, 3, 5, 2, 3])).toEqual(5);
@@ -292,6 +340,38 @@ describe('Test palette functions', () => {
 
     it('from an object returns a max value', () => {
       expect(_.getMax({ a: 2, b: 3, c: 5, d: 2, e: 3 })).toEqual(5);
+    });
+  });
+
+  describe('Check if any conditions match on data', () => {
+    it('checks against a single predicate', () => {
+      expect(_.anyPass([['sumAll', 'isEqualTo(0)']], { a: -1, b: 2, c: -1 })).toEqual(true);
+    });
+
+    it('checks against multiple predicates', () => {
+      expect(
+        _.anyPass([['sumAll', 'isEqualTo(0)'], 'any("isLessThan(0)")'], {
+          a: -1,
+          b: 2,
+          c: 2
+        })
+      ).toEqual(true);
+    });
+  });
+
+  describe('Runs multiple actions using runAll', () => {
+    it('runs stringy actions on list', () => {
+      expect(_.runAll(['identity', 'any("isLessThan(0)")'])([1, 2, 3, -1])).toEqual([
+        [1, 2, 3, -1],
+        true
+      ]);
+    });
+
+    it('runs stringy actions on object', () => {
+      expect(_.runAll(['identity', 'any("isLessThan(0)")'])({ a: 1, b: 2, c: 3, d: -1 })).toEqual([
+        { a: 1, b: 2, c: 3, d: -1 },
+        true
+      ]);
     });
   });
 });

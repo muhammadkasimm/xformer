@@ -59,19 +59,19 @@ describe('Tests helper functions', () => {
 
   describe('Sums up two values safely', () => {
     it('adds two numbers', () => {
-      expect(_.sum(2, 2)).toBe(4);
+      expect(_.add(2, 2)).toBe(4);
     });
 
     it('adds a number and a stringy number', () => {
-      expect(_.sum(2, '2')).toBe(4);
+      expect(_.add(2, '2')).toBe(4);
     });
 
     it('adds a number and a junky value', () => {
-      expect(_.sum(2, null)).toBe(2);
+      expect(_.add(2, null)).toBe(2);
     });
 
     it('adds two junky values', () => {
-      expect(_.sum(undefined, null)).toBe(0);
+      expect(_.add(undefined, null)).toBe(0);
     });
   });
 
@@ -90,6 +90,78 @@ describe('Tests helper functions', () => {
 
     it('subtracts two junky values', () => {
       expect(_.subtract(undefined, null)).toBe(0);
+    });
+  });
+
+  describe('Multiplies two values safely', () => {
+    it('multiplies two numbers', () => {
+      expect(_.multiply(4, 2)).toBe(8);
+    });
+
+    it('multiplies a number and a stringy number', () => {
+      expect(_.multiply(4, '2')).toBe(8);
+    });
+
+    it('multiplies a number and a junky value', () => {
+      expect(_.multiply(4, null)).toBe(0);
+    });
+
+    it('multiplies two junky values', () => {
+      expect(_.multiply(undefined, null)).toBe(0);
+    });
+  });
+
+  describe('Divides two values safely', () => {
+    it('divides two numbers', () => {
+      expect(_.divide(4, 2)).toBe(2);
+    });
+
+    it('divides a number and a stringy number', () => {
+      expect(_.divide(4, '2')).toBe(2);
+    });
+
+    it('divides a number and a junky value', () => {
+      expect(_.divide(4, null)).toBe(4);
+    });
+
+    it('divides two junky values', () => {
+      expect(_.divide(undefined, null)).toBe(0);
+    });
+  });
+
+  describe('Find max from two values safely', () => {
+    it('apply max on two numbers', () => {
+      expect(_.max(4, 2)).toBe(4);
+    });
+
+    it('apply max on a number and a stringy number', () => {
+      expect(_.max(4, '2')).toBe(4);
+    });
+
+    it('apply max on a number and a junky value', () => {
+      expect(_.max(4, null)).toBe(4);
+    });
+
+    it('apply max on two junky values', () => {
+      expect(_.max(undefined, null)).toBe(0);
+    });
+  });
+
+  describe('Find min from two values safely', () => {
+    it('apply min on two numbers', () => {
+      expect(_.min(4, 2)).toBe(2);
+    });
+
+    it('apply min on a number and a stringy number', () => {
+      expect(_.min(4, '2')).toBe(2);
+    });
+
+    it('apply min on a number and a junky value', () => {
+      expect(_.min(4, null)).toBe(0);
+    });
+
+    it('apply min on two junky values', () => {
+      expect(_.min(undefined, null)).toBe(0);
     });
   });
 

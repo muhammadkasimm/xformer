@@ -51,33 +51,59 @@ export const typeMatches = R.curry((typeToBe, input) =>
 );
 
 /**
- * @param  {number} left
- * @param  {number} right
+ * @param  {number} l
+ * @param  {number} r
  * @returns {number}
  */
-export const sum = R.curry((left, right) => R.add(defaultToZero(left), defaultToZero(right)));
+export const add = R.curry((l, r) => R.add(defaultToZero(l), defaultToZero(r)));
 
 /**
- * @param  {number} left
- * @param  {number} right
+ * @param  {number} l
+ * @param  {number} r
  * @returns {number}
  */
-export const subtract = R.curry((left, right) =>
-  Math.abs(R.subtract(defaultToZero(left), defaultToZero(right)))
-);
+export const subtract = R.curry((l, r) => R.subtract(defaultToZero(l), defaultToZero(r)));
 
 /**
- * @param  {number} left
- * @param  {number} right
+ * @param  {number} l
+ * @param  {number} r
  * @returns {number}
  */
-export const keepLatest = R.curry((left, right) => defaultToZero(right));
+export const multiply = R.curry((l, r) => R.multiply(defaultToZero(l), defaultToZero(r)));
+
+/**
+ * @param  {number} l
+ * @param  {number} r
+ * @returns {number}
+ */
+export const divide = R.curry((l, r) => R.divide(defaultToZero(l), defaultTo(1, r)));
+
+/**
+ * @param  {number} l
+ * @param  {number} r
+ * @returns {number}
+ */
+export const max = R.curry((l, r) => R.max(defaultToZero(l), defaultToZero(r)));
+
+/**
+ * @param  {number} l
+ * @param  {number} r
+ * @returns {number}
+ */
+export const min = R.curry((l, r) => R.min(defaultToZero(l), defaultToZero(r)));
+
+/**
+ * @param  {number} l
+ * @param  {number} r
+ * @returns {number}
+ */
+export const keepLatest = R.curry((l, r) => defaultToZero(r));
 
 /**
  * @param  {Array<number>} data
  * @returns {number}
  */
-export const sumList = R.reduce(sum, 0);
+export const sumList = R.reduce(add, 0);
 
 /**
  * @param  {string} step
@@ -150,20 +176,9 @@ export const getUsedMemoryForSingle = R.pipe(
  */
 export const getAverageForList = R.pipe(
   R.reject(isJunk),
-  R.converge(R.divide, [R.sum, R.length]),
+  R.converge(divide, [R.sum, R.length]),
   defaultToZero
 );
-
-/**
- * @param  {any} input
- * @returns {boolean}
- */
-export const divideBy = R.curry((denominator, numerator) => {
-  return R.pipe(
-    defaultTo(1),
-    R.divide(defaultToZero(numerator))
-  )(denominator);
-});
 
 /**
  * @param  {string|number} prop

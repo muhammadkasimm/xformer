@@ -1,6 +1,6 @@
 import * as R from 'ramda';
 import * as D from './decoder';
-import * as _ from './helpers';
+import * as H from './helpers';
 import { executeQuery } from './actions';
 import { PALETTE_INFO, ALIAS_REGEX } from './constants';
 
@@ -12,12 +12,12 @@ import { PALETTE_INFO, ALIAS_REGEX } from './constants';
  * Takes an action or list of actions, current state of accumulator and updates the accumulator
  * according to the action(s).
  */
-function executeAction(fn, data) {
+const executeAction = R.curry((fn, data) => {
   return R.cond([
-    [_.typeMatches('function'), R.applyTo(data)],
-    [_.typeMatches('array'), R.map(R.applyTo(data))]
+    [H.typeMatches('function'), R.applyTo(data)],
+    [H.typeMatches('array'), R.map(R.applyTo(data))]
   ])(fn);
-}
+});
 
 /**
  * @param  {Function | Array<Function>} fn
@@ -28,7 +28,7 @@ function executeAction(fn, data) {
  * Takes an action or list of actions, current state of accumulator and updates the accumulator
  * according to the action(s).
  */
-function updateAccumulator(fn, info, acc) {
+const updateAccumulator = R.curry((fn, info, acc) => {
   const executedData = executeAction(fn, acc.result);
 
   return R.pipe(
@@ -37,12 +37,12 @@ function updateAccumulator(fn, info, acc) {
       R.append({
         title: info.name,
         data: executedData,
-        info: PALETTE_INFO[_.getFirstMatch(ALIAS_REGEX, info.name)]
+        info: info.info
       })
     ),
     R.set(R.lensProp('result'), executedData)
   )(acc);
-}
+});
 
 /**
  * @param  {Array<string>} pipe
@@ -55,12 +55,16 @@ function updateAccumulator(fn, info, acc) {
  *
  * Returns an object containing the result of executing the pipeline and the corresponding result of each step.
  */
-export function executePipe(pipe, data) {
+export const executePipe = R.curry((pipe, data) => {
   return R.pipe(
     D.decodePipe,
-    _.reduceIndexed(
+    H.reduceIndexed(
       (acc, fn, idx) => {
-        const info = { idx: idx, name: D.getActionName(R.nth(idx, pipe), idx) };
+        const info = {
+          idx: idx,
+          name: D.getActionName(R.nth(idx, pipe), idx),
+          info: D.getActionInfo(R.nth(idx, pipe), idx)
+        };
         try {
           return updateAccumulator(fn, info, acc);
         } catch (error) {
@@ -78,7 +82,7 @@ export function executePipe(pipe, data) {
     ),
     R.over(R.lensProp('buffer'), R.insert(0, { title: 'Original Data', data: data }))
   )(pipe);
-}
+});
 
 /**
  * @param  {Object} query
@@ -88,8 +92,8 @@ export function executePipe(pipe, data) {
  * Takes a query and data as input and executes all pipelines within the query, with each pipeline receiving the
  * provided data.
  */
-export function execute(query, data, dispatch) {
-  const result = R.map(R.curry(executePipe)(R.__, data), query);
+export const execute = R.curry((query, data, dispatch) => {
+  const result = R.map(executePipe(R.__, data), query);
   if (dispatch) dispatch(executeQuery(result));
   return result;
-}
+});
