@@ -63,13 +63,35 @@ export const testRegex = R.curry((text, value) => R.test(new RegExp(text), value
  * @param  {any} value
  * @returns {boolean}
  * @example
+ *        isLessThan(0, -2) //=> true
+ *        isLessThan(-4, -2) //=> false
+ */
+export const isLessThan = R.flip(R.lt);
+
+/**
+ * Returns true if the second value is greater than the first value.
+ *
+ * @param  {any} value
+ * @returns {boolean}
+ * @example
+ *        isGreaterThan(0, -2) //=> false
+ *        isGreaterThan(-4, -2) //=> true
+ */
+export const isGreaterThan = R.flip(R.gt);
+
+/**
+ * Returns true if the second value is less than or equal to the first value.
+ *
+ * @param  {any} value
+ * @returns {boolean}
+ * @example
  *        isLessThanEqualTo(0, -2) //=> true
  *        isLessThanEqualTo(-4, -2) //=> false
  */
 export const isLessThanEqualTo = R.flip(R.lte);
 
 /**
- * Returns true if the second value is greater than the first value.
+ * Returns true if the second value is greater than or equal to the first value.
  *
  * @param  {any} value
  * @returns {boolean}
@@ -78,6 +100,11 @@ export const isLessThanEqualTo = R.flip(R.lte);
  *        isGreaterThanEqualTo(-4, -2) //=> true
  */
 export const isGreaterThanEqualTo = R.flip(R.gte);
+
+/**
+ * A function that returns the same value it was passed.
+ */
+export const identity = R.identity;
 
 /**
  * @param  {number} left
@@ -307,7 +334,7 @@ export const differential = R.memoizeWith(
           R.lensIndex(1),
           R.pipe(
             H.defaultToZero,
-            H.bePositive
+            R.max(0)
           )
         )
       ),
@@ -645,7 +672,7 @@ export const takeTopPairsAndAddOthers = takeTopAndCombineOthers(
 );
 
 /**
- * Find Max value.
+ * Find max value.
  *
  * @param  {any} value
  * @returns {number}
@@ -664,3 +691,84 @@ export const getMax = R.cond([
   ],
   [R.T, R.identity]
 ]);
+
+/**
+ * Check if any value in array or object satisfies condition.
+ *
+ * @param  {Array} predicates
+ * @param  {any} data
+ * @returns {boolean}
+ * @example
+ *        any('isLessThanEqualTo(0)', {a: -1, b: 2, c: -1}) //=> true
+ */
+export const any = R.memoizeWith(
+  (x, y) => R.toString([x, y]),
+  R.curry((predicate, data) =>
+    R.cond([
+      [H.typeMatches('array'), R.any(D.decodeAction(predicate))],
+      [
+        H.typeMatches('object'),
+        R.pipe(
+          R.values,
+          R.any(D.decodeAction(predicate))
+        )
+      ],
+      [R.T, D.decodeAction(predicate)]
+    ])(data)
+  )
+);
+
+/**
+ * Check if all values in array or object satisfy condition. Returns false if data is anything other than an array
+ * or object.
+ *
+ * @param  {Array} predicates
+ * @param  {any} data
+ * @returns {boolean}
+ * @example
+ *        all('isLessThanEqualTo(0)', {a: -1, b: 2, c: -1}) //=> false
+ */
+export const all = R.memoizeWith(
+  (x, y) => R.toString([x, y]),
+  R.curry((predicate, data) =>
+    R.cond([
+      [H.typeMatches('array'), R.all(D.decodeAction(predicate))],
+      [
+        H.typeMatches('object'),
+        R.pipe(
+          R.values,
+          R.all(D.decodeAction(predicate))
+        )
+      ],
+      [R.T, R.F]
+    ])(data)
+  )
+);
+
+/**
+ * Check if data passes any conditions.
+ *
+ * @param  {Array} predicates
+ * @param  {any} data
+ * @returns {boolean}
+ * @example
+ *        anyPass([['sum', 'isEqualTo(0)']], {a: -1, b: 2, c: -1})
+ */
+export const anyPass = R.memoizeWith(
+  (x, y) => R.toString([x, y]),
+  R.curry((predicates, data) => R.anyPass(R.map(D.decodeAction, predicates))(data))
+);
+
+/**
+ * Check if data passes all conditions.
+ *
+ * @param  {Array} predicates
+ * @param  {any} data
+ * @returns {boolean}
+ * @example
+ *        allPass([['sum', 'isEqualTo(0)']], {a: -1, b: 2, c: -1})
+ */
+export const allPass = R.memoizeWith(
+  (x, y) => R.toString([x, y]),
+  R.curry((predicates, data) => R.allPass(R.map(D.decodeAction, predicates))(data))
+);
