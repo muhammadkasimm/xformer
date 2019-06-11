@@ -499,12 +499,6 @@ window.esdocSearchIndex = [
   ],
   [
     "",
-    "test-file/__tests__/index.test.js.html#lineNumber1",
-    "Says hello!",
-    "test"
-  ],
-  [
-    "",
     "test-file/__tests__/palette.test.js.html#lineNumber3",
     "Test palette functions",
     "test"
@@ -1521,12 +1515,6 @@ window.esdocSearchIndex = [
     "__tests__/helpers.test.js",
     "test-file/__tests__/helpers.test.js.html",
     "__tests__/helpers.test.js",
-    "testFile"
-  ],
-  [
-    "__tests__/index.test.js",
-    "test-file/__tests__/index.test.js.html",
-    "__tests__/index.test.js",
     "testFile"
   ],
   [

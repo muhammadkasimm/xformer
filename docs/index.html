@@ -24,7 +24,7 @@
   </span>
     <ul class="search-result"></ul>
   </div>
-<a href="https://gitlab.com/muhammadkasim/xformer">Repository</a></header>
+<a style="position:relative; top:3px;" href="https://github.com/lordvoldemortrocks/xformer"><img width="20px" src="./image/github.png"></a></header>
 
 <nav class="navigation" data-ice="nav"><div>
   <ul>
@@ -80,6 +80,7 @@
 </nav>
 
 <div class="content" data-ice="content"><div data-ice="index" class="github-markdown"><h2 id="xformer--easier-data-transformations">XFormer: Easier Data Transformations</h2><p>XFormer makes data transformations easy on your cognition and hassle-free.</p>
+<p>Read complete docs <a href="https://lordvoldemortrocks.github.io/xformer/">here</a>.</p>
 <h4 id="features">Features</h4><ul>
 <li>Provides an intuitive way to express transformation pipelines</li>
 <li>Supports a flexible palette of actions</li>
@@ -151,125 +152,6 @@ X.executePipe([&apos;mergeWithAdd&apos;, &apos;getAvg&apos;], mock_data);
 //     }
 // }</code>
 </code></pre>
-<h4 id="action-palette">Action Palette</h4><p>You can describe following actions in transformation pipelines.</p>
-<table>
-<thead>
-<tr>
-<th>Action</th>
-<th>Params</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>pickFrom</code></td>
-<td><code>path: Array&lt;string&gt;, data: Object</code></td>
-<td>Retrieves value at the specified path from a JSON object.</td>
-</tr>
-<tr>
-<td><code>pickByRegex</code></td>
-<td><code>regex: string, data: Object</code></td>
-<td>Filters key-value pairs from a JSON object when key matches the specified regular expression (or string).</td>
-</tr>
-<tr>
-<td><code>mergeWithAdd</code></td>
-<td><code>data: Array&lt;Object&gt;</code></td>
-<td>Merges a list of JSON objects into a single JSON object by adding values having the same key; treats a non-number value as zero.</td>
-</tr>
-<tr>
-<td><code>mergeWithSubtract</code></td>
-<td><code>data: Array&lt;Object&gt;</code></td>
-<td>Merges a list of JSON objects into a single JSON object by subtracting values having the same key; treats a non-number value as zero.</td>
-</tr>
-<tr>
-<td><code>getUsedMemory</code></td>
-<td><code>data: (Object, Array)</code></td>
-<td>Calculates percentages of used memory when given a list or JSON object containing percentages of free memory.</td>
-</tr>
-<tr>
-<td><code>getAvg</code></td>
-<td><code>data: (Object, Array)</code></td>
-<td>Calculates average of values in a list or JSON object; ignores values that are not numbers.</td>
-</tr>
-<tr>
-<td><code>differential</code></td>
-<td><code>data: Object</code></td>
-<td>Applies iterative subtraction over consecutive values in a JSON object such that <code>T[i] = T[i] - T[i-1]</code>; first value is ignored in the result.</td>
-</tr>
-<tr>
-<td><code>sumAll</code></td>
-<td><code>data: (Object, Array)</code></td>
-<td>Recieves an array or object, adds all the values and return a single number. All non-number values are treated as zero.</td>
-</tr>
-<tr>
-<td><code>defaultAll</code></td>
-<td><code>data: (Object, Array)</code></td>
-<td>Recieves an array or object and replaces each junky value with the provided fallback value. A value is considered junk if it can not be converted to a valid number.</td>
-</tr>
-<tr>
-<td><code>getRate</code></td>
-<td><code>interval: number, data: (Object, Array)</code></td>
-<td>Calculates rate by dividing each value in a list or JSON object by the provided interval; ignores values that are not numbers.</td>
-</tr>
-<tr>
-<td><code>runAll</code></td>
-<td><code>pipes: Array, data: any</code></td>
-<td>Execute a list of pipelines on provided data.</td>
-</tr>
-<tr>
-<td><code>map</code></td>
-<td><code>action: (string, Object, Array), data: any</code></td>
-<td>Takes an action and data as input and returns the result of performing that action on each value in the data.</td>
-</tr>
-<tr>
-<td><code>sortAscending</code></td>
-<td><code>key: any, data: (Array, Object)</code></td>
-<td>Sorts an array or object in ascending order. When data is an array of objects or arrays, key refers to the value with respect to which you want the data sorted. When data is an object, key can either be <code>0</code> (sort by key) or <code>1</code> (sort by value); sorted object is returned as a list of <code>[key, value]</code> pairs. When data is simply an array of numbers, key is ignored even if provided.</td>
-</tr>
-<tr>
-<td><code>sortDescending</code></td>
-<td><code>key: any, data: (Array, Object)</code></td>
-<td>Sorts an array or object in descending order. When data is an array of objects or arrays, key refers to the value with respect to which you want the data sorted. When data is an object, key can either be <code>0</code> (sort by key) or <code>1</code> (sort by value); sorted object is returned as a list of <code>[key, value]</code> pairs. When data is simply an array of numbers, key is ignored even if provided.</td>
-</tr>
-<tr>
-<td><code>cleanData</code></td>
-<td><code>predicates: Array, data: (Array, Object)</code></td>
-<td>Removes values from an array or object by applying the provided predicate functions on each value in an OR fashion. Additionally for an object, if a key is empty, it is removed regardless of the value.</td>
-</tr>
-<tr>
-<td><code>takeTopAndCombineOthers</code></td>
-<td><code>x: number, xformer: Action, data: (Array, Object)</code></td>
-<td>Takes top <code>x</code> items from a list and combines remaining by applying provided xformer. Returns <code>[...topX, others]</code>.</td>
-</tr>
-<tr>
-<td><code>takeTopPairsAndAddOthers</code></td>
-<td><code>x: number, data: (Array, Object)</code></td>
-<td>Takes top <code>x</code> pairs from a list of pairs and combines remaining pairs by adding values on index <code>1</code> of each pair; a pair should be of form <code>[x: any, y: number]</code>. Returns <code>[topX, others]</code>.</td>
-</tr>
-<tr>
-<td><code>isNothing</code></td>
-<td><code>value: any</code></td>
-<td>Returns true if the value under test is empty or nil.</td>
-</tr>
-<tr>
-<td><code>isEqualTo</code></td>
-<td><code>x1: any, x2: any</code></td>
-<td>Returns true if the 2 provided values are deeply equal.</td>
-</tr>
-<tr>
-<td><code>isLessThanEqualTo</code></td>
-<td><code>x1: number, x2: number</code></td>
-<td>Returns true if the second value is less than the first value.</td>
-</tr>
-<tr>
-<td><code>isGreaterThanEqualTo</code></td>
-<td><code>x1: number, x2: number</code></td>
-<td>Returns true if the second value is greater than the first value.</td>
-</tr>
-</tbody>
-</table>
-<p><code>* Action = string|Object|Array</code></p>
-<p><code>* Pipe = Array&lt;action&gt;</code></p>
 </div>
 </div>
 
