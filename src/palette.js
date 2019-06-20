@@ -571,6 +571,52 @@ export const sortAscending = _sort('ascend');
 export const sortDescending = _sort('descend');
 
 /**
+ * Sorts an object in desccending order accordin to the provided action.
+ *
+ * @param  {string|number} key
+ * @returns {data}
+ * @example
+ *        const data = {
+ *          '192.168.0.48': { bytes_in_sum: 12606, bytes_out_sum: 8887 },
+ *          '192.168.0.41': { bytes_in_sum: 14182, bytes_out_sum: 5818 },
+ *          '192.168.0.54': { bytes_in_sum: 5068, bytes_out_sum: 12696 },
+ *        }
+ *        const sortedData = sortObjectDescending('pickFrom(["bytes_out_sum"])', data);
+ *
+ *        //=> [
+ *          [ '192.168.0.54', { bytes_in_sum: 5068, bytes_out_sum: 12696 } ],
+ *          [ '192.168.0.48', { bytes_in_sum: 12606, bytes_out_sum: 8887 } ],
+ *          [ '192.168.0.41', { bytes_in_sum: 14182, bytes_out_sum: 5818 } ],
+ *        ]
+ */
+export const sortObjectDescending = R.memoizeWith(
+  (...args) => R.toString(args),
+  R.curry((action, data) => {
+    return R.pipe(
+      R.toPairs,
+      R.sort(R.descend(x => D.decodeAction(action)(x[1])))
+    )(data);
+  })
+);
+
+/**
+ * Sorts an object in ascending order accordin to the provided action.
+ *
+ * @param  {string|number} key
+ * @returns {data}
+ *
+ */
+export const sortObjectAscending = R.memoizeWith(
+  (...args) => R.toString(args),
+  R.curry((action, data) => {
+    return R.pipe(
+      R.toPairs,
+      R.sort(R.ascend(x => D.decodeAction(action)(x[1])))
+    )(data);
+  })
+);
+
+/**
  * Removes values from an array or object by applying the provided predicate functions on
  * each value in an OR fashion. Additionally for an object, if a key is empty, it is removed
  * regardless of the value.

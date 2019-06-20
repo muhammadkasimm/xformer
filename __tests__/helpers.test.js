@@ -223,16 +223,6 @@ describe('Tests helper functions', () => {
     });
   });
 
-  describe('Logs value and returns it', () => {
-    it('logs number with label', () => {
-      expect(_.logger('some number', 123)).toBe(123);
-    });
-
-    it('logs object with label', () => {
-      expect(_.logger('some Object', { a: 1, b: 2 })).toEqual({ a: 1, b: 2 });
-    });
-  });
-
   describe('Checks if a value is falsy or empty', () => {
     it('undefined is falsy', () => {
       expect(_.isNothing(undefined)).toBe(true);

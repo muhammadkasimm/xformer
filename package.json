@@ -1,6 +1,6 @@
 {
   "name": "@muhammadkasim/xformer",
-  "version": "1.0.11",
+  "version": "1.0.12",
   "description": "xFormer provides an extensive set of utilities, a way to define declarative transformation pipelines and a parser to facilitate easier data transformations.",
   "main": "lib/index.js",
   "author": "eMumba <muhammad.kasim@emumba.com>",
@@ -22,7 +22,7 @@
   ],
   "jest": {
     "transform": {
-      "^.+\\.(js|jsx|ts|tsx)$": "babel-jest"
+      "^.+\\.jsx?$": "babel-jest"
     },
     "verbose": true,
     "moduleFileExtensions": [
@@ -31,14 +31,6 @@
     "moduleDirectories": [
       "node_modules",
       "src"
-    ]
-  },
-  "babel": {
-    "presets": [
-      "stage-0"
-    ],
-    "plugins": [
-      "transform-es2015-modules-commonjs"
     ]
   },
   "dependencies": {
@@ -50,13 +42,13 @@
     "redux": "^4.x"
   },
   "devDependencies": {
-    "babel-cli": "^6.26.0",
-    "babel-core": "^6.26.3",
+    "@babel/cli": "^7.4.4",
+    "@babel/core": "^7.4.5",
+    "@babel/plugin-proposal-export-default-from": "^7.2.0",
+    "@babel/preset-env": "^7.4.5",
     "babel-jest": "^24.8.0",
-    "babel-plugin-transform-es2015-modules-commonjs": "^6.26.2",
-    "babel-preset-stage-0": "^6.24.1",
-    "esdoc": "^1.1.0",
-    "esdoc-standard-plugin": "^1.0.0",
-    "jest": "^24.8.0"
+    "esdoc": "1.1.0",
+    "esdoc-standard-plugin": "1.0.0",
+    "jest": "24.8.0"
   }
 }
