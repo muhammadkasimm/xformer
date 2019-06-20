@@ -70,6 +70,8 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-runAll">runAll</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-sortAscending">sortAscending</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-sortDescending">sortDescending</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-sortObjectAscending">sortObjectAscending</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-sortObjectDescending">sortObjectDescending</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-subtract">subtract</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-sumAll">sumAll</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-takeTopAndCombineOthers">takeTopAndCombineOthers</a></span></span></li>
@@ -651,6 +653,52 @@ export const sortAscending = _sort(&apos;ascend&apos;);
  *       sortDescending(1, { &apos;jkl&apos;: 345, &apos;efg&apos;: 121, &apos;uvx&apos;: 45 });    //=&gt; [[&apos;jkl&apos;, 345], [&apos;efg&apos;, 121], [&apos;uvx&apos;, 45]]
  */
 export const sortDescending = _sort(&apos;descend&apos;);
+
+/**
+ * Sorts an object in desccending order accordin to the provided action.
+ *
+ * @param  {string|number} key
+ * @returns {data}
+ * @example
+ *        const data = {
+ *          &apos;192.168.0.48&apos;: { bytes_in_sum: 12606, bytes_out_sum: 8887 },
+ *          &apos;192.168.0.41&apos;: { bytes_in_sum: 14182, bytes_out_sum: 5818 },
+ *          &apos;192.168.0.54&apos;: { bytes_in_sum: 5068, bytes_out_sum: 12696 },
+ *        }
+ *        const sortedData = sortObjectDescending(&apos;pickFrom([&quot;bytes_out_sum&quot;])&apos;, data);
+ *
+ *        //=&gt; [
+ *          [ &apos;192.168.0.54&apos;, { bytes_in_sum: 5068, bytes_out_sum: 12696 } ],
+ *          [ &apos;192.168.0.48&apos;, { bytes_in_sum: 12606, bytes_out_sum: 8887 } ],
+ *          [ &apos;192.168.0.41&apos;, { bytes_in_sum: 14182, bytes_out_sum: 5818 } ],
+ *        ]
+ */
+export const sortObjectDescending = R.memoizeWith(
+  (...args) =&gt; R.toString(args),
+  R.curry((action, data) =&gt; {
+    return R.pipe(
+      R.toPairs,
+      R.sort(R.descend(x =&gt; D.decodeAction(action)(x[1])))
+    )(data);
+  })
+);
+
+/**
+ * Sorts an object in ascending order accordin to the provided action.
+ *
+ * @param  {string|number} key
+ * @returns {data}
+ *
+ */
+export const sortObjectAscending = R.memoizeWith(
+  (...args) =&gt; R.toString(args),
+  R.curry((action, data) =&gt; {
+    return R.pipe(
+      R.toPairs,
+      R.sort(R.ascend(x =&gt; D.decodeAction(action)(x[1])))
+    )(data);
+  })
+);
 
 /**
  * Removes values from an array or object by applying the provided predicate functions on
