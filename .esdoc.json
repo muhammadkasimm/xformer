@@ -17,7 +17,7 @@
           "logo": "./logo.png",
           "title": "xFormer",
           "description": "xFormer makes data transformations easy on your cognition and hassle-free.",
-          "repository": "https://gitlab.com/muhammadkasim/xformer",
+          "repository": "https://github.com/lordvoldemortrocks/xformer",
           "site": "https://www.npmjs.com/package/@muhammadkasim/xformer",
           "author": "Muhammad Kasim",
           "image": "./logo.png"
