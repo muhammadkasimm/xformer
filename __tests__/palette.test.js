@@ -269,6 +269,62 @@ describe('Test palette functions', () => {
     });
   });
 
+  describe('Sorts object in descending according to the provided action', () => {
+    it('sorts a nested object', () => {
+      const mockObj = {
+        '192.168.0.54': {
+          bytes_in_sum: 5068,
+          bytes_out_sum: 12696
+        },
+        '192.168.0.48': {
+          bytes_in_sum: 12606,
+          bytes_out_sum: 8887
+        },
+        '192.168.0.41': {
+          bytes_in_sum: 14182,
+          bytes_out_sum: 5818
+        }
+      };
+      const mockResult = [
+        ['192.168.0.41', { bytes_in_sum: 14182, bytes_out_sum: 5818 }],
+        ['192.168.0.48', { bytes_in_sum: 12606, bytes_out_sum: 8887 }],
+        ['192.168.0.54', { bytes_in_sum: 5068, bytes_out_sum: 12696 }]
+      ];
+      expect(_.sortObjectDescending('pickFrom(["bytes_in_sum"])', mockObj)).toEqual(mockResult);
+    });
+
+    it('sorts a double nested object', () => {
+      const mockObj = {
+        '192.168.0.54': {
+          bytes: {
+            bytes_in_sum: 5068,
+            bytes_out_sum: 12696
+          }
+        },
+        '192.168.0.48': {
+          bytes: {
+            bytes_in_sum: 12606,
+            bytes_out_sum: 8887
+          }
+        },
+        '192.168.0.41': {
+          bytes: {
+            bytes_in_sum: 14182,
+            bytes_out_sum: 5818
+          }
+        }
+      };
+      const mockResult = [
+        ['192.168.0.41', { bytes: { bytes_in_sum: 14182, bytes_out_sum: 5818 } }],
+        ['192.168.0.48', { bytes: { bytes_in_sum: 12606, bytes_out_sum: 8887 } }],
+        ['192.168.0.54', { bytes: { bytes_in_sum: 5068, bytes_out_sum: 12696 } }]
+      ];
+      expect(_.sortObjectDescending('pickFrom(["bytes", "bytes_in_sum"])', mockObj)).toEqual(
+        mockResult
+      );
+    });
+  });
+
   describe('Cleans data by passing each value in data through the provided predicates', () => {
     it('removes null or undefined values from an array', () => {
       expect(_.cleanData(['isNothing'], [null, 1, 2, undefined, 3])).toEqual([1, 2, 3]);
