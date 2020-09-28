@@ -2,7 +2,7 @@
 
 XFormer makes data transformations easy on your cognition and hassle-free.
 
-Read complete docs [here](https://lordvoldemortrocks.github.io/xformer/).
+Read complete docs [here](https://muhammadkasimm.github.io/xformer/).
 
 
 
